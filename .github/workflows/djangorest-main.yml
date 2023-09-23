@@ -49,20 +49,24 @@ jobs:
       - name: Build and Push Docker image
         run: |
           export APP_VERSION=$(grep -m 1 version src/pyproject.toml | tr -d '=' | cut -d' ' -f3 | tr -d '"' | tr -d '\n' | tr -d '\r')
+          export MAJOR_VERSION=$(echo "${APP_VERSION}" | cut -d. -f1,2)
           echo "Using version ${APP_VERSION}"
           # Tag variables
-          IMAGE_TAG="${DOCKER_USERNAME}/${DOCKER_REPO_NAME}:${APP_VERSION}"
-          DRF_TAG="${DOCKER_USERNAME}/${DOCKER_REPO_NAME}:drf"
-          LATEST_TAG="${DOCKER_USERNAME}/${DOCKER_REPO_NAME}:latest"
+          DOCKER_REPO="${DOCKER_USERNAME}/${DOCKER_REPO_NAME}"
+          APP_VERSION_TAG="${DOCKER_REPO}:${APP_VERSION}"
+          MAJOR_VERSION_TAG="${DOCKER_REPO}:${MAJOR_VERSION}"
+          DRF_VERSION_TAG="${DOCKER_REPO}:${APP_VERSION}-drf"
+          DRF_TAG="${DOCKER_REPO}:drf"
+          LATEST_TAG="${DOCKER_REPO}:latest"
           # Image build
-          docker build . -t ${IMAGE_TAG}
+          docker build . -t ${MAJOR_VERSION_TAG}
           # Image tag
-          docker tag ${IMAGE_TAG} "${IMAGE_TAG}-drf"
-          docker tag ${IMAGE_TAG} ${DRF_TAG}
-          docker tag ${IMAGE_TAG} ${LATEST_TAG}
+          docker tag ${MAJOR_VERSION_TAG} ${DRF_VERSION_TAG}
+          docker tag ${MAJOR_VERSION_TAG} ${DRF_TAG}
+          docker tag ${MAJOR_VERSION_TAG} ${LATEST_TAG}
           # Image push
-          docker push ${IMAGE_TAG}
-          docker push "${IMAGE_TAG}-drf"
+          docker push ${MAJOR_VERSION_TAG}
+          docker push ${DRF_VERSION_TAG}
           docker push ${DRF_TAG}
           docker push ${LATEST_TAG}
         env:
