@@ -55,7 +55,7 @@ jobs:
           DOCKER_REPO="${DOCKER_USERNAME}/${DOCKER_REPO_NAME}"
           APP_VERSION_TAG="${DOCKER_REPO}:${APP_VERSION}"
           MAJOR_VERSION_TAG="${DOCKER_REPO}:${MAJOR_VERSION}"
-          DRF_VERSION_TAG="${DOCKER_REPO}:${APP_VERSION}-drf"
+          DRF_VERSION_TAG="${DOCKER_REPO}:drf-${APP_VERSION}"
           DRF_TAG="${DOCKER_REPO}:drf"
           LATEST_TAG="${DOCKER_REPO}:latest"
           # Image build
