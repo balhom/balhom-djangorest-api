@@ -67,5 +67,5 @@ jobs:
           docker push ${LATEST_TAG}
         env:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-          DJANGOREST_DOCKER_REPO_NAME: ${{ secrets.DOCKER_REPO_NAME }}
+          DOCKER_REPO_NAME: ${{ secrets.DOCKER_REPO_NAME }}
         working-directory: ./api
