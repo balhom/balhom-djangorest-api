@@ -1,0 +1,13 @@
+version: '3'
+
+services:
+
+  balhom-redis:
+    image: redis:7.0.11
+    container_name: balhom-redis
+    restart: unless-stopped
+    networks:
+      - balhom-redis-net
+
+networks:
+  balhom-redis-net:

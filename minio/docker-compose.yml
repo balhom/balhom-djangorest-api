@@ -1,0 +1,22 @@
+version: '3'
+
+services:
+
+  balhom-minio:
+    image: bitnami/minio:2023.7.7
+    container_name: balhom-minio
+    ports:
+      - "33090:9000"
+      - "33091:9001"
+    env_file:
+      - ./minio.env
+    volumes:
+      - ./data:/data
+      #- ./certs/fullchain.pem:/etc/minio/certs/public.crt # Uncomment to enabe HTTPS
+      #- ./certs/privkey.pem:/etc/minio/certs/private.key # Uncomment to enabe HTTPS
+    restart: unless-stopped
+    networks:
+      - balhom-minio-net
+
+networks:
+  balhom-minio-net:
