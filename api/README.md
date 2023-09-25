@@ -5,8 +5,9 @@
 | NAME                     | DESCRIPTION                                                    |
 | ------------------------ | -------------------------------------------------------------- |
 | ALLOWED_HOSTS            | List of strings representing the allowed host/domain names     |
-| CORS_HOSTS               | CORS allowed host/domain names                                 |
-| USE_HTTPS                | Enable HTTPS (true                                             | false). Default: ***false*** |
+| CORS_HOSTS               | CORS allowed hosts (url format)                                |
+| CSRF_HOSTS               | CSRF allowed hosts (url format)                                |
+| USE_HTTPS                | Enable HTTPS (true or false). Default: ***false***             |
 | EMAIL_HOST               | Email service host name                                        |
 | EMAIL_PORT               | Email service port                                             |
 | EMAIL_HOST_USER          | Email service authentication user                              |

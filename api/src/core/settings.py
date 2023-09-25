@@ -28,12 +28,20 @@ class Dev(Configuration):
     TESTING = len(sys.argv) > 1 and sys.argv[1] == "test"
 
     ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=["*"])
+
+    # Cors Setup
     cors_hosts = env.list("CORS_HOSTS", default=[])
     if cors_hosts:
         CORS_ALLOW_ALL_ORIGINS = False
         CORS_ALLOWED_ORIGINS = cors_hosts
     else:
         CORS_ALLOW_ALL_ORIGINS = True
+
+    # Csrf Setup
+    csrf_hosts = env.list("CSRF_HOSTS", default=[])
+    if csrf_hosts:
+        CSRF_TRUSTED_ORIGINS = csrf_hosts
+
     X_FRAME_OPTIONS = "DENY"
 
     # Application definition
