@@ -8,7 +8,7 @@
 
 4. Create a Client with `OpenID Connect` type and `balhom-client` id. Then in `Capability config`, `Client authentication` must be disabled and in `Authentication flow` section only `Direct access grants` must be enabled.
 
-5. Create `openid` client scope and add it to `balhom-client`.
+5. Create `openid` client scope (`None` as `Assigned Type`) and add it to `balhom-client` (`Default` as `Assigned Type`).
 
 6. Assign `manage-users` role (realm-management) in `Service accounts roles` tab to `balhom-api` client inside `Clients` section. 
 
