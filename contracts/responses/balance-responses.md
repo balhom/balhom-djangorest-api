@@ -16,8 +16,33 @@
 | name  | type            | comments |
 | ----- | --------------- | -------- |
 | name  | String          |          |
-| type  | BalanceTypeEnum | not-null |
+| type  | BalanceTypeEnum |          |
 | image | String          |          |
+
+## Annual Balance Response
+
+| name              | type   | comments |
+| ----------------- | ------ | -------- |
+| gross_quantity    | double |          |
+| expected_quantity | double |          |
+| currency_type     | String |          |
+| year              | int    |          |
+
+## Monthly Balance Response
+
+| name              | type   | comments |
+| ----------------- | ------ | -------- |
+| gross_quantity    | double |          |
+| expected_quantity | double |          |
+| currency_type     | String |          |
+| year              | int    |          |
+| month             | int    |          |
+
+## Balance Years Response
+
+| name  | type       | comments |
+| ----- | ---------- | -------- |
+| years | List [int] |          |
 
 ## Enums options:
 
