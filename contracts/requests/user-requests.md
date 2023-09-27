@@ -2,29 +2,32 @@
 
 ## User Creation Request
 
-| name                     | type   | validations                           | comments |
-| ------------------------ | ------ | ------------------------------------- | -------- |
-| username                 | String | max-size: 15, regex: "^[A-Za-z0-9]+$" |          |
-| email                    | String | format: email                         |          |
-| locale                   | String | max-size: 5                           |          |
-| inv_code                 | uuid   |                                       |          |
-| password                 | String | format: password                      |          |
-| expected_annual_balance  | double | min: 0                                | Optional |
-| expected_monthly_balance | double | min: 0                                | Optional |
-| pref_currency_type       | String | max-size: 3, format: currency_type    |          |
+| name                     | type   | validations                                      | comments             |
+| ------------------------ | ------ | ------------------------------------------------ | -------------------- |
+| username                 | String | max-size: 15, regex: "^[A-Za-z0-9]+$", not-blank |                      |
+| email                    | String | format: email, not-blank                         |                      |
+| locale                   | String | max-size: 5, not-blank                           |                      |
+| inv_code                 | UUID   | not-null                                         |                      |
+| password                 | String | format: password, not-blank                      |                      |
+| expected_annual_balance  | double | min: 0                                           | Optional, default: 0 |
+| expected_monthly_balance | double | min: 0                                           | Optional, default: 0 |
+| pref_currency_type       | String | max-size: 4, not-blank                           |                      |
 
 ## User Update Request
 
-| name                     | type          | validations                           | comments |
-| ------------------------ | ------------- | ------------------------------------- | -------- |
-| username                 | String        | max-size: 15, regex: "^[A-Za-z0-9]+$" |          |
-| locale                   | String        | max-size: 5                           |          |
-| receive_email_balance    | boolean       |                                       |          |
-| balance                  | double        |                                       |          |
-| expected_annual_balance  | double        | min: 0                                |          |
-| expected_monthly_balance | double        | min: 0                                |          |
-| pref_currency_type       | String        | max-size: 3, format: currency_type    |          |
-| image                    | MultiPartFile |                                       |          |
+| name                     | type          | validations                                      | comments |
+| ------------------------ | ------------- | ------------------------------------------------ | -------- |
+| username                 | String        | max-size: 15, regex: "^[A-Za-z0-9]+$", not-empty |          |
+| locale                   | String        | max-size: 5, not-empty                           |          |
+| receive_email_balance    | Boolean       |                                                  |          |
+| balance                  | Double        |                                                  |          |
+| expected_annual_balance  | Double        | min: 0                                           |          |
+| expected_monthly_balance | Double        | min: 0                                           |          |
+| pref_currency_type       | String        | max-size: 4, not-empty                           |          |
+| image                    | MultiPartFile |                                                  |          |
+
+> Note:
+> * If `balance` is not specified and `pref_currency_type` is specified then the stored `balance` is converted with the specified `pref_currency_type` using the currency conversion api.
 
 ## Email Request
 
