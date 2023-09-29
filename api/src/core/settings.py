@@ -3,6 +3,7 @@ Provides Settings classes for execution environments.
 """
 import os
 import sys
+import pkg_resources
 from pathlib import Path
 import environ
 from configurations import Configuration
@@ -71,7 +72,7 @@ class Dev(Configuration):
         "revenue",
         "expense",
         "coin",
-        "frontend_version",
+        "version",
     ]
 
     MIDDLEWARE = [
@@ -210,8 +211,14 @@ class Dev(Configuration):
     KEYCLOAK_CLIENT_ID = env.str("KEYCLOAK_CLIENT_ID", default="balhom-api")
     KEYCLOAK_CLIENT_SECRET = env.str(
         "KEYCLOAK_CLIENT_SECRET", default="secret")
-    KEYCLOAK_ENDPOINT = env.str("KEYCLOAK_ENDPOINT", default="localhost:39080")
+    KEYCLOAK_URL = env.str("KEYCLOAK_URL", default="http://localhost:39080")
     KEYCLOAK_REALM = env.str("KEYCLOAK_REALM", default="balhom-realm")
+
+    # Currency Conversion API config
+    CURRENCY_CONVERSION_API_URL = env.str(
+        "CURRENCY_CONVERSION_API_URL", default="http://localhost:18070")
+    CURRENCY_CONVERSION_API_KEY = env.str(
+        "CURRENCY_CONVERSION_API_KEY", default="apiKey")
 
     SWAGGER_SETTINGS = {
         "SECURITY_DEFINITIONS": {
@@ -233,7 +240,9 @@ class Dev(Configuration):
     CURRENCY_TYPE_CODES = env.list(
         "CURRENCY_TYPE_CODES", default=["EUR", "USD"])
 
-    FRONTEND_VERSION = env.str("FRONTEND_VERSION", default="1.4.0")
+    APP_VERSION = env.str("APP_VERSION", default="1.4.0")
+    WEB_VERSION = env.str("WEB_VERSION", default="1.4.0")
+    API_VERSION = pkg_resources.get_distribution("balhom-drf-api").version
 
     DISABLE_ADMIN_PANEL = env.bool("DISABLE_ADMIN_PANEL", default=False)
 
@@ -310,29 +319,23 @@ class OnPremise(Dev):
     EMAIL_HOST_USER = env.str("EMAIL_HOST_USER", default="example@gmail.com")
     EMAIL_HOST_PASSWORD = env.str("EMAIL_HOST_PASSWORD", default="password")
 
-    MINIO_STORAGE_ENDPOINT = env.str("MINIO_ENDPOINT", default=None)
-    if MINIO_STORAGE_ENDPOINT:
+    S3_URL = env.str("S3_URL", default=None)
+    if S3_URL:
         STORAGES = {
             "default": {"BACKEND": "core.storage_backends.MinioMediaStorage"},
             "staticfiles": {"BACKEND": "core.storage_backends.MinioStaticStorage"},
         }
-        if USE_HTTPS:
-            AWS_S3_USE_SSL = True
-            AWS_S3_ENDPOINT_URL = "https://" + \
-                env.str("MINIO_ENDPOINT", default=None)
-        else:
-            AWS_S3_ENDPOINT_URL = "http://" + \
-                env.str("MINIO_ENDPOINT", default=None)
-        AWS_ACCESS_KEY_ID = env.str("MINIO_ACCESS_KEY")
-        AWS_SECRET_ACCESS_KEY = env.str("MINIO_SECRET_KEY")
+        AWS_S3_ENDPOINT_URL = S3_URL
+        AWS_ACCESS_KEY_ID = env.str("S3_ACCESS_KEY")
+        AWS_SECRET_ACCESS_KEY = env.str("S3_SECRET_KEY")
         AWS_S3_OBJECT_PARAMETERS = {
             "CacheControl": "max-age=86400",
         }
         AWS_DEFAULT_ACL = None
 
-        MINIO_STATIC_BUCKET_NAME = env.str(
-            "MINIO_STATIC_BUCKET_NAME", default="balhom-static-bucket")
-        MINIO_MEDIA_BUCKET_NAME = env.str(
-            "MINIO_MEDIA_BUCKET_NAME", default="balhom-media-bucket")
-        MINIO_STORAGE_ACCESS_KEY = env.str("MINIO_ACCESS_KEY")
-        MINIO_STORAGE_SECRET_KEY = env.str("MINIO_SECRET_KEY")
+        S3_STATIC_BUCKET_NAME = env.str(
+            "S3_STATIC_BUCKET_NAME", default="balhom-static-bucket")
+        S3_MEDIA_BUCKET_NAME = env.str(
+            "S3_MEDIA_BUCKET_NAME", default="balhom-media-bucket")
+        S3_STORAGE_ACCESS_KEY = env.str("S3_ACCESS_KEY")
+        S3_STORAGE_SECRET_KEY = env.str("S3_SECRET_KEY")

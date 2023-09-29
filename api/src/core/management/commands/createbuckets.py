@@ -1,8 +1,8 @@
+import json
+import logging
 from django.core.management.base import BaseCommand
 from django.conf import settings
-import logging
 from minio import Minio
-import json
 
 logger = logging.getLogger(__name__)
 
@@ -25,7 +25,7 @@ class Command(BaseCommand):
                 "Principal": {"AWS": "*"},
                 "Action": ["s3:GetBucketLocation", "s3:ListBucket"],
                 "Resource": "arn:aws:s3:::{}".format(
-                    settings.MINIO_STATIC_BUCKET_NAME
+                    settings.S3_STATIC_BUCKET_NAME
                 ),
             },
             {
@@ -33,7 +33,7 @@ class Command(BaseCommand):
                 "Principal": {"AWS": "*"},
                 "Action": "s3:GetObject",
                 "Resource": "arn:aws:s3:::{}/*".format(
-                    settings.MINIO_STATIC_BUCKET_NAME
+                    settings.S3_STATIC_BUCKET_NAME
                 ),
             },
         ],
@@ -41,14 +41,15 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         minio_client = Minio(
-            endpoint=settings.MINIO_STORAGE_ENDPOINT,
-            access_key=settings.MINIO_STORAGE_ACCESS_KEY,
-            secret_key=settings.MINIO_STORAGE_SECRET_KEY,
-            secure=settings.USE_HTTPS,
+            endpoint=settings.S3_STORAGE_ENDPOINT,
+            access_key=settings.S3_STORAGE_ACCESS_KEY,
+            secret_key=settings.S3_STORAGE_SECRET_KEY,
+            secure="https" in settings.S3_URL,
         )
-        minio_client.make_bucket(settings.MINIO_STATIC_BUCKET_NAME)
+        minio_client.make_bucket(settings.S3_STATIC_BUCKET_NAME)
         minio_client.set_bucket_policy(
-            settings.MINIO_STATIC_BUCKET_NAME, json.dumps(self.public_read_policy)
+            settings.S3_STATIC_BUCKET_NAME, json.dumps(
+                self.public_read_policy)
         )
-        minio_client.make_bucket(settings.MINIO_MEDIA_BUCKET_NAME)
+        minio_client.make_bucket(settings.S3_MEDIA_BUCKET_NAME)
         print("Buckets succesfully created")

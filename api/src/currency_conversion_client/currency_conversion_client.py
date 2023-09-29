@@ -17,8 +17,12 @@ from keycloak.exceptions import KeycloakAuthenticationError
 
 logger = logging.getLogger(__name__)
 
+KEYCLOAK_URL = (
+    "https://" if settings.USE_HTTPS else "http://" + settings.KEYCLOAK_ENDPOINT
+)
 
-class KeycloakClient:
+
+class CurrencyConversionClient:
     """
     Keycloak service client for user crud and authentication.
     """
@@ -33,7 +37,7 @@ class KeycloakClient:
         )
         # OpenIDClient
         self.keycloak_openid = KeycloakOpenID(
-            server_url=settings.KEYCLOAK_URL,
+            server_url=KEYCLOAK_URL,
             client_id=settings.KEYCLOAK_CLIENT_ID,
             client_secret_key=settings.KEYCLOAK_CLIENT_SECRET,
             realm_name=settings.KEYCLOAK_REALM,

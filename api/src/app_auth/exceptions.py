@@ -1,8 +1,8 @@
 """
 Provides app exceptions classes.
 """
-from core.exceptions import AppBadRequestException
 from django.utils.translation import gettext_lazy as _
+from core.exceptions import AppBadRequestException
 
 
 USER_NOT_FOUND_ERROR = 1

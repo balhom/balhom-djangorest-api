@@ -3,8 +3,8 @@ from django.utils.translation import gettext_lazy as _
 
 
 class BalanceTypeChoices(models.TextChoices):
-    REVENUE = 'expense', _('expense')
-    EXPENSE = 'revenue', _('revenue')
+    REVENUE = 'exp', _('expense')
+    EXPENSE = 'rev', _('revenue')
 
 
 class BalanceType(models.Model):
@@ -13,7 +13,7 @@ class BalanceType(models.Model):
         max_length=15
     )
     type = models.CharField(
-        max_length=2,
+        max_length=3,
         choices=BalanceTypeChoices.choices
     )
     image = models.ImageField(
