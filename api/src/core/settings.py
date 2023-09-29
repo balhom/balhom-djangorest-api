@@ -322,8 +322,8 @@ class OnPremise(Dev):
     S3_URL = env.str("S3_URL", default=None)
     if S3_URL:
         STORAGES = {
-            "default": {"BACKEND": "core.storage_backends.MinioMediaStorage"},
-            "staticfiles": {"BACKEND": "core.storage_backends.MinioStaticStorage"},
+            "default": {"BACKEND": "core.storage_backends.S3MediaStorage"},
+            "staticfiles": {"BACKEND": "core.storage_backends.S3StaticStorage"},
         }
         AWS_S3_ENDPOINT_URL = S3_URL
         AWS_ACCESS_KEY_ID = env.str("S3_ACCESS_KEY")

@@ -11,5 +11,5 @@ class AbstractCurrencyConversionClient(ABC):
         pass
 
     @abstractmethod
-    def get_conversion(self, currency_from: str, currency_to: str) -> dict | None:
+    def get_conversion(self, currency_from: str, currency_to: str) -> float:
         pass

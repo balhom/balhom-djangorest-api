@@ -24,7 +24,7 @@ class KeycloakClient:
     """
 
     def __init__(self):
-        logger.debug(
+        logger.info(
             "Using:\n%s\n%s\n%s\n%s",
             settings.KEYCLOAK_URL,
             settings.KEYCLOAK_CLIENT_ID,
@@ -46,7 +46,7 @@ class KeycloakClient:
         )
         # Admin client
         keycloak_connection = KeycloakOpenIDConnection(
-            server_url=KEYCLOAK_URL,
+            server_url=settings.KEYCLOAK_URL,
             client_id=settings.KEYCLOAK_CLIENT_ID,
             client_secret_key=settings.KEYCLOAK_CLIENT_SECRET,
             realm_name=settings.KEYCLOAK_REALM,

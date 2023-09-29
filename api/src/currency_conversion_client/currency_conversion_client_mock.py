@@ -55,7 +55,7 @@ class CurrencyConversionClientMock:
     def get_currency_codes(self) -> list[str]:
         return self.currency_codes
 
-    def get_conversion(self, currency_from: str, currency_to: str) -> dict | None:
+    def get_conversion(self, currency_from: str, currency_to: str) -> float:
         for conversion in self.currency_conversions:
             if conversion["code"] == currency_from:
                 for value in conversion["conversions"]:
