@@ -3,7 +3,6 @@ from django.contrib.auth.models import AbstractUser, UserManager
 from django.db import models
 from django.core.validators import MinValueValidator
 from django.utils.translation import gettext_lazy as _
-from coin.models import CoinType
 
 
 class InvitationCode(models.Model):
@@ -13,7 +12,8 @@ class InvitationCode(models.Model):
         default=uuid.uuid4,
         editable=False,
     )
-    usage_left = models.PositiveIntegerField(verbose_name=_("usage left"), default=1)
+    usage_left = models.PositiveIntegerField(
+        verbose_name=_("usage left"), default=1)
     is_active = models.BooleanField(verbose_name=_("is active"), default=True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now_add=True)
@@ -37,9 +37,11 @@ class BalanceUserManager(UserManager):
                     "A keycloak id must be provided"
                 )  # pylint: disable=used-before-assignment
             )
-        currency_type, _ = CoinType.objects.get_or_create(  # pylint: disable=no-member
-            code="EUR"
-        )
+
+        from currency_conversion_client.django_client import get_currency_conversion_client
+        currency_conversion_client = get_currency_conversion_client()
+        currency_type = currency_conversion_client.get_currency_codes()[0]
+
         return User.objects.create(
             keycloak_id=keycloak_id,
             inv_code=InvitationCode.objects.create(  # pylint: disable=no-member
@@ -59,9 +61,11 @@ class BalanceUserManager(UserManager):
                     "A keycloak id must be provided"
                 )  # pylint: disable=used-before-assignment
             )
-        currency_type, _ = CoinType.objects.get_or_create(  # pylint: disable=no-member
-            code="EUR"
-        )
+
+        from currency_conversion_client.django_client import get_currency_conversion_client
+        currency_conversion_client = get_currency_conversion_client()
+        currency_type = currency_conversion_client.get_currency_codes()[0]
+
         return User.objects.create(
             keycloak_id=keycloak_id,
             inv_code=InvitationCode.objects.create(  # pylint: disable=no-member
@@ -104,9 +108,13 @@ class User(AbstractUser):
         blank=True,
         null=True,
     )
-    balance = models.FloatField(verbose_name=_("current balance"), default=0.0)
+    current_balance = models.FloatField(
+        verbose_name=_("current balance"),
+        default=0.0
+    )
     receive_email_balance = models.BooleanField(
-        verbose_name=_("receive email about balance"), default=True
+        verbose_name=_("receive email about balance"),
+        default=True
     )
     # Expected annual balance at the end of a year,
     # it is used to be subtracted with the gross balance of each year
@@ -132,10 +140,9 @@ class User(AbstractUser):
     count_pass_reset = models.IntegerField(
         verbose_name=_("number of requests for password reset"), default=0
     )
-    pref_currency_type = models.ForeignKey(
-        CoinType,
-        on_delete=models.DO_NOTHING,
+    pref_currency_type = models.CharField(
         verbose_name=_("preferred currency type"),
+        max_length=4,
         blank=True,
         null=True,
     )

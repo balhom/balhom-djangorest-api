@@ -3,7 +3,6 @@ Provides Settings classes for execution environments.
 """
 import os
 import sys
-import pkg_resources
 from pathlib import Path
 import environ
 from configurations import Configuration
@@ -69,9 +68,6 @@ class Dev(Configuration):
         "core",
         "app_auth",
         "balance",
-        "revenue",
-        "expense",
-        "coin",
         "version",
     ]
 
@@ -237,12 +233,18 @@ class Dev(Configuration):
     # Days for a periodic deletion of unverified users
     UNVERIFIED_USER_DAYS = env.int("UNVERIFIED_USER_DAYS", default=2)
 
-    CURRENCY_TYPE_CODES = env.list(
-        "CURRENCY_TYPE_CODES", default=["EUR", "USD"])
-
     APP_VERSION = env.str("APP_VERSION", default="1.4.0")
     WEB_VERSION = env.str("WEB_VERSION", default="1.4.0")
-    API_VERSION = pkg_resources.get_distribution("balhom-drf-api").version
+    with open(os.path.join(BASE_DIR, 'pyproject.toml'), encoding="utf-8") as f:
+        lines = f.readlines()
+        for line in lines:
+            if "version" in line:
+                API_VERSION = line \
+                    .strip('\n') \
+                    .strip('version =') \
+                    .strip() \
+                    .strip('"')
+                break
 
     DISABLE_ADMIN_PANEL = env.bool("DISABLE_ADMIN_PANEL", default=False)
 

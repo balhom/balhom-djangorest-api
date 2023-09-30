@@ -3,13 +3,13 @@ from django.db.models.functions import ExtractYear
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import cache_page
 from django.views.decorators.vary import vary_on_headers
+from django.utils.translation import gettext_lazy as _
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.exceptions import ValidationError
 from balance.models.balance_type_model import BalanceType
 from balance.models.balance_model import Balance
 from core.permissions import IsCurrentVerifiedUser
-from coin.currency_converter_integration import convert_or_fetch
 
 
 class BalanceYearsRetrieveView(APIView):

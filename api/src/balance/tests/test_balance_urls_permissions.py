@@ -15,7 +15,7 @@ class BalanceUrlsPermissionsTests(APITestCase):
         # Avoid WARNING logs while testing wrong requests
         logging.disable(logging.WARNING)
 
-        self.expense_url = reverse("expense-list")
+        self.balance_url = reverse("balance-list-create")
         self.exp_type_list_url = reverse("expense-type-list")
 
         self.keycloak_client_mock = get_keycloak_client()
@@ -107,11 +107,11 @@ class BalanceUrlsPermissionsTests(APITestCase):
         """
         data = self.get_expense_data()
         # Try without authentication
-        response = test_utils.post(self.client, self.expense_url, data)
+        response = test_utils.post(self.client, self.balance_url, data)
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
         # Try with authentication
         test_utils.authenticate_user(self.client)
-        response = test_utils.post(self.client, self.expense_url, data)
+        response = test_utils.post(self.client, self.balance_url, data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         # Compare owner
         expense = Expense.objects.get(name="Test name")
@@ -124,20 +124,20 @@ class BalanceUrlsPermissionsTests(APITestCase):
         data = self.get_expense_data()
         # Add new expense as user1
         test_utils.authenticate_user(self.client, self.user_data1["keycloak_id"])
-        test_utils.post(self.client, self.expense_url, data)
+        test_utils.post(self.client, self.balance_url, data)
         # Get expense data as user1
-        response = test_utils.get(self.client, self.expense_url)
+        response = test_utils.get(self.client, self.balance_url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(dict(response.data)["count"], 1)
         # Get expense data as user2
         test_utils.authenticate_user(self.client, self.user_data2["keycloak_id"])
-        response = test_utils.get(self.client, self.expense_url)
+        response = test_utils.get(self.client, self.balance_url)
         # Gets an empty dict
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(dict(response.data)["count"], 0)
         # Try with an specific expense
         expense = Expense.objects.get(name="Test name")
-        response = test_utils.get(self.client, self.expense_url + "/" + str(expense.id))
+        response = test_utils.get(self.client, self.balance_url + "/" + str(expense.id))
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_expense_put_url(self):
@@ -147,12 +147,12 @@ class BalanceUrlsPermissionsTests(APITestCase):
         data = self.get_expense_data()
         # Add new expense as user1
         test_utils.authenticate_user(self.client, self.user_data1["keycloak_id"])
-        test_utils.post(self.client, self.expense_url, data)
+        test_utils.post(self.client, self.balance_url, data)
         expense = Expense.objects.get(name="Test name")
         # Try update as user1
         response = test_utils.patch(
             self.client,
-            self.expense_url + "/" + str(expense.id),
+            self.balance_url + "/" + str(expense.id),
             {"real_quantity": 35.0},
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -163,7 +163,7 @@ class BalanceUrlsPermissionsTests(APITestCase):
         test_utils.authenticate_user(self.client, self.user_data2["keycloak_id"])
         response = test_utils.patch(
             self.client,
-            self.expense_url + "/" + str(expense.id),
+            self.balance_url + "/" + str(expense.id),
             {"real_quantity": 30.0},
         )
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
@@ -175,17 +175,17 @@ class BalanceUrlsPermissionsTests(APITestCase):
         data = self.get_expense_data()
         # Add new expense as user1
         test_utils.authenticate_user(self.client, self.user_data1["keycloak_id"])
-        test_utils.post(self.client, self.expense_url, data)
+        test_utils.post(self.client, self.balance_url, data)
         # Delete expense data as user2
         test_utils.authenticate_user(self.client, self.user_data2["keycloak_id"])
         expense = Expense.objects.get(name="Test name")
         response = test_utils.delete(
-            self.client, self.expense_url + "/" + str(expense.id)
+            self.client, self.balance_url + "/" + str(expense.id)
         )
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         # Delete expense data as user1
         test_utils.authenticate_user(self.client, self.user_data1["keycloak_id"])
         response = test_utils.delete(
-            self.client, self.expense_url + "/" + str(expense.id)
+            self.client, self.balance_url + "/" + str(expense.id)
         )
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)

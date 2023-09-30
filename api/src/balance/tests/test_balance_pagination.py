@@ -14,7 +14,7 @@ class BalancePaginationTests(APITestCase):
         # Avoid WARNING logs while testing wrong requests
         logging.disable(logging.WARNING)
 
-        self.expense_url = reverse("expense-list")
+        self.balance_url = reverse("balance-list-create")
 
         self.keycloak_client_mock = get_keycloak_client()
 
@@ -61,9 +61,9 @@ class BalancePaginationTests(APITestCase):
         data = self.get_expense_data()
         # Add new expense
         test_utils.authenticate_user(self.client)
-        test_utils.post(self.client, self.expense_url, data)
+        test_utils.post(self.client, self.balance_url, data)
         # Get expense data
-        response = test_utils.get(self.client, self.expense_url)
+        response = test_utils.get(self.client, self.balance_url)
         scheme = dict(response.data)
         scheme["results"] = []
         results = dict(response.data)["results"]
@@ -102,9 +102,9 @@ class BalancePaginationTests(APITestCase):
         for i in range(20):
             data = self.get_expense_data()
             # Add new expense
-            test_utils.post(self.client, self.expense_url, data)
+            test_utils.post(self.client, self.balance_url, data)
         # Get First page expense data
-        response = test_utils.get(self.client, self.expense_url)
+        response = test_utils.get(self.client, self.balance_url)
         data = dict(response.data)
         self.assertEqual(data["count"], 20)
         # 10 expenses in the first page

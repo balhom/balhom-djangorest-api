@@ -51,7 +51,6 @@ class Balance(models.Model):
     class Meta:
         verbose_name = _("Balance")
         verbose_name_plural = _("Balances")
-        abstract = True
         # Greater to lower date
         ordering = ["-date"]
 

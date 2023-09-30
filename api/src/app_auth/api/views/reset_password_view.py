@@ -1,3 +1,6 @@
+from django.utils.timezone import now
+from django.utils.translation import gettext_lazy as _
+from django.db import transaction
 from rest_framework import generics, status
 from rest_framework.parsers import JSONParser
 from rest_framework.permissions import AllowAny
@@ -12,9 +15,6 @@ from app_auth.exceptions import (
     UserNotFoundException,
     ResetPasswordRetriesException,
 )
-from django.utils.timezone import now
-from django.utils.translation import gettext_lazy as _
-from django.db import transaction
 from keycloak_client.django_client import get_keycloak_client
 
 

@@ -4,89 +4,22 @@ Provide view classes.
 from rest_framework import generics
 from rest_framework.response import Response
 from rest_framework.parsers import FormParser, MultiPartParser, JSONParser
-from rest_framework.permissions import AllowAny
 from django.utils.translation import gettext_lazy as _
 from django.db import transaction
 from django.utils.timezone import now
 from keycloak_client.django_client import get_keycloak_client
-from coin.currency_converter_integration import convert_or_fetch
 from core.permissions import IsCurrentVerifiedUser
-from app_auth.models import InvitationCode, User
+from app_auth.models import User
 from app_auth.api.serializers.user_serializers import (
-    UserCreationSerializer,
     UserRetrieveUpdateDestroySerializer,
-    EmailSerializer
 )
 from app_auth.tasks import change_converted_quantities
 from app_auth.exceptions import (
-    UserNotFoundException,
-    CannotSendVerifyEmailException,
-    UserEmailConflictException,
-    CannotCreateUserException,
     CannotUpdateUserException,
     CannotDeleteUserException,
     CurrencyTypeChangedException,
 )
-
-
-class UserCreationView(generics.CreateAPIView):
-    """
-    View for User creation (register)
-    """
-
-    queryset = User.objects.all()
-    permission_classes = (AllowAny,)
-    serializer_class = UserCreationSerializer
-    parser_classes = (
-        FormParser,
-        JSONParser,
-    )
-
-    @transaction.atomic
-    def perform_create(self, serializer):
-        validated_data = serializer.validated_data
-
-        inv_code = validated_data["inv_code"]
-        pref_currency_type = validated_data["pref_currency_type"]
-
-        keycloak_client = get_keycloak_client()
-
-        created, res_code, _ = keycloak_client.create_user(
-            email=validated_data["email"],
-            username=validated_data["username"],
-            password=validated_data["password"],
-            locale=validated_data["locale"]
-        )
-
-        if not created:
-            if res_code == 409:
-                raise UserEmailConflictException()
-            raise CannotCreateUserException()
-
-        keycloak_id = keycloak_client.get_user_id(
-            email=validated_data["email"])
-        if not keycloak_id:
-            raise CannotCreateUserException()
-
-        user = User.objects.create(
-            keycloak_id=keycloak_id,
-            inv_code=inv_code,
-            pref_currency_type=pref_currency_type
-        )
-        user.set_password(validated_data["password"])
-
-        # Invitation code decrease, race condition
-        inv_codes = InvitationCode.objects.select_for_update().filter(  # pylint: disable=no-member
-            code=inv_code.code
-        )
-        for inv_code in inv_codes:
-            inv_code.usage_left = inv_code.usage_left - 1
-            if inv_code.usage_left <= 0:
-                inv_code.is_active = False
-            inv_code.save()
-        # Alternative:
-        # inv_code.usage_left = F("usage_left") - 1
-        user.save()
+from currency_conversion_client.django_client import get_currency_conversion_client
 
 
 class UserRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
@@ -126,6 +59,8 @@ class UserRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
 
     @transaction.atomic
     def perform_update(self, serializer):
+        currency_conversion_client = get_currency_conversion_client()
+
         # The user balance should only be converted if
         # the same balance is provided in the request
         # and the pref_currency_type is changed, same for
@@ -142,10 +77,11 @@ class UserRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
                         now() - user.date_currency_change).total_seconds()
                     if duration_s < 24 * 60 * 60:
                         raise CurrencyTypeChangedException()
-                serializer.validated_data["balance"] = convert_or_fetch(
-                    serializer.instance.pref_currency_type,
-                    serializer.validated_data["pref_currency_type"],
-                    serializer.validated_data["balance"],
+                serializer.validated_data["balance"] = round(
+                    currency_conversion_client.get_conversion(
+                        serializer.instance.pref_currency_type,
+                        serializer.validated_data["pref_currency_type"]
+                    ) * serializer.validated_data["balance"], 2
                 )
                 # Change expected annual balance
                 if "expected_annual_balance" not in serializer.validated_data:
@@ -154,10 +90,11 @@ class UserRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
                     ] = self.request.user.expected_annual_balance
                 serializer.validated_data[
                     "expected_annual_balance"
-                ] = convert_or_fetch(
-                    serializer.instance.pref_currency_type,
-                    serializer.validated_data["pref_currency_type"],
-                    serializer.validated_data["expected_annual_balance"],
+                ] = round(
+                    currency_conversion_client.get_conversion(
+                        serializer.instance.pref_currency_type,
+                        serializer.validated_data["pref_currency_type"]
+                    ) * serializer.validated_data["expected_annual_balance"], 2
                 )
                 # Change expected monthly balance
                 if "expected_monthly_balance" not in serializer.validated_data:
@@ -166,10 +103,11 @@ class UserRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
                     ] = self.request.user.expected_monthly_balance
                 serializer.validated_data[
                     "expected_monthly_balance"
-                ] = convert_or_fetch(
-                    serializer.instance.pref_currency_type,
-                    serializer.validated_data["pref_currency_type"],
-                    serializer.validated_data["expected_monthly_balance"],
+                ] = round(
+                    currency_conversion_client.get_conversion(
+                        serializer.instance.pref_currency_type,
+                        serializer.validated_data["pref_currency_type"]
+                    ) * serializer.validated_data["expected_monthly_balance"], 2
                 )
                 change_converted_quantities.delay(
                     user.keycloak_id,
@@ -180,18 +118,20 @@ class UserRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
             if "expected_annual_balance" in serializer.validated_data:
                 serializer.validated_data[
                     "expected_annual_balance"
-                ] = convert_or_fetch(
-                    serializer.instance.pref_currency_type,
-                    serializer.validated_data["pref_currency_type"],
-                    serializer.validated_data["expected_annual_balance"],
+                ] = round(
+                    currency_conversion_client.get_conversion(
+                        serializer.instance.pref_currency_type,
+                        serializer.validated_data["pref_currency_type"]
+                    ) * serializer.validated_data["expected_annual_balance"], 2
                 )
             if "expected_monthly_balance" in serializer.validated_data:
                 serializer.validated_data[
                     "expected_monthly_balance"
-                ] = convert_or_fetch(
-                    serializer.instance.pref_currency_type,
-                    serializer.validated_data["pref_currency_type"],
-                    serializer.validated_data["expected_monthly_balance"],
+                ] = round(
+                    currency_conversion_client.get_conversion(
+                        serializer.instance.pref_currency_type,
+                        serializer.validated_data["pref_currency_type"]
+                    ) * serializer.validated_data["expected_monthly_balance"], 2
                 )
         serializer.save()
 
@@ -238,33 +178,3 @@ class UserRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
             keycloak_id=keycloak_id)
         if not deleted:
             raise CannotDeleteUserException()
-
-
-class SendVerifyEmailView(generics.CreateAPIView):
-    """
-    View to send verification email
-    """
-
-    permission_classes = (AllowAny,)
-    serializer_class = EmailSerializer
-    parser_classes = (JSONParser,)
-
-    @transaction.atomic
-    def perform_create(self, serializer):
-        email = serializer.validated_data["email"]
-
-        keycloak_client = get_keycloak_client()
-
-        user_info = keycloak_client.get_user_info_by_email(
-            email=email)
-        if not user_info:
-            raise UserNotFoundException()
-        if dict(user_info)["emailVerified"]:
-            raise CannotSendVerifyEmailException()
-
-        keycloak_id = dict(user_info)["id"]
-        sent = keycloak_client.send_verify_email(
-            keycloak_id=keycloak_id
-        )
-        if not sent:
-            raise CannotSendVerifyEmailException()

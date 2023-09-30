@@ -17,7 +17,7 @@ class DateBalanceLogicTests(APITestCase):
         # Avoid WARNING logs while testing wrong requests
         logging.disable(logging.WARNING)
 
-        self.expense_url = reverse("expense-list")
+        self.balance_url = reverse("balance-list-create")
         self.revenue_url = reverse("revenue-list")
 
         self.keycloak_client_mock = get_keycloak_client()
@@ -98,7 +98,7 @@ class DateBalanceLogicTests(APITestCase):
         test_utils.authenticate_user(self.client)
         data = self.get_expense_data()
         # Post expense
-        response = test_utils.post(self.client, self.expense_url, data)
+        response = test_utils.post(self.client, self.balance_url, data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         last_monthly_balance = MonthlyBalance.objects.last()
         self.assertEqual(now().date().year, last_monthly_balance.year)
@@ -142,11 +142,11 @@ class DateBalanceLogicTests(APITestCase):
         test_utils.authenticate_user(self.client)
         data = self.get_expense_data()
         # Post expense
-        response = test_utils.post(self.client, self.expense_url, data)
+        response = test_utils.post(self.client, self.balance_url, data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         # Delete expense
         exp = Expense.objects.get(name=data["name"])
-        response = test_utils.delete(self.client, self.expense_url + "/" + str(exp.id))
+        response = test_utils.delete(self.client, self.balance_url + "/" + str(exp.id))
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         last_monthly_balance = MonthlyBalance.objects.last()
         self.assertEqual(now().date().year, last_monthly_balance.year)
@@ -231,13 +231,13 @@ class DateBalanceLogicTests(APITestCase):
         test_utils.authenticate_user(self.client)
         data = self.get_expense_data()
         # Post expense
-        response = test_utils.post(self.client, self.expense_url, data)
+        response = test_utils.post(self.client, self.balance_url, data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         # Update expense dfiferent date
         exp = Expense.objects.get(name=data["name"])
         past_date = (now() - timedelta(days=32)).date()
         response = test_utils.patch(
-            self.client, self.expense_url + "/" + str(exp.id), {"date": str(past_date)}
+            self.client, self.balance_url + "/" + str(exp.id), {"date": str(past_date)}
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         last_monthly_balance = MonthlyBalance.objects.last()
@@ -258,7 +258,7 @@ class DateBalanceLogicTests(APITestCase):
         # Test update diferent quantity and date
         response = test_utils.patch(
             self.client,
-            self.expense_url + "/" + str(exp.id),
+            self.balance_url + "/" + str(exp.id),
             {"date": str(now().date()), "real_quantity": 10.14},
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -277,7 +277,7 @@ class DateBalanceLogicTests(APITestCase):
         self.assertEqual(-10.14, last_annual_balance.gross_quantity)
         # Test update diferent quantity
         response = test_utils.patch(
-            self.client, self.expense_url + "/" + str(exp.id), {"real_quantity": 20.86}
+            self.client, self.balance_url + "/" + str(exp.id), {"real_quantity": 20.86}
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         last_monthly_balance = MonthlyBalance.objects.last()

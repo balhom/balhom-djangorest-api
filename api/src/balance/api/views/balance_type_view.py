@@ -7,7 +7,6 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.exceptions import ValidationError
 from balance.models.balance_type_model import BalanceType
 from balance.api.serializers.balance_type_serializer import BalanceTypeSerializer
-from coin.currency_converter_integration import convert_or_fetch
 
 
 class BalanceTypeViewSet(ModelViewSet):

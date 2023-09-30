@@ -34,6 +34,9 @@ class CurrencyConversionClient:
         return list(response.content)
 
     def get_conversion(self, currency_from: str, currency_to: str) -> float:
+        if currency_from == currency_to:
+            return 1
+
         response = requests.get(
             f"{settings.CURRENCY_CONVERSION_API_URL}/api/v1/conversion/{currency_from}",
             headers={

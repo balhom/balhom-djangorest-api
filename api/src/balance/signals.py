@@ -8,18 +8,22 @@ from balance.utils import (
     update_or_create_annual_balance,
     update_or_create_monthly_balance
 )
-from currency. import convert_or_fetch
+from currency_conversion_client.django_client import get_currency_conversion_client
 from app_auth.models import User
 
 
 @receiver(pre_save, sender=Balance)
 def balance_pre_save(sender, instance: Balance, **kwargs):
+    currency_conversion_client = get_currency_conversion_client()
+
     new_instance = instance
     try:
-        old_instance = Balance.objects.get(id=new_instance.id)
+        old_instance = Balance.objects.get(  # pylint: disable=no-member
+            id=new_instance.id
+        )
     except ObjectDoesNotExist:
         old_instance = None
-    
+
     owner = User.objects.get(id=new_instance.owner.id)
     sign = -1 if instance.balance_type.type == BalanceTypeChoices.EXPENSE \
         else 1
@@ -30,14 +34,17 @@ def balance_pre_save(sender, instance: Balance, **kwargs):
         currency_to = owner.pref_currency_type
 
         real_quantity = new_instance.real_quantity
-        converted_quantity = convert_or_fetch(
-            currency_from, currency_to, real_quantity)
+        converted_quantity = round(
+            real_quantity * currency_conversion_client.get_conversion(
+                currency_from, currency_to
+            ), 2
+        )
         new_instance.converted_quantity = converted_quantity
-        
-        owner.balance += converted_quantity * sign
-        owner.balance = round(owner.balance, 2)
+
+        owner.current_balance += converted_quantity * sign
+        owner.current_balance = round(owner.current_balance, 2)
         owner.save()
-        
+
         # Create AnnualBalance or update it
         update_or_create_annual_balance(
             converted_quantity, owner,
@@ -62,19 +69,23 @@ def balance_pre_save(sender, instance: Balance, **kwargs):
             currency_to = owner.pref_currency_type
             real_quantity = new_instance.real_quantity
 
-            converted_quantity = convert_or_fetch(
-                currency_from, currency_to, real_quantity
+            converted_quantity = round(
+                real_quantity * currency_conversion_client.get_conversion(
+                    currency_from, currency_to
+                ), 2
             )
             new_instance.converted_quantity = converted_quantity
-            converted_old_quantity = convert_or_fetch(
-                old_instance.currency_type,
-                currency_to,
-                old_instance.real_quantity
+
+            converted_old_quantity = round(
+                old_instance.real_quantity * currency_conversion_client.get_conversion(
+                    old_instance.currency_type,
+                    currency_to
+                ), 2
             )
 
-            owner.balance += (converted_quantity \
-                - converted_old_quantity) * sign
-            owner.balance = round(owner.balance, 2)
+            owner.current_balance += (converted_quantity
+                                      - converted_old_quantity) * sign
+            owner.current_balance = round(owner.current_balance, 2)
             owner.save()
 
             # Create DateBalance or update it
@@ -90,8 +101,8 @@ def balance_pre_save(sender, instance: Balance, **kwargs):
             converted_quantity = new_instance.converted_quantity
             # Create DateBalance or update it
             check_dates_and_update_date_balances(
-                old_instance, 
-                converted_quantity, 
+                old_instance,
+                converted_quantity,
                 None,
                 new_instance.date
             )
@@ -99,21 +110,23 @@ def balance_pre_save(sender, instance: Balance, **kwargs):
 
 @receiver(pre_delete, sender=Balance)
 def balance_pre_delete(sender, instance: Balance, **kwargs):
+    currency_conversion_client = get_currency_conversion_client()
+
     owner = User.objects.get(id=instance.owner.id)
     sign = -1 if instance.balance_type.type == BalanceTypeChoices.EXPENSE \
         else 1
-    
+
     currency_to = owner.pref_currency_type
-    converted_quantity = convert_or_fetch(
-        instance.currency_type,
-        currency_to,
-        instance.real_quantity
+    converted_quantity = round(
+        instance.real_quantity * currency_conversion_client.get_conversion(
+            instance.currency_type, currency_to
+        ), 2
     )
 
-    owner.balance -= converted_quantity * sign
-    owner.balance = round(owner.balance, 2)
+    owner.current_balance -= converted_quantity * sign
+    owner.current_balance = round(owner.current_balance, 2)
     owner.save()
-    
+
     # Create AnnualBalance or update it
     update_or_create_annual_balance(
         - converted_quantity,

@@ -7,7 +7,7 @@ from currency_conversion_client.currency_conversion_client_mock import CurrencyC
 
 
 @lru_cache
-def get_currency_converter_client() -> AbstractCurrencyConversionClient:
+def get_currency_conversion_client() -> AbstractCurrencyConversionClient:
     """Create an instance of a KeycloakClient using singleton pattern."""
     if settings.TESTING:
         return CurrencyConversionClientMock()

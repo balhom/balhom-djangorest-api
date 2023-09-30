@@ -15,7 +15,7 @@ class BalanceFilterTests(APITestCase):
         # Avoid WARNING logs while testing wrong requests
         logging.disable(logging.WARNING)
 
-        self.expense_url = reverse("expense-list")
+        self.balance_url = reverse("balance-list-create")
 
         self.keycloak_client_mock = get_keycloak_client()
 
@@ -59,7 +59,7 @@ class BalanceFilterTests(APITestCase):
         test_utils.authenticate_user(self.client)
         data = self.get_expense_data()
         # Add new expense
-        test_utils.post(self.client, self.expense_url, data)
+        test_utils.post(self.client, self.balance_url, data)
 
     def test_expense_filter_date(self):
         """
@@ -67,7 +67,7 @@ class BalanceFilterTests(APITestCase):
         """
         self.authenticate_add_expense()
         # Get expense data
-        url = self.expense_url + "?date=" + str(now().date())
+        url = self.balance_url + "?date=" + str(now().date())
         response = test_utils.get(self.client, url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         data = dict(response.data)
@@ -80,7 +80,7 @@ class BalanceFilterTests(APITestCase):
         self.authenticate_add_expense()
         # Get expense data
         url = (
-            self.expense_url
+            self.balance_url
             + "?date_from="
             + str(now().date() - timedelta(days=1))
             + "&date_to="
@@ -97,7 +97,7 @@ class BalanceFilterTests(APITestCase):
         """
         self.authenticate_add_expense()
         # Get expense data
-        url = self.expense_url + "?exp_type=test"
+        url = self.balance_url + "?exp_type=test"
         response = test_utils.get(self.client, url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         data = dict(response.data)
@@ -109,7 +109,7 @@ class BalanceFilterTests(APITestCase):
         """
         self.authenticate_add_expense()
         # Get expense data
-        url = self.expense_url + "?currency_type=EUR"
+        url = self.balance_url + "?currency_type=EUR"
         response = test_utils.get(self.client, url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         data = dict(response.data)
@@ -122,7 +122,7 @@ class BalanceFilterTests(APITestCase):
         self.authenticate_add_expense()
         # Get expense data
         url = (
-            self.expense_url + "?converted_quantity_min=1.0&converted_quantity_max=3.0"
+            self.balance_url + "?converted_quantity_min=1.0&converted_quantity_max=3.0"
         )
         response = test_utils.get(self.client, url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -130,7 +130,7 @@ class BalanceFilterTests(APITestCase):
         self.assertEqual(data["count"], 1)
         # Get expense data
         url = (
-            self.expense_url + "?converted_quantity_min=6.0&converted_quantity_max=8.0"
+            self.balance_url + "?converted_quantity_min=6.0&converted_quantity_max=8.0"
         )
         response = test_utils.get(self.client, url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)

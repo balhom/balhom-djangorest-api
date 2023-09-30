@@ -1,13 +1,12 @@
 import logging
+from django.db import transaction
 from celery import shared_task
 from app_auth.models import User
-from balance.models import MonthlyBalance, AnnualBalance
-from revenue.models import Revenue
-from expense.models import Expense
-from coin.models import CoinType
-from coin.currency_converter_integration import convert_or_fetch
-from django.db import transaction
+from balance.models.annual_balance_model import AnnualBalance
+from balance.models.monthly_balance_model import MonthlyBalance
+from balance.models.balance_model import Balance
 from keycloak_client.django_client import get_keycloak_client
+from currency_conversion_client.django_client import get_currency_conversion_client
 
 logger = logging.getLogger(__name__)
 
@@ -27,46 +26,53 @@ def remove_unverified_users():
 
 @shared_task
 def change_converted_quantities(
-    owner_keycloak_id, currency_from_code, currency_to_code
+    owner_keycloak_id, currency_from, currency_to
 ):
-    currency_from = CoinType.objects.get(  # pylint: disable=no-member
-        code=currency_from_code
-    )
-    currency_to = CoinType.objects.get(  # pylint: disable=no-member
-        code=currency_to_code
-    )
+    currency_conversion_client = get_currency_conversion_client()
+
     with transaction.atomic():
-        for revenue in Revenue.objects.filter(  # pylint: disable=no-member
+
+        for balance in Balance.objects.filter(  # pylint: disable=no-member
             owner=User.objects.get(keycloak_id=owner_keycloak_id)
         ):
-            revenue.converted_quantity = convert_or_fetch(
-                currency_from, currency_to, revenue.converted_quantity
+            balance.converted_quantity = round(
+                currency_conversion_client.get_conversion(
+                    currency_from,
+                    currency_to
+                ) * balance.converted_quantity, 2
             )
-            revenue.save()
-        for expense in Expense.objects.filter(  # pylint: disable=no-member
+            balance.save()
+
+        for date_balance in MonthlyBalance.objects.filter(  # pylint: disable=no-member
             owner=User.objects.get(keycloak_id=owner_keycloak_id)
         ):
-            expense.converted_quantity = convert_or_fetch(
-                currency_from, currency_to, expense.converted_quantity
+            date_balance.gross_quantity = round(
+                currency_conversion_client.get_conversion(
+                    currency_from,
+                    currency_to
+                ) * date_balance.gross_quantity, 2
             )
-            expense.save()
-        for dateBalance in MonthlyBalance.objects.filter(  # pylint: disable=no-member
+            date_balance.expected_quantity = round(
+                currency_conversion_client.get_conversion(
+                    currency_from,
+                    currency_to
+                ) * date_balance.expected_quantity, 2
+            )
+            date_balance.save()
+
+        for date_balance in AnnualBalance.objects.filter(  # pylint: disable=no-member
             owner=User.objects.get(keycloak_id=owner_keycloak_id)
         ):
-            dateBalance.gross_quantity = convert_or_fetch(
-                currency_from, currency_to, dateBalance.gross_quantity
+            date_balance.gross_quantity = round(
+                currency_conversion_client.get_conversion(
+                    currency_from,
+                    currency_to
+                ) * date_balance.gross_quantity, 2
             )
-            dateBalance.expected_quantity = convert_or_fetch(
-                currency_from, currency_to, dateBalance.expected_quantity
+            date_balance.expected_quantity = round(
+                currency_conversion_client.get_conversion(
+                    currency_from,
+                    currency_to
+                ) * date_balance.expected_quantity, 2
             )
-            dateBalance.save()
-        for dateBalance in AnnualBalance.objects.filter(  # pylint: disable=no-member
-            owner=User.objects.get(keycloak_id=owner_keycloak_id)
-        ):
-            dateBalance.gross_quantity = convert_or_fetch(
-                currency_from, currency_to, dateBalance.gross_quantity
-            )
-            dateBalance.expected_quantity = convert_or_fetch(
-                currency_from, currency_to, dateBalance.expected_quantity
-            )
-            dateBalance.save()
+            date_balance.save()

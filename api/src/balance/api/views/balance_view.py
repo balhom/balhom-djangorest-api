@@ -6,7 +6,6 @@ from balance.api.serializers.balance_serializer import (
     BalanceSerializer
 )
 from balance.api.filters.balance_filter import BalanceFilterSet
-from currency_converter_integration import convert_or_fetch
 
 
 class BalanceViewSet(ModelViewSet):
