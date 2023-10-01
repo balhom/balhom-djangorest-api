@@ -11,7 +11,8 @@ from balance.tasks import (
 )
 from balance.schedule_setup import schedule_setup
 from balance.tasks import periodic_monthly_balance, periodic_annual_balance
-from app_auth.models import User, InvitationCode
+from app_auth.models.user_model import User
+from app_auth.models.invitation_code_model import InvitationCode
 from keycloak_client.django_client import get_keycloak_client
 
 

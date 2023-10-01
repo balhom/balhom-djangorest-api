@@ -9,8 +9,8 @@ from django.db import transaction
 from django.utils.timezone import now
 from keycloak_client.django_client import get_keycloak_client
 from core.permissions import IsCurrentVerifiedUser
-from app_auth.models import User
-from app_auth.api.serializers.user_serializers import (
+from app_auth.models.user_model import User
+from app_auth.api.serializers.user_retrieve_update_destroy_serializer import (
     UserRetrieveUpdateDestroySerializer,
 )
 from app_auth.tasks import change_converted_quantities
@@ -70,18 +70,18 @@ class UserRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
             and serializer.validated_data["pref_currency_type"]
             != serializer.instance.pref_currency_type
         ):
-            if "balance" in serializer.validated_data:
+            if "current_balance" in serializer.validated_data:
                 user = self.request.user
                 if user.date_currency_change:
                     duration_s = (
                         now() - user.date_currency_change).total_seconds()
                     if duration_s < 24 * 60 * 60:
                         raise CurrencyTypeChangedException()
-                serializer.validated_data["balance"] = round(
+                serializer.validated_data["current_balance"] = round(
                     currency_conversion_client.get_conversion(
                         serializer.instance.pref_currency_type,
                         serializer.validated_data["pref_currency_type"]
-                    ) * serializer.validated_data["balance"], 2
+                    ) * serializer.validated_data["current_balance"], 2
                 )
                 # Change expected annual balance
                 if "expected_annual_balance" not in serializer.validated_data:
@@ -111,8 +111,8 @@ class UserRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
                 )
                 change_converted_quantities.delay(
                     user.keycloak_id,
-                    user.pref_currency_type.code,
-                    serializer.validated_data["pref_currency_type"].code,
+                    user.pref_currency_type,
+                    serializer.validated_data["pref_currency_type"],
                 )
                 serializer.validated_data["date_currency_change"] = now()
             if "expected_annual_balance" in serializer.validated_data:

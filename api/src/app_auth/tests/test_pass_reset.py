@@ -5,7 +5,8 @@ from django.urls import reverse
 from django.conf import settings
 from django.utils.timezone import timedelta
 from django.core.cache import cache
-from app_auth.models import InvitationCode, User
+from app_auth.models.invitation_code_model import InvitationCode
+from app_auth.models.user_model import User
 import core.tests.utils as test_utils
 from keycloak_client.django_client import get_keycloak_client
 

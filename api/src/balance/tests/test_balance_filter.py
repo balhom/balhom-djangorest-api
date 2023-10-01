@@ -1,12 +1,12 @@
 import logging
-import core.tests.utils as test_utils
 from django.utils.timezone import now, timedelta
 from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase
-from coin.models import CoinType
-from app_auth.models import InvitationCode, User
-from expense.models import ExpenseType
+import core.tests.utils as test_utils
+from app_auth.models.user_model import User
+from app_auth.models.invitation_code_model import InvitationCode
+from balance.models.balance_type_model import BalanceType, BalanceTypeChoices
 from keycloak_client.django_client import get_keycloak_client
 
 
@@ -23,8 +23,6 @@ class BalanceFilterTests(APITestCase):
         self.inv_code = InvitationCode.objects.create(  # pylint: disable=no-member
             usage_left=400
         )
-        # Create CurrencyType
-        self.currency_type = CoinType.objects.create(code="EUR")
         # User data
         self.user_data = {
             "keycloak_id": self.keycloak_client_mock.keycloak_id,
@@ -33,15 +31,18 @@ class BalanceFilterTests(APITestCase):
             "password": self.keycloak_client_mock.password,
             "inv_code": str(self.inv_code.code),
             "locale": self.keycloak_client_mock.locale,
-            "pref_currency_type": str(self.currency_type.code),
+            "pref_currency_type": "EUR",
         }
         # User creation
         self.user = User.objects.create(
             keycloak_id=self.user_data["keycloak_id"],
-            pref_currency_type=self.currency_type,
+            pref_currency_type="EUR",
             inv_code=self.inv_code,
         )
-        self.exp_type = ExpenseType.objects.create(name="test")
+        self.exp_type = BalanceType.objects.create(
+            name="test",
+            type=BalanceTypeChoices.EXPENSE
+        )
         return super().setUp()
 
     def get_expense_data(self):
@@ -49,8 +50,11 @@ class BalanceFilterTests(APITestCase):
             "name": "Test name",
             "description": "Test description",
             "real_quantity": 2.5,
-            "currency_type": self.currency_type.code,
-            "exp_type": self.exp_type.name,
+            "currency_type": "EUR",
+            "balance_type": {
+                "name": self.exp_type.name,
+                "type": self.exp_type.type
+            },
             "date": str(now().date()),
             "owner": str(self.user.keycloak_id),
         }

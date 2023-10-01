@@ -4,8 +4,8 @@ import tempfile
 import shutil
 from rest_framework.test import APITestCase
 from rest_framework import status
-from coin.models import CoinType
-from app_auth.models import User, InvitationCode
+from app_auth.models.invitation_code_model import InvitationCode
+from app_auth.models.user_model import User
 from app_auth.exceptions import (
     CURRENCY_TYPE_CHANGED_ERROR
 )
@@ -35,22 +35,19 @@ class UserPutTests(APITestCase):
         # Create InvitationCode
         self.inv_code = InvitationCode.objects.create()  # pylint: disable=no-member
         # User data
-        CoinType.objects.create(code="USD")  # pylint: disable=no-member
-        pref_currency_type = CoinType.objects.create(  # pylint: disable=no-member
-            code="EUR")
         self.user_data = {
             "username": self.keycloak_client_mock.username,
             "email": self.keycloak_client_mock.email,
             "password": self.keycloak_client_mock.password,
             "inv_code": str(self.inv_code.code),
-            "pref_currency_type": str(pref_currency_type.code),
+            "pref_currency_type": "EUR",
             "locale": self.keycloak_client_mock.locale
         }
         # User creation
         user = User.objects.create(
             keycloak_id=self.keycloak_client_mock.keycloak_id,
             inv_code=self.inv_code,
-            pref_currency_type=pref_currency_type
+            pref_currency_type="EUR"
         )
         user.set_password(self.user_data["password"])
         user.save()
@@ -131,7 +128,7 @@ class UserPutTests(APITestCase):
             self.user_put_url,
             data={
                 "pref_currency_type": "USD",
-                "balance": "0"
+                "current_balance": "0"
             }
         )
         self.assertEqual(status.HTTP_200_OK, response.status_code)
@@ -140,7 +137,7 @@ class UserPutTests(APITestCase):
             self.user_put_url,
             data={
                 "pref_currency_type": "EUR",
-                "balance": "0"
+                "current_balance": "0"
             }
         )
         self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)

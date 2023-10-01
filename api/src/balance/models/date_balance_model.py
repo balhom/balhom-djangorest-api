@@ -1,7 +1,7 @@
 import uuid
 from django.db import models
 from django.utils.translation import gettext_lazy as _
-from app_auth.models import User
+from app_auth.models.user_model import User
 
 
 class DateBalance(models.Model):

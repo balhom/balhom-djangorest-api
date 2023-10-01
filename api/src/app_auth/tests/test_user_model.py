@@ -1,5 +1,5 @@
 from rest_framework.test import APITestCase
-from app_auth.models import User
+from app_auth.models.user_model import User
 from django.utils.translation import gettext_lazy as _
 from keycloak_client.django_client import get_keycloak_client
 

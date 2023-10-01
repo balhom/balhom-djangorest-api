@@ -11,6 +11,8 @@ class BalanceConfig(AppConfig):
     name = "balance"
 
     def ready(self):
+        import balance.signals  # noqa
+
         from django.conf import settings
 
         try:
@@ -19,28 +21,30 @@ class BalanceConfig(AppConfig):
 
             schedule_setup()
 
-            # Create default Revenue Type models
-            from revenue.models import RevenueType
+            from balance.models.balance_type_model import BalanceType, BalanceTypeChoices
 
+            # Create default Revenue Type models
             revenue_path = os.path.join(settings.MEDIA_ROOT, "revenue")
             if not os.path.exists(revenue_path):
                 return
             for rev_icon in os.listdir(revenue_path):
                 if rev_icon.endswith((".png", ".jpg", ".jpeg")) and "icon" in rev_icon:
-                    RevenueType.objects.update_or_create(
-                        name=rev_icon.split("_icon")[0], image="revenue/" + rev_icon
+                    BalanceType.objects.update_or_create(
+                        name=rev_icon.split("_icon")[0],
+                        type=BalanceTypeChoices.REVENUE,
+                        image="revenue/" + rev_icon
                     )
 
             # Create default Expense Type models
-            from expense.models import ExpenseType
-
             expense_path = os.path.join(settings.MEDIA_ROOT, "expense")
             if not os.path.exists(expense_path):
                 return
             for exp_icon in os.listdir(expense_path):
                 if exp_icon.endswith((".png", ".jpg", ".jpeg")) and "icon" in exp_icon:
-                    ExpenseType.objects.update_or_create(
-                        name=exp_icon.split("_icon")[0], image="expense/" + exp_icon
+                    BalanceType.objects.update_or_create(
+                        name=exp_icon.split("_icon")[0],
+                        type=BalanceTypeChoices.EXPENSE,
+                        image="expense/" + exp_icon
                     )
         except Exception:
-            pass
+            logger.info("Unable to create balance type entries")

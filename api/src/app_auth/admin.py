@@ -1,5 +1,6 @@
 from django.contrib import admin
-from app_auth.models import InvitationCode, User
+from app_auth.models.invitation_code_model import InvitationCode
+from app_auth.models.user_model import User
 from django.contrib.auth.models import Group
 
 # Remove Groups from admin

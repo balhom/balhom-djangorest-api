@@ -16,12 +16,12 @@ class BalanceYearsRetrieveView(APIView):
     permission_classes = (IsCurrentVerifiedUser,)
 
     def validate(self):
-        if "type" not in self.request.GET:
-            raise ValidationError({"type": _("type not provided")})
+        if "type" not in list(self.kwargs):
+            raise ValidationError({"type": [_("type not provided")]})
         if not BalanceType.objects.filter(  # pylint: disable=no-member
-            type=self.request.GET["type"]
+            type=self.kwargs["type"]
         ).exists():
-            raise ValidationError({"type": _("type not valid")})
+            raise ValidationError({"type": [_("type not valid")]})
 
     @method_decorator(cache_page(60))
     @method_decorator(vary_on_headers("Authorization"))

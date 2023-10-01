@@ -3,8 +3,8 @@ from rest_framework.test import APITestCase
 from rest_framework import status
 from django.urls import reverse
 from django.conf import settings
-from coin.models import CoinType
-from app_auth.models import InvitationCode, User
+from app_auth.models.invitation_code_model import InvitationCode
+from app_auth.models.user_model import User
 import core.tests.utils as test_utils
 from keycloak_client.django_client import get_keycloak_client
 
@@ -35,9 +35,7 @@ class AppAuthUrlsPermissionsTests(APITestCase):
             "password": self.keycloak_client_mock.password,
             "inv_code": str(self.inv_code.code),
             "locale": self.keycloak_client_mock.locale,
-            "pref_currency_type":
-                str(CoinType.objects.create(  # pylint: disable=no-member
-                    code="EUR").code),
+            "pref_currency_type": "EUR",
         }
         self.user_data2 = {
             "keycloak_id": self.keycloak_client_mock.keycloak_id + "1",
@@ -46,9 +44,7 @@ class AppAuthUrlsPermissionsTests(APITestCase):
             "password": "password1@212",
             "inv_code": str(self.inv_code.code),
             "locale": "en",
-            "pref_currency_type":
-                str(CoinType.objects.create(  # pylint: disable=no-member
-                    code="USD").code),
+            "pref_currency_type": "EUR",
         }
         # User creation
         User.objects.create(

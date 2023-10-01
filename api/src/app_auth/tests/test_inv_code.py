@@ -3,8 +3,8 @@ import logging
 from rest_framework.test import APITestCase
 from rest_framework import status
 from django.urls import reverse
-from coin.models import CoinType
-from app_auth.models import User, InvitationCode
+from app_auth.models.invitation_code_model import InvitationCode
+from app_auth.models.user_model import User
 import core.tests.utils as test_utils
 from keycloak_client.django_client import get_keycloak_client
 
@@ -21,9 +21,6 @@ class InvitationCodeTests(APITestCase):
 
         # Create InvitationCode
         self.inv_code = InvitationCode.objects.create()  # pylint: disable=no-member
-        # Create CurrencyType
-        self.currency_type = CoinType.objects.create(  # pylint: disable=no-member
-            code="EUR")
         # Test user data
         self.register_data = {
             "username": self.keycloak_client_mock.username,
@@ -31,7 +28,7 @@ class InvitationCodeTests(APITestCase):
             "locale": self.keycloak_client_mock.locale,
             "inv_code": str(self.inv_code.code),
             "password": self.keycloak_client_mock.password,
-            "pref_currency_type": str(self.currency_type.code)
+            "pref_currency_type": "EUR"
         }
         return super().setUp()
 

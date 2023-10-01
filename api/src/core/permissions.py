@@ -1,6 +1,5 @@
-from typing import OrderedDict
 from rest_framework import permissions
-from app_auth.models import User
+from app_auth.models.user_model import User
 
 
 class IsCurrentVerifiedUser(permissions.IsAuthenticated):

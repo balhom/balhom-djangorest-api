@@ -4,8 +4,10 @@ from django.urls import reverse
 from rest_framework.test import APITestCase
 from rest_framework import status
 import core.tests.utils as test_utils
-from balance.models import AnnualBalance, MonthlyBalance
-from app_auth.models import InvitationCode, User
+from balance.models.annual_balance_model import AnnualBalance
+from balance.models.monthly_balance_model import MonthlyBalance
+from app_auth.models.user_model import User
+from app_auth.models.invitation_code_model import InvitationCode
 from keycloak_client.django_client import get_keycloak_client
 
 

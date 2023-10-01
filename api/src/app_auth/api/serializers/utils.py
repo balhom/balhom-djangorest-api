@@ -1,6 +1,6 @@
-from app_auth.models import User
 from django.utils.translation import gettext_lazy as _
 from rest_framework.serializers import ValidationError
+from app_auth.models.user_model import User
 
 
 def check_username_pass(username, email, password):

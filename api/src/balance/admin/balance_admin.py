@@ -8,7 +8,7 @@ class ExpenseAdmin(admin.ModelAdmin):
         "name",
         "description",
         ("real_quantity", "converted_quantity", "date",),
-        ("currency_type", "exp_type",),
+        ("currency_type", "balance_type",),
         "owner",
         ("created", "updated",),
     )

@@ -4,7 +4,7 @@ Provides a Keycloak authentication backend class for django.
 import logging
 from django.contrib.auth.backends import ModelBackend
 from django.core.exceptions import ObjectDoesNotExist
-from app_auth.models import User
+from app_auth.models.user_model import User
 from keycloak_client.django_client import get_keycloak_client
 
 logger = logging.getLogger(__name__)

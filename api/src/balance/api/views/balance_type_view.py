@@ -15,12 +15,12 @@ class BalanceTypeViewSet(ModelViewSet):
     permission_classes = (IsAuthenticated,)
 
     def validate(self):
-        if "type" not in self.request.GET:
-            raise ValidationError({"type": _("type not provided")})
-        if BalanceType.objects.filter(  # pylint: disable=no-member
-            pk=self.request.GET["type"]
+        if "type" not in list(self.kwargs):
+            raise ValidationError({"type": [_("type not provided")]})
+        if not BalanceType.objects.filter(  # pylint: disable=no-member
+            type=self.kwargs["type"]
         ).exists():
-            raise ValidationError({"type": _("type not valid")})
+            raise ValidationError({"type": [_("type not valid")]})
 
     def get_queryset(self):
         """
@@ -29,7 +29,13 @@ class BalanceTypeViewSet(ModelViewSet):
         if getattr(self, "swagger_fake_view", False):
             return BalanceType.objects.none()  # return empty queryset
         self.validate()
-        return BalanceType.objects.get()  # pylint: disable=no-member
+        return BalanceType.objects.filter(  # pylint: disable=no-member
+            type=self.kwargs["type"]
+        )
+
+    def get_object(self):
+        return self.get_queryset().get(
+            name=self.kwargs["name"])
 
     @method_decorator(cache_page(12 * 60 * 60))
     @method_decorator(vary_on_headers("Authorization"))

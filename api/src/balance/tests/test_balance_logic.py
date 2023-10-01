@@ -4,7 +4,8 @@ from django.urls import reverse
 from rest_framework.test import APITestCase
 from rest_framework import status
 import core.tests.utils as test_utils
-from app_auth.models import InvitationCode, User
+from app_auth.models.user_model import User
+from app_auth.models.invitation_code_model import InvitationCode
 from balance.models.balance_model import Balance
 from balance.models.balance_type_model import BalanceType, BalanceTypeChoices
 from keycloak_client.django_client import get_keycloak_client
@@ -37,7 +38,7 @@ class BalanceLogicTests(APITestCase):
         self.user = User.objects.create(
             keycloak_id=self.user_data["keycloak_id"],
             pref_currency_type="EUR",
-            balance=10,
+            current_balance=10,
             inv_code=self.inv_code,
         )
 
@@ -52,7 +53,10 @@ class BalanceLogicTests(APITestCase):
             "description": "",
             "real_quantity": 2.0,
             "currency_type": "EUR",
-            "exp_type": self.exp_type.id,
+            "balance_type": {
+                "name": self.exp_type.name,
+                "type": self.exp_type.type
+            },
             "date": str(now().date()),
             "owner": str(self.user),
         }

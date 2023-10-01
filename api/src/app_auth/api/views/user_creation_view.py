@@ -7,8 +7,9 @@ from rest_framework.permissions import AllowAny
 from django.utils.translation import gettext_lazy as _
 from django.db import transaction
 from keycloak_client.django_client import get_keycloak_client
-from app_auth.models import InvitationCode, User
-from app_auth.api.serializers.user_serializers import (
+from app_auth.models.invitation_code_model import InvitationCode
+from app_auth.models.user_model import User
+from app_auth.api.serializers.user_creation_serializer import (
     UserCreationSerializer,
 )
 from app_auth.exceptions import (

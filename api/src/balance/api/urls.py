@@ -16,17 +16,17 @@ urlpatterns = [
          name="monthly-balance-list"),
     path("monthly-balance/<int:pk>", monthly_balance_view,
          name="monthly-balance"),
+    # Balance years url
+    path("balance/years/<str:type>", BalanceYearsRetrieveView.as_view(),
+         name="balance-years-get"),
+    # Balance type url
+    path("balance/type/<str:type>/<str:name>", balance_type_view,
+         name="balance-type-get"),
+    path("balance/type/<str:type>", balance_type_list_view,
+         name="balance-type-list"),
     # Balance urls
     path("balance", balance_list_create_view,
          name="balance-list-create"),
     path("balance/<int:pk>", balance_get_update_view,
          name="balance-get-update"),
-    # Balance years url
-    path("balance/years/<str:type>", BalanceYearsRetrieveView.as_view(),
-         name="balance-years-get"),
-    # Balance type url
-    path("balance/type/<str:type>", balance_type_list_view,
-         name="balance-type-list"),
-    path("balance/type/<str:type>/<str:name>", balance_type_view,
-         name="balance-type-get"),
 ]

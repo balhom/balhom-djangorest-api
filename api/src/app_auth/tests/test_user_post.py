@@ -3,8 +3,8 @@ from rest_framework.test import APITestCase
 from rest_framework import status
 from django.urls import reverse
 from django.core.cache import cache
-from coin.models import CoinType
-from app_auth.models import User, InvitationCode
+from app_auth.models.invitation_code_model import InvitationCode
+from app_auth.models.user_model import User
 from app_auth.exceptions import (
     USER_EMAIL_CONFLICT_ERROR
 )
@@ -34,9 +34,7 @@ class UserPostTests(APITestCase):
             "password": self.keycloak_client_mock.password,
             "inv_code": str(self.inv_code.code),
             "locale": self.keycloak_client_mock.locale,
-            "pref_currency_type":
-                str(CoinType.objects.create(  # pylint: disable=no-member
-                    code="EUR").code)
+            "pref_currency_type": "EUR"
         }
         return super().setUp()
 

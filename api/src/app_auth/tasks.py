@@ -1,7 +1,7 @@
 import logging
 from django.db import transaction
 from celery import shared_task
-from app_auth.models import User
+from app_auth.models.user_model import User
 from balance.models.annual_balance_model import AnnualBalance
 from balance.models.monthly_balance_model import MonthlyBalance
 from balance.models.balance_model import Balance

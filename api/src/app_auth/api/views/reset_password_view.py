@@ -5,8 +5,8 @@ from rest_framework import generics, status
 from rest_framework.parsers import JSONParser
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
-from app_auth.models import User
-from app_auth.api.serializers.user_serializers import (
+from app_auth.models.user_model import User
+from app_auth.api.serializers.email_serializer import (
     EmailSerializer
 )
 from app_auth.exceptions import (

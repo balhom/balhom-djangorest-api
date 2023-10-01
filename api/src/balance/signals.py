@@ -9,7 +9,7 @@ from balance.utils import (
     update_or_create_monthly_balance
 )
 from currency_conversion_client.django_client import get_currency_conversion_client
-from app_auth.models import User
+from app_auth.models.user_model import User
 
 
 @receiver(pre_save, sender=Balance)
@@ -30,30 +30,21 @@ def balance_pre_save(sender, instance: Balance, **kwargs):
 
     # Create action
     if not old_instance:
-        currency_from = new_instance.currency_type
-        currency_to = owner.pref_currency_type
-
-        real_quantity = new_instance.real_quantity
-        converted_quantity = round(
-            real_quantity * currency_conversion_client.get_conversion(
-                currency_from, currency_to
-            ), 2
-        )
-        new_instance.converted_quantity = converted_quantity
-
-        owner.current_balance += converted_quantity * sign
+        owner.current_balance += new_instance.converted_quantity * sign
         owner.current_balance = round(owner.current_balance, 2)
         owner.save()
 
         # Create AnnualBalance or update it
         update_or_create_annual_balance(
-            converted_quantity, owner,
+            new_instance.converted_quantity,
+            owner,
             new_instance.date.year,
             instance.balance_type.type == BalanceTypeChoices.REVENUE
         )
         # Create MonthlyBalance or update it
         update_or_create_monthly_balance(
-            converted_quantity, owner,
+            new_instance.converted_quantity,
+            owner,
             new_instance.date.year,
             new_instance.date.month,
             instance.balance_type.type == BalanceTypeChoices.REVENUE

@@ -3,8 +3,8 @@ import core.tests.utils as test_utils
 from rest_framework.test import APITestCase
 from rest_framework import status
 from django.urls import reverse
-from coin.models import CoinType
-from app_auth.models import User, InvitationCode
+from app_auth.models.invitation_code_model import InvitationCode
+from app_auth.models.user_model import User
 from keycloak_client.django_client import get_keycloak_client
 
 
@@ -30,9 +30,7 @@ class UserGetDelTests(APITestCase):
             "password": self.keycloak_client_mock.password,
             "inv_code": str(self.inv_code.code),
             "locale": self.keycloak_client_mock.locale,
-            "pref_currency_type":
-                str(CoinType.objects.create(  # pylint: disable=no-member
-                    code="EUR").code),
+            "pref_currency_type": "EUR",
         }
         # User creation
         User.objects.create(

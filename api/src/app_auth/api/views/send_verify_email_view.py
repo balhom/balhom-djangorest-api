@@ -7,7 +7,7 @@ from rest_framework.permissions import AllowAny
 from django.utils.translation import gettext_lazy as _
 from django.db import transaction
 from keycloak_client.django_client import get_keycloak_client
-from app_auth.api.serializers.user_serializers import (
+from app_auth.api.serializers.email_serializer import (
     EmailSerializer
 )
 from app_auth.exceptions import (

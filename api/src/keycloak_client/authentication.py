@@ -4,7 +4,7 @@ Provides a Keycloak authentication backend class for django rest framework.
 from django.utils.translation import gettext_lazy as _
 from django.core.exceptions import ObjectDoesNotExist
 from rest_framework import exceptions, authentication
-from app_auth.models import User
+from app_auth.models.user_model import User
 from keycloak_client.django_client import get_keycloak_client
 
 

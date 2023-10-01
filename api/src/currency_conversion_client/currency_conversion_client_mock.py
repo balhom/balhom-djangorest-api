@@ -21,7 +21,7 @@ class CurrencyConversionClientMock:
                     {
                             "code": "EUR",
                             "value": 0.945875
-                        }
+                    }
                 ]
             },
             {
@@ -34,7 +34,7 @@ class CurrencyConversionClientMock:
                     {
                             "code": "USD",
                             "value": 1.05713
-                        }
+                    }
                 ]
             },
             {
@@ -47,7 +47,7 @@ class CurrencyConversionClientMock:
                     {
                             "code": "USD",
                             "value": 0.737505
-                        }
+                    }
                 ]
             }
         ]
@@ -56,6 +56,9 @@ class CurrencyConversionClientMock:
         return self.currency_codes
 
     def get_conversion(self, currency_from: str, currency_to: str) -> float:
+        if currency_from == currency_to:
+            return 1
+
         for conversion in self.currency_conversions:
             if conversion["code"] == currency_from:
                 for value in conversion["conversions"]:

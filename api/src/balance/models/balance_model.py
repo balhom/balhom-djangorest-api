@@ -2,7 +2,7 @@ from django.db import models
 from django.core.validators import MinValueValidator
 from django.utils.translation import gettext_lazy as _
 from balance.models.balance_type_model import BalanceType
-from app_auth.models import User
+from app_auth.models.user_model import User
 
 
 class Balance(models.Model):
