@@ -1,6 +1,6 @@
-# User Requests
+# Account Requests
 
-## User Creation Request
+## Account Creation Request
 
 | name                     | type   | validations                                      | comments             |
 | ------------------------ | ------ | ------------------------------------------------ | -------------------- |
@@ -13,7 +13,7 @@
 | expected_monthly_balance | double | min: 0                                           | Optional, default: 0 |
 | pref_currency_type       | String | max-size: 4, not-blank                           |                      |
 
-## User Update Request
+## Account Update Request
 
 | name                     | type          | validations                                      | comments |
 | ------------------------ | ------------- | ------------------------------------------------ | -------- |

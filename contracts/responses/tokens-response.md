@@ -1,9 +1,8 @@
-# Keycloak Token Response
+# Tokens Response
 
 | name               | type   | comments |
 | ------------------ | ------ | -------- |
 | access_token       | String |          |
 | expires_in         | long   |          |
-| refresh_expires_in | long   |          |
 | refresh_token      | String |          |
-| token_type         | String |          |
+| refresh_expires_in | long   |          |

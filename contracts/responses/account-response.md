@@ -1,4 +1,4 @@
-# User Response
+# Account Response
 
 | name                     | type          | comments   |
 | ------------------------ | ------------- | ---------- |
