@@ -2,13 +2,13 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
+# 
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-30 13:56+0200\n"
+"POT-Creation-Date: 2023-10-09 17:17+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,369 +18,290 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: .\balance\models.py:16 .\expense\models.py:8 .\revenue\models.py:8
-msgid "name"
-msgstr "name"
+#: app_auth/api/serializers/user_creation_serializer.py:61
+#: app_auth/api/serializers/user_retrieve_update_destroy_serializer.py:54
+msgid "Locale not supported"
+msgstr "Locale not supported"
 
-#: .\balance\models.py:20
-msgid "description"
-msgstr "description"
-
-#: .\balance\models.py:26
-msgid "real quantity"
-msgstr "real quantity"
-
-#: .\balance\models.py:30
-msgid "converted quantity"
-msgstr "converted quantity"
-
-#: .\balance\models.py:34
-msgid "date"
-msgstr "date"
-
-#: .\balance\models.py:38 .\balance\models.py:78
-msgid "coin type"
-msgstr "coin type"
-
-#: .\balance\models.py:43 .\balance\models.py:85
-msgid "owner"
-msgstr "owner"
-
-#: .\balance\models.py:50
-msgid "Balance"
-msgstr "Balance"
-
-#: .\balance\models.py:51
-msgid "Balances"
-msgstr "Balances"
-
-#: .\balance\models.py:68
-msgid "gross quantity"
-msgstr "gross quantity"
-
-#: .\balance\models.py:73
-msgid "expected quantity"
-msgstr "expected quantity"
-
-#: .\balance\models.py:92
-msgid "Date balance"
-msgstr "Date balance"
-
-#: .\balance\models.py:93
-msgid "Date balances"
-msgstr "Date balance"
-
-#: .\balance\models.py:102 .\balance\models.py:118
-msgid "year"
-msgstr "year"
-
-#: .\balance\models.py:110
-msgid "Annual balance"
-msgstr "Annual balance"
-
-#: .\balance\models.py:111
-msgid "Annual balances"
-msgstr "Annual balances"
-
-#: .\balance\models.py:125
-msgid "month"
-msgstr "month"
-
-#: .\balance\models.py:133
-msgid "Monthly balance"
-msgstr "Monthly balance"
-
-#: .\balance\models.py:134
-msgid "Monthly balances"
-msgstr "Monthly balances"
-
-#: .\coin\api\views.py:53
-msgid "{} code not supported"
-msgstr "{} code not supported"
-
-#: .\coin\api\views.py:68
-msgid "No exchange data, try later"
-msgstr "No exchange data, try later"
-
-#: .\coin\currency_converter_integration.py:13
-msgid "No coin exchange"
-msgstr "No coin exchange"
-
-#: .\coin\currency_converter_integration.py:19
-msgid "Exchange data not updated in the past 24 hours"
-msgstr "Exchange data not updated in the past 24 hours"
-
-#: .\coin\currency_converter_integration.py:25
-msgid "No exchange data for the given coin type"
-msgstr "No exchange data for the given coin type"
-
-#: .\coin\models.py:8
-msgid "code"
-msgstr "code"
-
-#: .\coin\models.py:14
-msgid "Coin type"
-msgstr "Coin type"
-
-#: .\coin\models.py:15
-msgid "Coin types"
-msgstr "Coin types"
-
-#: .\coin\models.py:24
-msgid "uuid"
-msgstr "uuid"
-
-#: .\coin\models.py:36
-msgid "data exhange dictionary"
-msgstr "data exhange dictionary"
-
-#: .\coin\models.py:42
-msgid "Coin exchange"
-msgstr "Coin exchange"
-
-#: .\coin\models.py:43
-msgid "Coin exchanges"
-msgstr "Coin exchanges"
-
-#: .\core\settings.py:172
-msgid "English"
-msgstr "English"
-
-#: .\core\settings.py:173
-msgid "Spanish"
-msgstr "Spanish"
-
-#: .\core\settings.py:174
-msgid "French"
-msgstr "French"
-
-#: .\app_auth\api\serializers\code_serializers.py:99
-#: .\app_auth\api\serializers\code_serializers.py:136
-#: .\app_auth\api\serializers\utils.py:16
-msgid "User not found"
-msgstr "User not found"
-
-#: .\app_auth\api\serializers\code_serializers.py:171
-msgid "Invalid old password"
-msgstr "Invalid old password"
-
-#: .\app_auth\api\serializers\user_serializers.py:65
-#: .\app_auth\models.py:185
-msgid "Language not supported"
-msgstr "Language not supported"
-
-#: .\app_auth\api\serializers\user_serializers.py:73
+#: app_auth/api/serializers/user_creation_serializer.py:72
 msgid "Invitation code not found"
 msgstr "Invitation code not found"
 
-#: .\app_auth\api\serializers\user_serializers.py:75
+#: app_auth/api/serializers/user_creation_serializer.py:74
 msgid "Invalid invitation code"
 msgstr "Invalid invitation code"
 
-#: .\app_auth\api\serializers\utils.py:19
-msgid "User already verified"
-msgstr "User already verified"
-
-#: .\app_auth\api\serializers\utils.py:29
-msgid "Password fields do not match"
-msgstr "Password fields do not match"
-
-#: .\app_auth\api\serializers\utils.py:32 .\app_auth\models.py:188
+#: app_auth/api/serializers/utils.py:12
 msgid "Password cannot match other profile data"
 msgstr "Password cannot match other profile data"
 
-#: .\app_auth\api\views\user_views.py:55
-msgid "Coin type has already been changed in the las 24 hours"
-msgstr "Coin type has already been changed in the las 24 hours"
+#: app_auth/api/views/auth_views.py:87 app_auth/api/views/auth_views.py:116
+msgid "Refresh token not provided"
+msgstr "Refresh token not provided"
 
-#: .\app_auth\exceptions.py:22
-msgid "No invitation code stored"
-msgstr "No invitation code stored"
+#: app_auth/exceptions.py:27
+msgid "User not found"
+msgstr "User not found"
 
-#: .\app_auth\exceptions.py:28
+#: app_auth/exceptions.py:37
 msgid "Unverified email"
 msgstr "Unverified email"
 
-#: .\app_auth\exceptions.py:34
-msgid "Invalid refresh token"
-msgstr "Invalid refresh token"
+#: app_auth/exceptions.py:47
+msgid "Cannot send verification mail"
+msgstr "Cannot send verification mail"
 
-#: .\app_auth\exceptions.py:40
-msgid "No active account found for specified refresh token"
-msgstr "No active account found for specified refresh token"
+#: app_auth/exceptions.py:57
+msgid "Cannot send reset password mail"
+msgstr "Cannot send reset password mail"
 
-#: .\app_auth\exceptions.py:46 .\app_auth\models.py:191
-msgid "Username and email can not be the same"
-msgstr "Username and email can not be the same"
+#: app_auth/exceptions.py:67
+msgid "Email already used"
+msgstr "Email already used"
 
-#: .\app_auth\exceptions.py:52
-msgid "Code has already been sent, wait {} seconds"
-msgstr "Code has already been sent, wait {} seconds"
+#: app_auth/exceptions.py:77
+msgid "Cannot create user"
+msgstr "Cannot create user"
 
-#: .\app_auth\exceptions.py:59
-msgid "No code sent"
-msgstr "No code sent"
+#: app_auth/exceptions.py:87
+msgid "Cannot update user"
+msgstr "Cannot update user"
 
-#: .\app_auth\exceptions.py:65
-msgid "Code is no longer valid"
-msgstr "Code is no longer valid"
+#: app_auth/exceptions.py:97
+msgid "Cannot delete user"
+msgstr "Cannot delete user"
 
-#: .\app_auth\exceptions.py:71
-msgid "Invalid code"
-msgstr "Invalid code"
+#: app_auth/exceptions.py:107
+msgid "Password can only be reset 3 times a day"
+msgstr "Password can only be reset 3 times a day"
 
-#: .\app_auth\exceptions.py:77
-msgid "Only three codes can be sent per day"
-msgstr "Only three codes can be sent per day"
+#: app_auth/exceptions.py:117
+msgid "Currency type has already been changed in the las 24 hours"
+msgstr "Currency type has already been changed in the las 24 hours"
 
-#: .\app_auth\exceptions.py:83
-msgid "New password must be different from old password"
-msgstr "New password must be different from old password"
+#: app_auth/exceptions.py:127
+msgid "Wrong credentials"
+msgstr "Wrong credentials"
 
-#: .\app_auth\exceptions.py:89
-msgid "New password cannot match other profile data"
-msgstr "New password cannot match other profile data"
-
-#: .\app_auth\models.py:12
+#: app_auth/models/invitation_code_model.py:8
 msgid "uuid code"
 msgstr "uuid code"
 
-#: .\app_auth\models.py:18
+#: app_auth/models/invitation_code_model.py:14
 msgid "usage left"
 msgstr "usage left"
 
-#: .\app_auth\models.py:22
+#: app_auth/models/invitation_code_model.py:15
 msgid "is active"
 msgstr "is active"
 
-#: .\app_auth\models.py:29
+#: app_auth/models/invitation_code_model.py:20
 msgid "Invitation code"
 msgstr "Invitation code"
 
-#: .\app_auth\models.py:30
+#: app_auth/models/invitation_code_model.py:21
 msgid "Invitation codes"
 msgstr "Invitation codes"
 
-#: .\app_auth\models.py:43 .\app_auth\models.py:58
-msgid "An email address must be provided"
-msgstr "An email address must be provided"
+#: app_auth/models/user_model.py:16 app_auth/models/user_model.py:40
+msgid "A keycloak id must be provided"
+msgstr "A keycloak id must be provided"
 
-#: .\app_auth\models.py:45 .\app_auth\models.py:60
-msgid "An username must be provided"
-msgstr "An username must be provided"
+#: app_auth/models/user_model.py:76
+msgid "keycloak id"
+msgstr "keycloak id"
 
-#: .\app_auth\models.py:53
-msgid "Superuser must have is_staff=True"
-msgstr "Superuser must have is_staff=True"
-
-#: .\app_auth\models.py:55
-msgid "Superuser must have is_superuser=True"
-msgstr "Superuser must have is_superuser=True"
-
-#: .\app_auth\models.py:77
-msgid "email address"
-msgstr "email address"
-
-#: .\app_auth\models.py:82
-msgid "language"
-msgstr "language"
-
-#: .\app_auth\models.py:88
+#: app_auth/models/user_model.py:79
 msgid "profile image"
 msgstr "profile image"
 
-#: .\app_auth\models.py:94
+#: app_auth/models/user_model.py:86
 msgid "invitation code"
 msgstr "invitation code"
 
-#: .\app_auth\models.py:99
+#: app_auth/models/user_model.py:91
 msgid "current balance"
 msgstr "current balance"
 
-#: .\app_auth\models.py:103
+#: app_auth/models/user_model.py:95
 msgid "receive email about balance"
 msgstr "receive email about balance"
 
-#: .\app_auth\models.py:110
+#: app_auth/models/user_model.py:102
 msgid "expected annual balance"
 msgstr "expected annual balance"
 
-#: .\app_auth\models.py:118
+#: app_auth/models/user_model.py:110
 msgid "expected monthly balance"
 msgstr "expected monthly balance"
 
-#: .\app_auth\models.py:124
-msgid "verified"
-msgstr "verified"
-
-#: .\app_auth\models.py:130
-msgid "last code sent"
-msgstr "last code sent"
-
-#: .\app_auth\models.py:138
-msgid "date of last code sent"
-msgstr "date of last code sent"
-
-#: .\app_auth\models.py:145
-msgid "last password reset code sent"
-msgstr "last password reset code sent"
-
-#: .\app_auth\models.py:153
+#: app_auth/models/user_model.py:116
 msgid "date of last password reset code sent"
 msgstr "date of last password reset code sent"
 
-#: .\app_auth\models.py:159
-msgid "number of requests for password reset code"
-msgstr "number of requests for password reset code"
+#: app_auth/models/user_model.py:120
+msgid "number of requests for password reset"
+msgstr "number of requests for password reset"
 
-#: .\app_auth\models.py:164
-msgid "preferred coin type"
-msgstr "preferred coin type"
+#: app_auth/models/user_model.py:123
+msgid "preferred currency type"
+msgstr "preferred currency type"
 
-#: .\app_auth\models.py:171
-msgid "date of last preferred coin type change"
-msgstr "date of last preferred coin type change"
+#: app_auth/models/user_model.py:129
+msgid "date of last preferred currency type change"
+msgstr "date of last preferred currency type change"
 
-#: .\expense\models.py:13 .\revenue\models.py:13
+#: balance/api/serializers/balance_serializer.py:39
+msgid "Balance type not provided"
+msgstr "Balance type not provided"
+
+#: balance/api/serializers/balance_serializer.py:47
+msgid "Provided balance type does not exists"
+msgstr "Provided balance type does not exists"
+
+#: balance/api/views/balance_type_view.py:19
+#: balance/api/views/balance_years_view.py:20
+msgid "type not provided"
+msgstr "type not provided"
+
+#: balance/api/views/balance_type_view.py:23
+#: balance/api/views/balance_years_view.py:24
+msgid "type not valid"
+msgstr "type not valid"
+
+#: balance/models/annual_balance_model.py:9
+#: balance/models/monthly_balance_model.py:9
+msgid "year"
+msgstr "year"
+
+#: balance/models/annual_balance_model.py:17
+msgid "Annual balance"
+msgstr "Annual balance"
+
+#: balance/models/annual_balance_model.py:18
+msgid "Annual balances"
+msgstr "Annual balances"
+
+#: balance/models/balance_model.py:14 balance/models/balance_type_model.py:12
+msgid "name"
+msgstr "name"
+
+#: balance/models/balance_model.py:18
+msgid "description"
+msgstr "description"
+
+#: balance/models/balance_model.py:24
+msgid "real quantity"
+msgstr "real quantity"
+
+#: balance/models/balance_model.py:28
+msgid "converted quantity"
+msgstr "converted quantity"
+
+#: balance/models/balance_model.py:32
+msgid "date"
+msgstr "date"
+
+#: balance/models/balance_model.py:35 balance/models/date_balance_model.py:24
+msgid "currency type"
+msgstr "currency type"
+
+#: balance/models/balance_model.py:40
+msgid "balance type"
+msgstr "balance type"
+
+#: balance/models/balance_model.py:45 balance/models/date_balance_model.py:29
+msgid "owner"
+msgstr "owner"
+
+#: balance/models/balance_model.py:52
+msgid "Balance"
+msgstr "Balance"
+
+#: balance/models/balance_model.py:53
+msgid "Balances"
+msgstr "Balances"
+
+#: balance/models/balance_type_model.py:6
+msgid "revenue"
+msgstr "revenue"
+
+#: balance/models/balance_type_model.py:7
+msgid "expense"
+msgstr "expense"
+
+#: balance/models/balance_type_model.py:20
 msgid "image"
 msgstr "image"
 
-#: .\expense\models.py:19
-msgid "Expense type"
-msgstr "Expense type"
+#: balance/models/balance_type_model.py:26
+msgid "Balance type"
+msgstr "Balance type"
 
-#: .\expense\models.py:20
-msgid "Expense types"
-msgstr "Expense types"
+#: balance/models/balance_type_model.py:27
+msgid "Balance types"
+msgstr "Balance types"
 
-#: .\expense\models.py:29
-msgid "expense type"
-msgstr "expense type"
+#: balance/models/date_balance_model.py:15
+msgid "gross quantity"
+msgstr "gross quantity"
 
-#: .\expense\models.py:34
-msgid "Expense"
-msgstr "Expense"
+#: balance/models/date_balance_model.py:20
+msgid "expected quantity"
+msgstr "expected quantity"
 
-#: .\expense\models.py:35
-msgid "Expenses"
-msgstr "Expenses"
+#: balance/models/date_balance_model.py:36
+msgid "Date balance"
+msgstr "Date balance"
 
-#: .\revenue\models.py:19
-msgid "Revenue type"
-msgstr "Revenue type"
+#: balance/models/date_balance_model.py:37
+msgid "Date balances"
+msgstr "Date balance"
 
-#: .\revenue\models.py:20
-msgid "Revenue types"
-msgstr "Revenue types"
+#: balance/models/monthly_balance_model.py:16
+msgid "month"
+msgstr "month"
 
-#: .\revenue\models.py:29
-msgid "revenue type"
-msgstr "revenue type"
+#: balance/models/monthly_balance_model.py:24
+msgid "Monthly balance"
+msgstr "Monthly balance"
 
-#: .\revenue\models.py:34
-msgid "Revenue"
-msgstr "Revenue"
+#: balance/models/monthly_balance_model.py:25
+msgid "Monthly balances"
+msgstr "Monthly balances"
 
-#: .\revenue\models.py:35
-msgid "Revenues"
-msgstr "Revenues"
+#: core/settings.py:140
+msgid "English"
+msgstr "English"
+
+#: core/settings.py:141
+msgid "Spanish"
+msgstr "Spanish"
+
+#: core/settings.py:142
+msgid "French"
+msgstr "French"
+
+#: currency_conversion_client/exceptions.py:17
+msgid "Cannot make conversion"
+msgstr "Cannot make conversion"
+
+#: keycloak_client/authentication.py:27
+msgid "Unprocessable authorization header"
+msgstr "Unprocessable authorization header"
+
+#: keycloak_client/authentication.py:43
+msgid "No invitation code stored"
+msgstr "No invitation code stored"
+
+#: keycloak_client/authentication.py:48
+msgid "User does not exists"
+msgstr "User does not exists"
+
+#: keycloak_client/authentication.py:49
+msgid "Invalid access token"
+msgstr "Invalid access token"
+
+#: keycloak_client/authentication.py:52
+msgid "Bearer <jwt>"
+msgstr "Bearer <jwt>"
