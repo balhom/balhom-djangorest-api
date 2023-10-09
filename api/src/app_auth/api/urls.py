@@ -5,8 +5,8 @@ from app_auth.api.views.user_creation_view import UserCreationView
 from app_auth.api.views.send_verify_email_view import SendVerifyEmailView
 
 urlpatterns = [
-    path("user", UserCreationView.as_view(), name="user-post"),
-    path("user/profile", UserRetrieveUpdateDestroyView.as_view(),
+    path("account", UserCreationView.as_view(), name="user-post"),
+    path("account/profile", UserRetrieveUpdateDestroyView.as_view(),
          name="user-put-get-del"),
     path("user/send-verify-email", SendVerifyEmailView.as_view(),
          name="send-verify-email"),
