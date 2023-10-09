@@ -5,7 +5,6 @@ import logging
 from jose import JWTError
 from django.conf import settings
 from django.utils.timezone import datetime
-from keycloak_client.exceptions import AppUnauthorizedException
 from keycloak import (
     KeycloakOpenID,
     KeycloakAdmin,
@@ -218,6 +217,7 @@ class KeycloakClient:
                 grant_type=["refresh_token"],
             )
         except KeycloakAuthenticationError as exc:
+            from core.exceptions import AppUnauthorizedException
             raise AppUnauthorizedException(
                 detail=exc.error_message,
             ) from exc
@@ -231,6 +231,7 @@ class KeycloakClient:
                 refresh_token=refresh_token,
             )
         except KeycloakAuthenticationError as exc:
+            from core.exceptions import AppUnauthorizedException
             raise AppUnauthorizedException(
                 detail=exc.error_message,
             ) from exc
