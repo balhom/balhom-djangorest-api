@@ -17,7 +17,6 @@
 | EMAIL_CODE_VALID            | Email verification code validity duration                      |
 | UNVERIFIED_USER_DAYS        | Days for a periodic deletion of unverified users. Default: 2   |
 | DATABASE_URL                | Databse endpoint                                               |
-| CURRENCY_TYPE_CODES         | Coin type codes allowed (they have to be valid)                |
 | APP_VERSION                 | Minimum supported app version. Optional                        |
 | WEB_VERSION                 | Minimum supported web version. Optional                        |
 | DISABLE_ADMIN_PANEL         | Disable admin panel url `/general/admin`. Default: ***false*** |

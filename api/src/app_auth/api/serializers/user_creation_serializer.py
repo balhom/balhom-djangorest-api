@@ -4,7 +4,7 @@ Provide serializer classes.
 from rest_framework import serializers
 from rest_framework.serializers import ValidationError
 from django.core.validators import RegexValidator
-from django.core.exceptions import ObjectDoesNotExist
+from django.db.utils import OperationalError
 from django.contrib.auth.password_validation import validate_password
 from django.utils.translation import check_for_language, gettext_lazy as _
 from app_auth.models.invitation_code_model import InvitationCode
@@ -68,7 +68,7 @@ class UserCreationSerializer(serializers.ModelSerializer):
         try:
             inv_code = InvitationCode.objects.get(  # pylint: disable=no-member
                 code=str(code))
-        except ObjectDoesNotExist as exc:
+        except OperationalError as exc:
             raise ValidationError(_("Invitation code not found")) from exc
         if not inv_code.is_active:
             raise ValidationError(_("Invalid invitation code"))

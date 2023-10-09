@@ -2,7 +2,7 @@
 Provides a Keycloak authentication backend class for django rest framework.
 """
 from django.utils.translation import gettext_lazy as _
-from django.core.exceptions import ObjectDoesNotExist
+from django.db.utils import OperationalError
 from rest_framework import exceptions, authentication
 from app_auth.models.user_model import User
 from keycloak_client.django_client import get_keycloak_client
@@ -43,7 +43,7 @@ class KeycloakAuthentication(authentication.BaseAuthentication):
                             _("No invitation code stored")
                         )
                     return (user, None)
-                except ObjectDoesNotExist as exc:
+                except OperationalError as exc:
                     raise exceptions.AuthenticationFailed(
                         _("User does not exists")) from exc
         raise exceptions.AuthenticationFailed(_("Invalid access token"))

@@ -4,7 +4,8 @@ from rest_framework.views import APIView
 from rest_framework import status
 from rest_framework.permissions import AllowAny
 from rest_framework.serializers import ValidationError
-from rest_framework import authentication
+from drf_yasg import openapi
+from drf_yasg.utils import swagger_auto_schema
 from django.utils.translation import gettext_lazy as _
 from keycloak_client.django_client import get_keycloak_client
 from app_auth.api.serializers.credentials_serializer import CredentialsSerializer
@@ -18,15 +19,20 @@ def get_refresh_token(request) -> str:
     """
     if 'refresh_token' in request.COOKIES:
         return request.COOKIES['refresh_token']
-    # If no cookie, auth header will be used instead
-    header = authentication.get_authorization_header(request)
-    if not header:
-        return None
-    header = header.decode(authentication.HTTP_HEADER_ENCODING)
-    auth = header.split()
-    if len(auth) != 2 or auth[0].lower() != "bearer":
-        return None
-    return auth[1]
+    # If no cookie, http data will be used instead
+    if 'refresh_token' in request.data:
+        return request.data['refresh_token']
+    return None
+
+
+def set_resfresh_token_cookie(response, refresh_token):
+    response.set_cookie(
+        key="refresh_token",
+        value=refresh_token,
+        httponly=True,
+        samesite="Strict",
+    )
+    return response
 
 
 class AccessView(GenericAPIView):
@@ -39,11 +45,14 @@ class AccessView(GenericAPIView):
         if serializer.is_valid():
             email = serializer.validated_data["email"]
             password = serializer.validated_data["password"]
-            return Response(
-                data=keycloak_client.access_tokens(
-                    email=email,
-                    password=password
-                )
+            tokens = keycloak_client.access_tokens(
+                email=email,
+                password=password
+            )
+            return set_resfresh_token_cookie(
+                Response(
+                    data=tokens
+                ), tokens["refresh_token"]
             )
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -51,14 +60,27 @@ class AccessView(GenericAPIView):
 class RefreshView(APIView):
     permission_classes = (AllowAny,)
 
+    @swagger_auto_schema(
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            properties={
+                'refresh_token': openapi.Schema(
+                    type=openapi.TYPE_STRING,
+                ),
+            },
+        )
+    )
     def post(self, request, format=None):  # pylint: disable=unused-argument redefined-builtin
         keycloak_client = get_keycloak_client()
         refresh_token = get_refresh_token(request=request)
         if refresh_token:
-            return Response(
-                data=keycloak_client.refresh_tokens(
-                    refresh_token=refresh_token
-                )
+            tokens = keycloak_client.refresh_tokens(
+                refresh_token=refresh_token
+            )
+            return set_resfresh_token_cookie(
+                Response(
+                    data=tokens
+                ), tokens["refresh_token"]
             )
         raise ValidationError(
             {
@@ -70,6 +92,16 @@ class RefreshView(APIView):
 class LogoutView(APIView):
     permission_classes = (AllowAny,)
 
+    @swagger_auto_schema(
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            properties={
+                'refresh_token': openapi.Schema(
+                    type=openapi.TYPE_STRING,
+                ),
+            },
+        )
+    )
     def post(self, request, format=None):  # pylint: disable=unused-argument redefined-builtin
         keycloak_client = get_keycloak_client()
         refresh_token = get_refresh_token(request=request)

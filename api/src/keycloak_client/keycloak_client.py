@@ -216,7 +216,7 @@ class KeycloakClient:
                 refresh_token=refresh_token,
                 grant_type=["refresh_token"],
             )
-        except KeycloakAuthenticationError as exc:
+        except KeycloakPostError as exc:
             from core.exceptions import AppUnauthorizedException
             raise AppUnauthorizedException(
                 detail=exc.error_message,
