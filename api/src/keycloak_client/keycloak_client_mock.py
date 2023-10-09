@@ -33,18 +33,6 @@ class KeycloakClientMock:
             })
         return (False, {})
 
-    def authenticate_user(self, email: str, password: str) -> dict | None:
-        """
-        Tries to authenticate an user with "test@mail.com" email 
-        and "password" password.
-        """
-        if email == self.email and password == self.password:
-            return {
-                "access_token": self.access_token,
-                "refresh_token": self.refresh_token
-            }
-        return None
-
     def get_user_info_by_id(self, keycloak_id: str) -> dict | None:
         """
         Get user info by "1234" keycloak id.
@@ -212,3 +200,18 @@ class KeycloakClientMock:
             self.updated_password = password
             return True
         return False
+
+    def access_tokens(self, email: str, password: str) -> dict:
+        return {
+            "access_token": self.access_token,
+            "refresh_token": self.refresh_token
+        }
+
+    def refresh_tokens(self, refresh_token: str) -> dict:
+        return {
+            "access_token": self.access_token,
+            "refresh_token": self.refresh_token
+        }
+
+    def logout(self, refresh_token: str):
+        pass

@@ -5,6 +5,7 @@ import logging
 from jose import JWTError
 from django.conf import settings
 from django.utils.timezone import datetime
+from keycloak_client.exceptions import AppUnauthorizedException
 from keycloak import (
     KeycloakOpenID,
     KeycloakAdmin,
@@ -69,13 +70,6 @@ class KeycloakClient:
         except JWTError as ex:
             print(ex)
             return (False, {})
-
-    def authenticate_user(self, email: str, password: str) -> dict | None:
-        """Tries to authenticate an user with email and password."""
-        try:
-            return self.keycloak_openid.token(email, password)
-        except KeycloakAuthenticationError:
-            return None
 
     def get_user_info_by_id(self, keycloak_id: str) -> dict | None:
         """Get user info by keycloak id."""
@@ -199,3 +193,44 @@ class KeycloakClient:
             return True
         except KeycloakPutError:
             return False
+
+    def access_tokens(self, email: str, password: str) -> dict:
+        """
+        Get access and refresh tokens.
+        """
+        try:
+            return self.keycloak_openid.token(
+                username=email,
+                password=password,
+                grant_type=["password"],
+            )
+        except KeycloakAuthenticationError as exc:
+            from app_auth.exceptions import WrongCredentialsException
+            raise WrongCredentialsException() from exc
+
+    def refresh_tokens(self, refresh_token: str) -> dict:
+        """
+        Refresh tokens.
+        """
+        try:
+            return self.keycloak_openid.refresh_token(
+                refresh_token=refresh_token,
+                grant_type=["refresh_token"],
+            )
+        except KeycloakAuthenticationError as exc:
+            raise AppUnauthorizedException(
+                detail=exc.error_message,
+            ) from exc
+
+    def logout(self, refresh_token: str):
+        """
+        Logout refresh token.
+        """
+        try:
+            self.keycloak_openid.logout(
+                refresh_token=refresh_token,
+            )
+        except KeycloakAuthenticationError as exc:
+            raise AppUnauthorizedException(
+                detail=exc.error_message,
+            ) from exc

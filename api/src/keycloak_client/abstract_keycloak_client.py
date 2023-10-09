@@ -12,10 +12,6 @@ class AbstractKeycloakClient(ABC):
         pass
 
     @abstractmethod
-    def authenticate_user(self, email: str, password: str) -> dict | None:
-        pass
-
-    @abstractmethod
     def get_user_info_by_id(self, keycloak_id: str) -> dict | None:
         pass
 
@@ -61,4 +57,16 @@ class AbstractKeycloakClient(ABC):
 
     @abstractmethod
     def change_user_password(self, keycloak_id: str, password: str) -> bool:
+        pass
+
+    @abstractmethod
+    def access_tokens(self, email: str, password: str) -> dict:
+        pass
+
+    @abstractmethod
+    def refresh_tokens(self, refresh_token: str) -> dict:
+        pass
+
+    @abstractmethod
+    def logout(self, refresh_token: str):
         pass

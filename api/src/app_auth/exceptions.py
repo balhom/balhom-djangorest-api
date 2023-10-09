@@ -15,6 +15,7 @@ CANNOT_CREATE_USER_ERROR = 7
 CANNOT_UPDATE_USER_ERROR = 8
 CANNOT_DELETE_USER_ERROR = 9
 CURRENCY_TYPE_CHANGED_ERROR = 10
+WRONG_CREDENTIALS_ERROR = 11
 
 
 class UserNotFoundException(AppBadRequestException):
@@ -115,3 +116,13 @@ class CurrencyTypeChangedException(AppBadRequestException):
     def __init__(self):
         detail = _("Currency type has already been changed in the las 24 hours")
         super().__init__(detail, CURRENCY_TYPE_CHANGED_ERROR)
+
+
+class WrongCredentialsException(AppBadRequestException):
+    """
+    Exception used when wrong credentials are provided
+    """
+
+    def __init__(self):
+        detail = _("Wrong credentials")
+        super().__init__(detail, WRONG_CREDENTIALS_ERROR)
