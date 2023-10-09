@@ -4,6 +4,7 @@ from rest_framework.serializers import ValidationError
 from balance.api.serializers.balance_type_serializer import BalanceTypeSerializer
 from balance.models.balance_model import Balance
 from balance.models.balance_type_model import BalanceType
+from currency_conversion_client.django_client import get_currency_conversion_client
 
 
 class BalanceSerializer(serializers.ModelSerializer):
@@ -27,6 +28,15 @@ class BalanceSerializer(serializers.ModelSerializer):
         read_only_fields = [
             "id"
         ]
+
+    def validate_currency_type(self, currency_type):
+        """
+        Validate pref currency type param.
+        """
+        codes = get_currency_conversion_client().get_currency_codes()
+        if currency_type not in codes:
+            raise ValidationError(_("Currency type not supported"))
+        return currency_type
 
     def is_valid(self, *, raise_exception=False):
         if "balance_type" in list(self.initial_data):

@@ -1,5 +1,7 @@
 from django.db import transaction
 from rest_framework.viewsets import ModelViewSet
+from drf_yasg import openapi
+from drf_yasg.utils import swagger_auto_schema
 from core.permissions import IsCurrentVerifiedUser
 from balance.models.balance_model import Balance
 from balance.api.serializers.balance_serializer import (
@@ -28,6 +30,16 @@ class BalanceViewSet(ModelViewSet):
             return BalanceGetSerializer
         return BalanceSerializer
 
+    @swagger_auto_schema(
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            properties={
+                'balance_type': openapi.Schema(
+                    type=openapi.TYPE_OBJECT,
+                ),
+            },
+        )
+    )
     def perform_create(self, serializer):
         currency_conversion_client = get_currency_conversion_client()
 

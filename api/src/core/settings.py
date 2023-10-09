@@ -69,6 +69,7 @@ class Dev(Configuration):
         "app_auth",
         "balance",
         "version",
+        "app_statistics",
     ]
 
     MIDDLEWARE = [

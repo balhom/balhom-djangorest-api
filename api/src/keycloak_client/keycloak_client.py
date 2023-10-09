@@ -37,7 +37,7 @@ class KeycloakClient:
             client_id=settings.KEYCLOAK_CLIENT_ID,
             client_secret_key=settings.KEYCLOAK_CLIENT_SECRET,
             realm_name=settings.KEYCLOAK_REALM,
-            verify=settings.USE_HTTPS,
+            verify="https" in settings.KEYCLOAK_URL,
         )
         self.public_key = (
             "-----BEGIN PUBLIC KEY-----\n"
@@ -50,7 +50,7 @@ class KeycloakClient:
             client_id=settings.KEYCLOAK_CLIENT_ID,
             client_secret_key=settings.KEYCLOAK_CLIENT_SECRET,
             realm_name=settings.KEYCLOAK_REALM,
-            verify=settings.USE_HTTPS,
+            verify="https" in settings.KEYCLOAK_URL,
         )
         self.keycloak_admin = KeycloakAdmin(connection=keycloak_connection)
 
@@ -106,12 +106,14 @@ class KeycloakClient:
         """
         User creation.
         """
+        print(username)
+        print(email)
         try:
             self.keycloak_admin.create_user(
                 payload={
                     "firstName": username,
-                    "lastName": "",
-                    "username": email,
+                    "username": username,
+                    "email": email,
                     "enabled": True,
                     "emailVerified": False,
                     "attributes": {"locale": locale},
@@ -198,24 +200,39 @@ class KeycloakClient:
         Get access and refresh tokens.
         """
         try:
-            return self.keycloak_openid.token(
+            response = self.keycloak_openid.token(
                 username=email,
                 password=password,
                 grant_type=["password"],
             )
+            return {
+                "access_token": response["access_token"],
+                "expires_in": response["expires_in"],
+                "refresh_token": response["refresh_token"],
+                "refresh_expires_in": response["refresh_expires_in"],
+            }
         except KeycloakAuthenticationError as exc:
             from app_auth.exceptions import WrongCredentialsException
             raise WrongCredentialsException() from exc
+        except KeycloakPostError as exc:
+            from app_auth.exceptions import UnverifiedEmailException
+            raise UnverifiedEmailException() from exc
 
     def refresh_tokens(self, refresh_token: str) -> dict:
         """
         Refresh tokens.
         """
         try:
-            return self.keycloak_openid.refresh_token(
+            response = self.keycloak_openid.refresh_token(
                 refresh_token=refresh_token,
                 grant_type=["refresh_token"],
             )
+            return {
+                "access_token": response["access_token"],
+                "expires_in": response["expires_in"],
+                "refresh_token": response["refresh_token"],
+                "refresh_expires_in": response["refresh_expires_in"],
+            }
         except KeycloakPostError as exc:
             from core.exceptions import AppUnauthorizedException
             raise AppUnauthorizedException(

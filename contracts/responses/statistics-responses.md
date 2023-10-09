@@ -1,6 +1,10 @@
 # Statistics Responses
 
-# Statistics Day Response
+| name       | type | comments                                                     |
+| ---------- | ---- | ------------------------------------------------------------ |
+| statistics | List | List of Statistics Day Response or Statistics Month Response |
+
+## Statistics Day Response
 
 | name    | type   | comments |
 | ------- | ------ | -------- |
@@ -8,7 +12,7 @@
 | expense | double |          |
 | revenue | double |          |
 
-# Statistics Month Response
+## Statistics Month Response
 
 | name    | type   | comments |
 | ------- | ------ | -------- |

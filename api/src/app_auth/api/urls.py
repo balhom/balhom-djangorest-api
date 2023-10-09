@@ -16,8 +16,8 @@ urlpatterns = [
     path("account", UserCreationView.as_view(), name="user-post"),
     path("account/profile", UserRetrieveUpdateDestroyView.as_view(),
          name="user-put-get-del"),
-    path("user/send-verify-email", SendVerifyEmailView.as_view(),
+    path("auth/send-verify-email", SendVerifyEmailView.as_view(),
          name="send-verify-email"),
-    path("user/password-reset", ResetPasswordView.as_view(),
+    path("auth/password-reset", ResetPasswordView.as_view(),
          name="reset-password"),
 ]

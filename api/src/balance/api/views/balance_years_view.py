@@ -25,13 +25,13 @@ class BalanceYearsRetrieveView(APIView):
 
     @method_decorator(cache_page(60))
     @method_decorator(vary_on_headers("Authorization"))
-    def get(self, request, format=None):
+    def get(self, request, **kwargs):
         """
         This view will be cached for 1 minute
         """
         self.validate()
 
-        balance_type = request.GET["type"]
+        balance_type = self.kwargs["type"]
         filtered_balances = Balance.objects.filter(  # pylint: disable=no-member
             balance_type__type=balance_type
         )

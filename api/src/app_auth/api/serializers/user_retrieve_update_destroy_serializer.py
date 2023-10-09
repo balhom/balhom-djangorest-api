@@ -6,6 +6,7 @@ from rest_framework.serializers import ValidationError
 from django.core.validators import RegexValidator
 from django.utils.translation import check_for_language, gettext_lazy as _
 from app_auth.models.user_model import User
+from currency_conversion_client.django_client import get_currency_conversion_client
 
 
 class UserRetrieveUpdateDestroySerializer(serializers.ModelSerializer):
@@ -53,3 +54,12 @@ class UserRetrieveUpdateDestroySerializer(serializers.ModelSerializer):
         if not check_for_language(locale):
             raise ValidationError(_("Locale not supported"))
         return locale
+
+    def validate_pref_currency_type(self, pref_currency_type):
+        """
+        Validate pref currency type param.
+        """
+        codes = get_currency_conversion_client().get_currency_codes()
+        if pref_currency_type not in codes:
+            raise ValidationError(_("Currency type not supported"))
+        return pref_currency_type

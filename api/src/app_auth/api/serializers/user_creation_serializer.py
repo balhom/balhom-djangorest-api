@@ -10,6 +10,7 @@ from django.utils.translation import check_for_language, gettext_lazy as _
 from app_auth.models.invitation_code_model import InvitationCode
 from app_auth.models.user_model import User
 from app_auth.api.serializers.utils import check_username_pass
+from currency_conversion_client.django_client import get_currency_conversion_client
 
 
 class UserCreationSerializer(serializers.ModelSerializer):
@@ -60,6 +61,15 @@ class UserCreationSerializer(serializers.ModelSerializer):
         if not check_for_language(locale):
             raise ValidationError(_("Locale not supported"))
         return locale
+
+    def validate_pref_currency_type(self, pref_currency_type):
+        """
+        Validate pref currency type param.
+        """
+        codes = get_currency_conversion_client().get_currency_codes()
+        if pref_currency_type not in codes:
+            raise ValidationError(_("Currency type not supported"))
+        return pref_currency_type
 
     def validate_inv_code(self, code):
         """

@@ -30,8 +30,8 @@ class CurrencyConversionClient:
                 "Authorization": f"APIKey {settings.CURRENCY_CONVERSION_API_KEY}"
             },
             timeout=10
-        )
-        return list(response.content)
+        ).json()
+        return [code["code"] for code in list(response)]
 
     def get_conversion(self, currency_from: str, currency_to: str) -> float:
         if currency_from == currency_to:
