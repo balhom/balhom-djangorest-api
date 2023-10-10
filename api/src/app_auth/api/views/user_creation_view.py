@@ -6,6 +6,7 @@ from rest_framework.parsers import FormParser, JSONParser
 from rest_framework.permissions import AllowAny
 from django.utils.translation import gettext_lazy as _
 from django.db import transaction
+from django.core.exceptions import ObjectDoesNotExist
 from keycloak_client.django_client import get_keycloak_client
 from app_auth.models.invitation_code_model import InvitationCode
 from app_auth.models.user_model import User
@@ -15,6 +16,8 @@ from app_auth.api.serializers.user_creation_serializer import (
 from app_auth.exceptions import (
     UserEmailConflictException,
     CannotCreateUserException,
+    UnverifiedEmailException,
+    WrongCredentialsException
 )
 
 
@@ -47,15 +50,34 @@ class UserCreationView(generics.CreateAPIView):
             locale=validated_data["locale"]
         )
 
-        if not created:
-            if res_code == 409:
-                raise UserEmailConflictException()
+        if not created and res_code != 409:
             raise CannotCreateUserException()
 
         keycloak_id = keycloak_client.get_user_id(
             email=validated_data["email"])
         if not keycloak_id:
             raise CannotCreateUserException()
+
+        # In case keycloak user already exists
+        if not created:
+            try:
+                try:
+                    # Check credentials
+                    keycloak_client.access_tokens(
+                        email=validated_data["email"],
+                        password=validated_data["password"]
+                    )
+                except WrongCredentialsException as exc:
+                    raise UserEmailConflictException() from exc
+                except UnverifiedEmailException:
+                    pass
+                # Check if user already exists
+                user = User.objects.get(
+                    keycloak_id=keycloak_id
+                )
+                raise UserEmailConflictException()
+            except ObjectDoesNotExist:
+                pass
 
         user = User.objects.create(
             keycloak_id=keycloak_id,

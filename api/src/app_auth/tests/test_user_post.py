@@ -64,6 +64,7 @@ class UserPostTests(APITestCase):
         # User 2 creation
         user_data2 = self.user_data
         user_data2["email"] = self.keycloak_client_mock.email_for_conflict
+        self.keycloak_client_mock.email = user_data2["email"]
         response = test_utils.post(self.client, self.user_post_url, user_data2)
         self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
         self.assertEqual(

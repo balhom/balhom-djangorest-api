@@ -68,34 +68,34 @@ class KeycloakClientMock:
 
     def get_user_info_by_email(self, email: str) -> dict | None:
         """Get user info by "test@mail.com" email."""
-        if email == self.email:
-            return {
-                "id": self.keycloak_id,
-                "createdTimestamp": 1688991767048,
-                "username": self.email,
-                "enabled": self.user_enabled,
-                "totp": False,
-                "emailVerified": self.email_verified,
-                "firstName": self.username,
-                "lastName": "",
-                "email": self.email,
-                "attributes": {
-                    "locale": [
-                        self.locale
-                    ]
-                },
-                "disableableCredentialTypes": [],
-                "requiredActions": [],
-                "notBefore": 0,
-                "access": {
-                    "manageGroupMembership": True,
-                    "view": True,
-                    "mapRoles": True,
-                    "impersonate": False,
-                    "manage": True
-                }
+        if email != self.email:
+            return None
+        return {
+            "id": self.keycloak_id,
+            "createdTimestamp": 1688991767048,
+            "username": self.email,
+            "enabled": self.user_enabled,
+            "totp": False,
+            "emailVerified": self.email_verified,
+            "firstName": self.username,
+            "lastName": "",
+            "email": self.email,
+            "attributes": {
+                "locale": [
+                    self.locale
+                ]
+            },
+            "disableableCredentialTypes": [],
+            "requiredActions": [],
+            "notBefore": 0,
+            "access": {
+                "manageGroupMembership": True,
+                "view": True,
+                "mapRoles": True,
+                "impersonate": False,
+                "manage": True
             }
-        return None
+        }
 
     def get_user_sessions(self, keycloak_id: str) -> list | None:
         """Get test user sessions."""

@@ -1,13 +1,9 @@
 from django.db import transaction
+from django.utils.translation import gettext_lazy as _
 from rest_framework.viewsets import ModelViewSet
-from drf_yasg import openapi
-from drf_yasg.utils import swagger_auto_schema
 from core.permissions import IsCurrentVerifiedUser
 from balance.models.balance_model import Balance
-from balance.api.serializers.balance_serializer import (
-    BalanceGetSerializer,
-    BalanceSerializer
-)
+from balance.api.serializers.balance_serializer import BalanceSerializer
 from balance.api.filters.balance_filter import BalanceFilterSet
 from currency_conversion_client.django_client import get_currency_conversion_client
 
@@ -16,6 +12,7 @@ class BalanceViewSet(ModelViewSet):
     queryset = Balance.objects.all()  # pylint: disable=no-member
     permission_classes = (IsCurrentVerifiedUser,)
     filterset_class = BalanceFilterSet
+    serializer_class = BalanceSerializer
 
     def get_queryset(self):
         """
@@ -25,21 +22,6 @@ class BalanceViewSet(ModelViewSet):
             return Balance.objects.none()  # pylint: disable=no-member
         return Balance.objects.filter(owner=self.request.user)  # pylint: disable=no-member
 
-    def get_serializer_class(self):
-        if self.request.method == "GET":
-            return BalanceGetSerializer
-        return BalanceSerializer
-
-    @swagger_auto_schema(
-        request_body=openapi.Schema(
-            type=openapi.TYPE_OBJECT,
-            properties={
-                'balance_type': openapi.Schema(
-                    type=openapi.TYPE_OBJECT,
-                ),
-            },
-        )
-    )
     def perform_create(self, serializer):
         currency_conversion_client = get_currency_conversion_client()
 

@@ -44,8 +44,8 @@ class CurrencyConversionClient:
                 "Authorization": f"APIKey {settings.CURRENCY_CONVERSION_API_KEY}"
             },
             timeout=10
-        )
-        for value in response.content["conversions"]:
+        ).json()
+        for value in response["conversions"]:
             if value["code"] == currency_to:
                 return float(value["value"])
         raise CannotMakeConversionException()

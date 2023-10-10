@@ -2,8 +2,8 @@ from django.utils.translation import gettext_lazy as _
 from rest_framework import serializers
 from rest_framework.serializers import ValidationError
 from balance.api.serializers.balance_type_serializer import BalanceTypeSerializer
-from balance.models.balance_model import Balance
 from balance.models.balance_type_model import BalanceType
+from balance.models.balance_model import Balance
 from currency_conversion_client.django_client import get_currency_conversion_client
 
 
@@ -12,6 +12,7 @@ class BalanceSerializer(serializers.ModelSerializer):
         min_value=0.0,
         required=False,
     )
+    balance_type = BalanceTypeSerializer()
 
     class Meta:
         model = Balance
@@ -38,26 +39,25 @@ class BalanceSerializer(serializers.ModelSerializer):
             raise ValidationError(_("Currency type not supported"))
         return currency_type
 
-    def is_valid(self, *, raise_exception=False):
-        if "balance_type" in list(self.initial_data):
-            if (
-                not isinstance(self.initial_data["balance_type"], dict)
-                or "name" not in list(self.initial_data["balance_type"])
-                or "type" not in list(self.initial_data["balance_type"])
-            ):
-                raise ValidationError(
-                    {"balance_type": [_("Balance type not provided")]})
-            balance_type = self.initial_data["balance_type"]
-            stored_balance_type = BalanceType.objects.filter(
-                name=balance_type["name"],
-                type=balance_type["type"],
+    def create(self, validated_data):
+        stored_balance_type = BalanceType.objects.filter(  # pylint: disable=no-member
+            name=validated_data["balance_type"]["name"],
+            type=validated_data["balance_type"]["type"],
+        )
+        if not stored_balance_type.exists():
+            raise ValidationError(
+                {"balance_type": [_("Provided balance type does not exists")]})
+        validated_data["balance_type"] = stored_balance_type.first()
+        return super().create(validated_data)
+    
+    def update(self, instance, validated_data):
+        if validated_data.get("balance_type"):
+            stored_balance_type = BalanceType.objects.filter(  # pylint: disable=no-member
+                name=validated_data["balance_type"]["name"],
+                type=validated_data["balance_type"]["type"],
             )
             if not stored_balance_type.exists():
                 raise ValidationError(
                     {"balance_type": [_("Provided balance type does not exists")]})
-            self.initial_data["balance_type"] = stored_balance_type.first().id
-        return super().is_valid(raise_exception=raise_exception)
-
-
-class BalanceGetSerializer(BalanceSerializer):
-    balance_type = BalanceTypeSerializer()
+            validated_data["balance_type"] = stored_balance_type.first()
+        return super().update(instance, validated_data)
