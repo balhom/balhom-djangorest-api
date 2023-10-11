@@ -28,7 +28,7 @@ class Balance(models.Model):
         verbose_name=_("converted quantity"),
         validators=[MinValueValidator(0.0)],
     )
-    date = models.DateField(
+    date = models.DateTimeField(
         verbose_name=_("date")
     )
     currency_type = models.CharField(

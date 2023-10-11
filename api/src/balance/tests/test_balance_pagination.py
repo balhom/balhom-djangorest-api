@@ -38,6 +38,7 @@ class BalancePaginationTests(APITestCase):
         return super().setUp()
 
     def get_expense_data(self):
+        self.expense_date = now()
         return {
             "name": "Test name",
             "description": "Test description",
@@ -47,7 +48,7 @@ class BalancePaginationTests(APITestCase):
                 "name": self.exp_type.name,
                 "type": self.exp_type.type
             },
-            "date": str(now().date()),
+            "date": str(self.expense_date),
             "owner": str(self.user),
         }
 
@@ -80,7 +81,7 @@ class BalancePaginationTests(APITestCase):
                     "description": "Test description",
                     "real_quantity": 2.0,
                     "converted_quantity": 2.0,
-                    "date": str(now().date()),
+                    "date": self.expense_date.strftime('%Y-%m-%dT%H:%M:%S.%fZ'),
                     "currency_type": "EUR",
                     "balance_type": {
                         "name": "test",
