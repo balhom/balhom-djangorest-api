@@ -4,7 +4,6 @@ from django.utils.timezone import now
 from django.urls import reverse
 import core.tests.utils as test_utils
 from app_auth.models.user_model import User
-from app_auth.models.invitation_code_model import InvitationCode
 from balance.models import BalanceType, BalanceTypeChoices
 from keycloak_client.django_client import get_keycloak_client
 
@@ -18,17 +17,12 @@ class BalancePaginationTests(APITestCase):
 
         self.keycloak_client_mock = get_keycloak_client()
 
-        # Create InvitationCodes
-        self.inv_code = InvitationCode.objects.create(  # pylint: disable=no-member
-            usage_left=400
-        )
         # User data
         self.user_data = {
             "keycloak_id": self.keycloak_client_mock.keycloak_id,
             "username": self.keycloak_client_mock.username,
             "email": self.keycloak_client_mock.email,
             "password": self.keycloak_client_mock.password,
-            "inv_code": str(self.inv_code.code),
             "locale": self.keycloak_client_mock.locale,
             "pref_currency_type": "EUR",
         }
@@ -36,9 +30,8 @@ class BalancePaginationTests(APITestCase):
         self.user = User.objects.create(
             keycloak_id=self.user_data["keycloak_id"],
             pref_currency_type="EUR",
-            inv_code=self.inv_code,
         )
-        self.exp_type = BalanceType.objects.create(
+        self.exp_type = BalanceType.objects.create(  # pylint: disable=no-member
             name="test",
             type=BalanceTypeChoices.EXPENSE
         )
@@ -104,7 +97,7 @@ class BalancePaginationTests(APITestCase):
         Checks 2 pages of Expense data is correct
         """
         test_utils.authenticate_user(self.client)
-        for i in range(20):
+        for _ in range(20):
             data = self.get_expense_data()
             # Add new expense
             test_utils.post(self.client, self.balance_url, data)

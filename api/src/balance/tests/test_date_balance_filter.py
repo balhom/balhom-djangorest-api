@@ -1,11 +1,10 @@
 import logging
-import core.tests.utils as test_utils
 from rest_framework.test import APITestCase
 from rest_framework import status
 from django.utils.timezone import now
 from django.urls import reverse
+import core.tests.utils as test_utils
 from app_auth.models.user_model import User
-from app_auth.models.invitation_code_model import InvitationCode
 from balance.models import AnnualBalance, MonthlyBalance
 from keycloak_client.django_client import get_keycloak_client
 
@@ -20,17 +19,12 @@ class DateBalanceFilterTests(APITestCase):
 
         self.keycloak_client_mock = get_keycloak_client()
 
-        # Create InvitationCodes
-        self.inv_code = InvitationCode.objects.create(  # pylint: disable=no-member
-            usage_left=400
-        )
         # User data
         self.user_data = {
             "keycloak_id": self.keycloak_client_mock.keycloak_id,
             "username": self.keycloak_client_mock.username,
             "email": self.keycloak_client_mock.email,
             "password": self.keycloak_client_mock.password,
-            "inv_code": str(self.inv_code.code),
             "locale": self.keycloak_client_mock.locale,
             "pref_currency_type": "EUR",
         }
@@ -38,7 +32,6 @@ class DateBalanceFilterTests(APITestCase):
         self.user = User.objects.create(
             keycloak_id=self.user_data["keycloak_id"],
             pref_currency_type="EUR",
-            inv_code=self.inv_code,
         )
         return super().setUp()
 
@@ -64,7 +57,7 @@ class DateBalanceFilterTests(APITestCase):
     def authenticate_add_annual_balance(self):
         test_utils.authenticate_user(self.client)
         data = self.get_annual_balance_data()
-        AnnualBalance.objects.create(
+        AnnualBalance.objects.create(  # pylint: disable=no-member
             gross_quantity=data["gross_quantity"],
             expected_quantity=data["expected_quantity"],
             currency_type=data["currency_type"],
@@ -75,7 +68,7 @@ class DateBalanceFilterTests(APITestCase):
     def authenticate_add_monthly_balance(self):
         test_utils.authenticate_user(self.client)
         data = self.get_monthly_balance_data()
-        MonthlyBalance.objects.create(
+        MonthlyBalance.objects.create(  # pylint: disable=no-member
             gross_quantity=data["gross_quantity"],
             expected_quantity=data["expected_quantity"],
             currency_type=data["currency_type"],
@@ -201,7 +194,7 @@ class DateBalanceFilterTests(APITestCase):
         data = dict(response.data)
         self.assertEqual(data["count"], 1)
 
-    def test_annual_monthly_filter_year(self):
+    def test_annual_filter_year(self):
         """
         Checks MonthlyBalance filter by year
         """
@@ -212,7 +205,7 @@ class DateBalanceFilterTests(APITestCase):
         data = dict(response.data)
         self.assertEqual(data["count"], 1)
 
-    def test_annual_monthly_filter_year(self):
+    def test_monthly_filter_year(self):
         """
         Checks MonthlyBalance filter by month
         """

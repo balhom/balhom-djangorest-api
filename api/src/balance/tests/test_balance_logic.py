@@ -5,7 +5,6 @@ from rest_framework.test import APITestCase
 from rest_framework import status
 import core.tests.utils as test_utils
 from app_auth.models.user_model import User
-from app_auth.models.invitation_code_model import InvitationCode
 from balance.models.balance_model import Balance
 from balance.models.balance_type_model import BalanceType, BalanceTypeChoices
 from keycloak_client.django_client import get_keycloak_client
@@ -20,17 +19,12 @@ class BalanceLogicTests(APITestCase):
 
         self.keycloak_client_mock = get_keycloak_client()
 
-        # Create InvitationCodes
-        self.inv_code = InvitationCode.objects.create(  # pylint: disable=no-member
-            usage_left=400
-        )
         # User data
         self.user_data = {
             "keycloak_id": self.keycloak_client_mock.keycloak_id,
             "username": self.keycloak_client_mock.username,
             "email": self.keycloak_client_mock.email,
             "password": self.keycloak_client_mock.password,
-            "inv_code": str(self.inv_code.code),
             "locale": self.keycloak_client_mock.locale,
             "pref_currency_type": "EUR",
         }
@@ -39,7 +33,6 @@ class BalanceLogicTests(APITestCase):
             keycloak_id=self.user_data["keycloak_id"],
             pref_currency_type="EUR",
             current_balance=10,
-            inv_code=self.inv_code,
         )
 
         self.exp_type = BalanceType.objects.create(  # pylint: disable=no-member

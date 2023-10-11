@@ -2,17 +2,16 @@ import logging
 import os
 import tempfile
 import shutil
+from django.conf import settings
+from django.core.cache import cache
+from django.urls import reverse
 from rest_framework.test import APITestCase
 from rest_framework import status
-from app_auth.models.invitation_code_model import InvitationCode
+from PIL import Image
 from app_auth.models.user_model import User
 from app_auth.exceptions import (
     CURRENCY_TYPE_CHANGED_ERROR
 )
-from PIL import Image
-from django.conf import settings
-from django.core.cache import cache
-from django.urls import reverse
 import core.tests.utils as test_utils
 from keycloak_client.django_client import get_keycloak_client
 
@@ -32,21 +31,17 @@ class UserPutTests(APITestCase):
 
         self.keycloak_client_mock = get_keycloak_client()
 
-        # Create InvitationCode
-        self.inv_code = InvitationCode.objects.create()  # pylint: disable=no-member
         # User data
         self.user_data = {
             "username": self.keycloak_client_mock.username,
             "email": self.keycloak_client_mock.email,
             "password": self.keycloak_client_mock.password,
-            "inv_code": str(self.inv_code.code),
             "pref_currency_type": "EUR",
             "locale": self.keycloak_client_mock.locale
         }
         # User creation
         user = User.objects.create(
             keycloak_id=self.keycloak_client_mock.keycloak_id,
-            inv_code=self.inv_code,
             pref_currency_type="EUR"
         )
         user.set_password(self.user_data["password"])

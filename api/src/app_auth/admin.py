@@ -1,5 +1,4 @@
 from django.contrib import admin
-from app_auth.models.invitation_code_model import InvitationCode
 from app_auth.models.user_model import User
 from django.contrib.auth.models import Group
 
@@ -7,22 +6,11 @@ from django.contrib.auth.models import Group
 admin.site.unregister(Group)
 
 
-@admin.register(InvitationCode)
-class InvitationCodeAdmin(admin.ModelAdmin):
-    list_display = (
-        "code",
-        "usage_left",
-        "is_active",
-    )
-    readonly_fields = ("created", "updated")
-
-
 @admin.register(User)
 class UserAdmin(admin.ModelAdmin):
     fields = (
-        "id",
+        "keycloak_id",
         "image",
-        "inv_code",
         "last_login",
         "date_joined",
         (
@@ -35,7 +23,7 @@ class UserAdmin(admin.ModelAdmin):
         ),
         "count_pass_reset",
         (
-            "balance",
+            "current_balance",
             "pref_currency_type",
         ),
         (
@@ -44,11 +32,11 @@ class UserAdmin(admin.ModelAdmin):
         ),
     )
     readonly_fields = (
-        "id",
+        "keycloak_id",
         "last_login",
         "date_joined",
         "count_pass_reset",
-        "balance",
+        "current_balance",
     )
     list_display = (
         "last_login",

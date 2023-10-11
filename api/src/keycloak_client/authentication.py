@@ -38,10 +38,6 @@ class KeycloakAuthentication(authentication.BaseAuthentication):
             if "sub" in data:
                 try:
                     user = User.objects.get(keycloak_id=data["sub"])
-                    if not user.inv_code:
-                        raise exceptions.AuthenticationFailed(
-                            _("No invitation code stored")
-                        )
                     return (user, None)
                 except OperationalError as exc:
                     raise exceptions.AuthenticationFailed(

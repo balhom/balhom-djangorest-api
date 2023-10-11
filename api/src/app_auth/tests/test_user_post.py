@@ -3,7 +3,6 @@ from rest_framework.test import APITestCase
 from rest_framework import status
 from django.urls import reverse
 from django.core.cache import cache
-from app_auth.models.invitation_code_model import InvitationCode
 from app_auth.models.user_model import User
 from app_auth.exceptions import (
     USER_EMAIL_CONFLICT_ERROR
@@ -24,15 +23,11 @@ class UserPostTests(APITestCase):
 
         self.keycloak_client_mock = get_keycloak_client()
 
-        # Create InvitationCode
-        self.inv_code = InvitationCode.objects.create(  # pylint: disable=no-member
-            usage_left=400)
         # Test user data
         self.user_data = {
             "username": self.keycloak_client_mock.username,
             "email": self.keycloak_client_mock.email,
             "password": self.keycloak_client_mock.password,
-            "inv_code": str(self.inv_code.code),
             "locale": self.keycloak_client_mock.locale,
             "pref_currency_type": "EUR"
         }
@@ -50,7 +45,6 @@ class UserPostTests(APITestCase):
         self.assertIsNotNone(new_user)
         self.assertEqual(new_user.keycloak_id,
                          self.keycloak_client_mock.keycloak_id)
-        self.assertEqual(str(new_user.inv_code), self.user_data["inv_code"])
         self.assertEqual(str(new_user.pref_currency_type),
                          self.user_data["pref_currency_type"])
 
@@ -84,8 +78,6 @@ class UserPostTests(APITestCase):
                       for field in response.data["fields"]])
         self.assertIn("password", [field["name"]
                       for field in response.data["fields"]])
-        self.assertIn("inv_code", [field["name"]
-                      for field in response.data["fields"]])
         self.assertIn("pref_currency_type", [field["name"]
                       for field in response.data["fields"]])
         self.assertIn("locale", [field["name"]
@@ -100,7 +92,6 @@ class UserPostTests(APITestCase):
             self.user_post_url,
             {
                 "username": self.user_data["username"],
-                "inv_code": self.user_data["inv_code"],
                 "password": self.user_data["password"],
             }
         )
@@ -117,7 +108,6 @@ class UserPostTests(APITestCase):
             self.user_post_url,
             {
                 "email": self.user_data["email"],
-                "inv_code": self.user_data["inv_code"],
                 "password": self.user_data["password"],
             }
         )

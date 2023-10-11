@@ -4,7 +4,6 @@ from rest_framework.test import APITestCase
 from balance.models.balance_model import Balance
 from balance.models.balance_type_model import BalanceType, BalanceTypeChoices
 from app_auth.models.user_model import User
-from app_auth.models.invitation_code_model import InvitationCode
 from keycloak_client.django_client import get_keycloak_client
 
 
@@ -12,18 +11,15 @@ class BalanceModelTests(APITestCase):
     def setUp(self):
         self.keycloak_client_mock = get_keycloak_client()
 
-        # Create InvitationCodes
-        self.inv_code = InvitationCode.objects.create()
         # Test user data
         self.user_data = {
             "keycloak_id": self.keycloak_client_mock.keycloak_id,
             "username": "username1",
             "email": "email1@test.com",
             "password": "password1@212",
-            "inv_code": str(self.inv_code.code),
             "pref_currency_type": "EUR",
         }
-        self.exp_type = BalanceType.objects.create(
+        self.exp_type = BalanceType.objects.create(  # pylint: disable=no-member
             name="test",
             type=BalanceTypeChoices.EXPENSE
         )
@@ -43,7 +39,6 @@ class BalanceModelTests(APITestCase):
     def create_user(self):
         return User.objects.create(
             keycloak_id=self.user_data["keycloak_id"],
-            inv_code=self.inv_code,
             pref_currency_type="EUR",
         )
 
@@ -51,7 +46,7 @@ class BalanceModelTests(APITestCase):
         """
         Checks if exp_type is created
         """
-        exp_type = BalanceType.objects.create(
+        exp_type = BalanceType.objects.create(  # pylint: disable=no-member
             name="test2",
             type=BalanceTypeChoices.EXPENSE
         )
@@ -63,7 +58,7 @@ class BalanceModelTests(APITestCase):
         """
         data = self.get_expense_data()
         data["converted_quantity"] = 2.0
-        expense = Balance.objects.create(**data)
+        expense = Balance.objects.create(**data)  # pylint: disable=no-member
         self.assertEqual(expense.name, data["name"])
         self.assertEqual(expense.description, data["description"])
         self.assertEqual(expense.real_quantity, data["real_quantity"])

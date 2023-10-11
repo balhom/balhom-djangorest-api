@@ -3,7 +3,6 @@ from rest_framework.test import APITestCase
 from rest_framework import status
 from django.urls import reverse
 from django.conf import settings
-from app_auth.models.invitation_code_model import InvitationCode
 from app_auth.models.user_model import User
 import core.tests.utils as test_utils
 from keycloak_client.django_client import get_keycloak_client
@@ -23,17 +22,12 @@ class AppAuthUrlsPermissionsTests(APITestCase):
 
         self.keycloak_client_mock = get_keycloak_client()
 
-        # Create InvitationCode
-        self.inv_code = InvitationCode.objects.create(  # pylint: disable=no-member
-            usage_left=400
-        )
         # Test user data
         self.user_data1 = {
             "keycloak_id": self.keycloak_client_mock.keycloak_id,
             "username": self.keycloak_client_mock.username,
             "email": self.keycloak_client_mock.email,
             "password": self.keycloak_client_mock.password,
-            "inv_code": str(self.inv_code.code),
             "locale": self.keycloak_client_mock.locale,
             "pref_currency_type": "EUR",
         }
@@ -42,18 +36,15 @@ class AppAuthUrlsPermissionsTests(APITestCase):
             "username": "username2",
             "email": "email2@test.com",
             "password": "password1@212",
-            "inv_code": str(self.inv_code.code),
             "locale": "en",
             "pref_currency_type": "EUR",
         }
         # User creation
         User.objects.create(
             keycloak_id=self.user_data1["keycloak_id"],
-            inv_code=self.inv_code,
         )
         User.objects.create(
             keycloak_id=self.user_data2["keycloak_id"],
-            inv_code=self.inv_code,
         )
         return super().setUp()
 
@@ -65,7 +56,6 @@ class AppAuthUrlsPermissionsTests(APITestCase):
             "username": "test2",
             "email": "test2@email.com",
             "password": self.keycloak_client_mock.password,
-            "inv_code": str(self.inv_code.code),
             "locale": self.keycloak_client_mock.locale,
             "pref_currency_type": "EUR",
         }

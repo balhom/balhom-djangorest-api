@@ -30,11 +30,11 @@ This directory serves as a reference guide for developers working on the fronten
 
 | CODE | DEFINITION                                                 | ENDPOINT                                                     |
 | ---- | ---------------------------------------------------------- | ------------------------------------------------------------ |
-| 1    | User not found                                             | /api/v2/user/send-verify-email , /api/v2/user/password-reset |
-| 2    | Unverified email                                           | /api/v2/user/password-reset                                  |
-| 3    | Cannot send verification mail                              | /api/v2/user/send-verify-email                               |
-| 4    | Cannot send reset password mail                            | /api/v2/user/password-reset                                  |
-| 5    | Password can only be reset 3 times a day                   | /api/v2/user/password-reset                                  |
+| 1    | User not found                                             | /api/v2/auth/send-verify-email , /api/v2/user/password-reset |
+| 2    | Unverified email                                           | /api/v2/auth/password-reset                                  |
+| 3    | Cannot send verification mail                              | /api/v2/auth/send-verify-email                               |
+| 4    | Cannot send reset password mail                            | /api/v2/auth/password-reset                                  |
+| 5    | Password can only be reset 3 times a day                   | /api/v2/auth/password-reset                                  |
 | 6    | Email already used                                         | /api/v2/account [POST]                                       |
 | 7    | Cannot create user                                         | /api/v2/account [POST]                                       |
 | 8    | Cannot update user                                         | /api/v2/account [PUT/PATCH]                                  |

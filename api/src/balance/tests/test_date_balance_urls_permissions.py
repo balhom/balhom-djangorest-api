@@ -7,7 +7,6 @@ import core.tests.utils as test_utils
 from balance.models.annual_balance_model import AnnualBalance
 from balance.models.monthly_balance_model import MonthlyBalance
 from app_auth.models.user_model import User
-from app_auth.models.invitation_code_model import InvitationCode
 from keycloak_client.django_client import get_keycloak_client
 
 
@@ -21,17 +20,12 @@ class BalanceUrlsPermissionsTests(APITestCase):
 
         self.keycloak_client_mock = get_keycloak_client()
 
-        # Create InvitationCode
-        self.inv_code = InvitationCode.objects.create(  # pylint: disable=no-member
-            usage_left=400
-        )
         # Test user data
         self.user_data1 = {
             "keycloak_id": self.keycloak_client_mock.keycloak_id,
             "username": self.keycloak_client_mock.username,
             "email": self.keycloak_client_mock.email,
             "password": self.keycloak_client_mock.password,
-            "inv_code": str(self.inv_code.code),
             "locale": self.keycloak_client_mock.locale,
             "pref_currency_type": "EUR",
         }
@@ -40,7 +34,6 @@ class BalanceUrlsPermissionsTests(APITestCase):
             "username": "username2",
             "email": "email2@test.com",
             "password": "password1@212",
-            "inv_code": str(self.inv_code.code),
             "locale": "en",
             "pref_currency_type": "EUR",
         }
@@ -48,11 +41,9 @@ class BalanceUrlsPermissionsTests(APITestCase):
         # User creation
         self.user1 = User.objects.create(
             keycloak_id=self.user_data1["keycloak_id"],
-            inv_code=self.inv_code,
         )
         self.user2 = User.objects.create(
             keycloak_id=self.user_data2["keycloak_id"],
-            inv_code=self.inv_code,
         )
         return super().setUp()
 
@@ -102,7 +93,7 @@ class BalanceUrlsPermissionsTests(APITestCase):
         """
         test_utils.authenticate_user(self.client, self.user1.keycloak_id)
         # Add new AnnualBalance as user1
-        id = self.add_annual_balance(self.user1)
+        self.add_annual_balance(self.user1)
         # Get AnnualBalance data as user1
         response = test_utils.get(self.client, self.annual_balance_list)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -125,7 +116,7 @@ class BalanceUrlsPermissionsTests(APITestCase):
         """
         test_utils.authenticate_user(self.client, self.user1.keycloak_id)
         # Add new MonthlyBalance as user1
-        id = self.add_monthly_balance(self.user1)
+        self.add_monthly_balance(self.user1)
         # Get MonthlyBalance data as user1
         response = test_utils.get(self.client, self.monthly_balance_list)
         self.assertEqual(response.status_code, status.HTTP_200_OK)

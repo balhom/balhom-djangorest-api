@@ -1,9 +1,8 @@
 import logging
-import core.tests.utils as test_utils
+from django.urls import reverse
 from rest_framework.test import APITestCase
 from rest_framework import status
-from django.urls import reverse
-from app_auth.models.invitation_code_model import InvitationCode
+import core.tests.utils as test_utils
 from app_auth.models.user_model import User
 from keycloak_client.django_client import get_keycloak_client
 
@@ -18,24 +17,18 @@ class UserGetDelTests(APITestCase):
 
         self.keycloak_client_mock = get_keycloak_client()
 
-        # Create InvitationCode
-        self.inv_code = InvitationCode.objects.create(  # pylint: disable=no-member
-            usage_left=400
-        )
         # User data
         self.user_data = {
             "keycloak_id": self.keycloak_client_mock.keycloak_id,
             "username": self.keycloak_client_mock.username,
             "email": self.keycloak_client_mock.email,
             "password": self.keycloak_client_mock.password,
-            "inv_code": str(self.inv_code.code),
             "locale": self.keycloak_client_mock.locale,
             "pref_currency_type": "EUR",
         }
         # User creation
         User.objects.create(
             keycloak_id=self.user_data["keycloak_id"],
-            inv_code=self.inv_code,
         )
         # Authenticate
         test_utils.authenticate_user(self.client)

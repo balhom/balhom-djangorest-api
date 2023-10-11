@@ -10,9 +10,7 @@ from balance.tasks import (
     periodic_annual_balance,
 )
 from balance.schedule_setup import schedule_setup
-from balance.tasks import periodic_monthly_balance, periodic_annual_balance
 from app_auth.models.user_model import User
-from app_auth.models.invitation_code_model import InvitationCode
 from keycloak_client.django_client import get_keycloak_client
 
 
@@ -23,15 +21,9 @@ class BalanceTasksTests(TestCase):
 
         self.keycloak_client_mock = get_keycloak_client()
 
-        # Create InvitationCode
-        self.inv_code = InvitationCode.objects.create(  # pylint: disable=no-member
-            usage_left=400
-        )
-
         # User creation
         User.objects.create(
             keycloak_id=self.keycloak_client_mock.keycloak_id,
-            inv_code=self.inv_code,
             receive_email_balance=True,
         )
 
@@ -63,7 +55,7 @@ class BalanceTasksTests(TestCase):
         Checks that schedule_setup creates the correct crontab
         """
         schedule_setup()
-        crontab_schedules = CrontabSchedule.objects.all()
+        crontab_schedules = CrontabSchedule.objects.all()  # pylint: disable=no-member
         self.assertEqual(crontab_schedules.count(), 2)
         monthly_crontab_schedule = crontab_schedules.first()
         annual_crontab_schedule = crontab_schedules.last()

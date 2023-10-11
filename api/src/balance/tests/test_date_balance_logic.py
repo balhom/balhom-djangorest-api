@@ -1,10 +1,9 @@
+import logging
 from rest_framework import status
 from rest_framework.test import APITestCase
-import logging
 from django.urls import reverse
 from django.utils.timezone import now, timedelta
 from app_auth.models.user_model import User
-from app_auth.models.invitation_code_model import InvitationCode
 from balance.models import AnnualBalance, MonthlyBalance
 from balance.models.balance_model import Balance
 from balance.models.balance_type_model import BalanceType, BalanceTypeChoices
@@ -21,31 +20,27 @@ class DateBalanceLogicTests(APITestCase):
 
         self.keycloak_client_mock = get_keycloak_client()
 
-        # Create InvitationCodes
-        self.inv_code = InvitationCode.objects.create()
         # User data
         self.user_data = {
             "keycloak_id": self.keycloak_client_mock.keycloak_id,
             "username": self.keycloak_client_mock.username,
             "email": self.keycloak_client_mock.email,
             "password": self.keycloak_client_mock.password,
-            "inv_code": str(self.inv_code.code),
             "pref_currency_type": "EUR",
             "expected_annual_balance": 10.0,
             "expected_monthly_balance": 10.0,
         }
         # User creation
-        user = User.objects.create(
+        User.objects.create(
             keycloak_id=self.user_data["keycloak_id"],
             pref_currency_type="EUR",
             expected_annual_balance=self.user_data["expected_annual_balance"],
             expected_monthly_balance=self.user_data["expected_monthly_balance"],
-            inv_code=self.inv_code,
         )
         return super().setUp()
 
     def get_expense_data(self):
-        exp_type = BalanceType.objects.create(
+        exp_type = BalanceType.objects.create(  # pylint: disable=no-member
             name="test",
             type=BalanceTypeChoices.EXPENSE
         )
@@ -62,7 +57,7 @@ class DateBalanceLogicTests(APITestCase):
         }
 
     def get_revenue_data(self):
-        rev_type = BalanceType.objects.create(
+        rev_type = BalanceType.objects.create(  # pylint: disable=no-member
             name="test",
             type=BalanceTypeChoices.REVENUE
         )
@@ -89,13 +84,13 @@ class DateBalanceLogicTests(APITestCase):
         # Post revenue
         response = test_utils.post(self.client, self.balance_url, data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        last_monthly_balance = MonthlyBalance.objects.last()
+        last_monthly_balance = MonthlyBalance.objects.last()  # pylint: disable=no-member
         self.assertEqual(now().date().year, last_monthly_balance.year)
         self.assertEqual(now().date().month, last_monthly_balance.month)
         self.assertEqual(data["real_quantity"],
                          last_monthly_balance.gross_quantity)
         self.assertEqual(10.0, last_monthly_balance.expected_quantity)
-        last_annual_balance = AnnualBalance.objects.last()
+        last_annual_balance = AnnualBalance.objects.last()  # pylint: disable=no-member
         self.assertEqual(now().date().year, last_annual_balance.year)
         self.assertEqual(data["real_quantity"],
                          last_annual_balance.gross_quantity)
@@ -112,13 +107,13 @@ class DateBalanceLogicTests(APITestCase):
         # Post expense
         response = test_utils.post(self.client, self.balance_url, data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        last_monthly_balance = MonthlyBalance.objects.last()
+        last_monthly_balance = MonthlyBalance.objects.last()  # pylint: disable=no-member
         self.assertEqual(now().date().year, last_monthly_balance.year)
         self.assertEqual(now().date().month, last_monthly_balance.month)
         self.assertEqual(-data["real_quantity"],
                          last_monthly_balance.gross_quantity)
         self.assertEqual(10.0, last_monthly_balance.expected_quantity)
-        last_annual_balance = AnnualBalance.objects.last()
+        last_annual_balance = AnnualBalance.objects.last()  # pylint: disable=no-member
         self.assertEqual(now().date().year, last_annual_balance.year)
         self.assertEqual(-data["real_quantity"],
                          last_annual_balance.gross_quantity)
@@ -136,15 +131,16 @@ class DateBalanceLogicTests(APITestCase):
         response = test_utils.post(self.client, self.balance_url, data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         # Delete revenue
-        rev = Balance.objects.get(name=data["name"])
+        rev = Balance.objects.get(  # pylint: disable=no-member
+            name=data["name"])
         response = test_utils.delete(
             self.client, self.balance_url + "/" + str(rev.id))
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
-        last_monthly_balance = MonthlyBalance.objects.last()
+        last_monthly_balance = MonthlyBalance.objects.last()  # pylint: disable=no-member
         self.assertEqual(now().date().year, last_monthly_balance.year)
         self.assertEqual(now().date().month, last_monthly_balance.month)
         self.assertEqual(0, last_monthly_balance.gross_quantity)
-        last_annual_balance = AnnualBalance.objects.last()
+        last_annual_balance = AnnualBalance.objects.last()  # pylint: disable=no-member
         self.assertEqual(now().date().year, last_annual_balance.year)
         self.assertEqual(0, last_annual_balance.gross_quantity)
 
@@ -160,17 +156,17 @@ class DateBalanceLogicTests(APITestCase):
         response = test_utils.post(self.client, self.balance_url, data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         # Delete expense
-        exp = Balance.objects.get(
+        exp = Balance.objects.get(  # pylint: disable=no-member
             name=data["name"]
         )
         response = test_utils.delete(
             self.client, self.balance_url + "/" + str(exp.id))
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
-        last_monthly_balance = MonthlyBalance.objects.last()
+        last_monthly_balance = MonthlyBalance.objects.last()  # pylint: disable=no-member
         self.assertEqual(now().date().year, last_monthly_balance.year)
         self.assertEqual(now().date().month, last_monthly_balance.month)
         self.assertEqual(0, last_monthly_balance.gross_quantity)
-        last_annual_balance = AnnualBalance.objects.last()
+        last_annual_balance = AnnualBalance.objects.last()  # pylint: disable=no-member
         self.assertEqual(now().date().year, last_annual_balance.year)
         self.assertEqual(0, last_annual_balance.gross_quantity)
 
@@ -186,7 +182,7 @@ class DateBalanceLogicTests(APITestCase):
         response = test_utils.post(self.client, self.balance_url, data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         # Update revenue dfiferent date
-        rev = Balance.objects.get(
+        rev = Balance.objects.get(  # pylint: disable=no-member
             name=data["name"]
         )
         past_date = (now() - timedelta(days=32)).date()
@@ -195,8 +191,8 @@ class DateBalanceLogicTests(APITestCase):
             str(rev.id), {"date": str(past_date)}
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        last_monthly_balance = MonthlyBalance.objects.last()
-        second_to_last_monthly_balance = MonthlyBalance.objects.get(
+        last_monthly_balance = MonthlyBalance.objects.last()  # pylint: disable=no-member
+        second_to_last_monthly_balance = MonthlyBalance.objects.get(  # pylint: disable=no-member
             month=past_date.month
         )
         self.assertEqual(now().date().year, last_monthly_balance.year)
@@ -207,7 +203,8 @@ class DateBalanceLogicTests(APITestCase):
         self.assertEqual(
             data["real_quantity"], second_to_last_monthly_balance.gross_quantity
         )
-        last_annual_balance = AnnualBalance.objects.get(year=past_date.year)
+        last_annual_balance = AnnualBalance.objects.get(  # pylint: disable=no-member
+            year=past_date.year)
         self.assertEqual(past_date.year, last_annual_balance.year)
         self.assertEqual(data["real_quantity"],
                          last_annual_balance.gross_quantity)
@@ -218,8 +215,8 @@ class DateBalanceLogicTests(APITestCase):
             {"date": str(now().date()), "real_quantity": 10.14},
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        last_monthly_balance = MonthlyBalance.objects.last()
-        second_to_last_monthly_balance = MonthlyBalance.objects.get(
+        last_monthly_balance = MonthlyBalance.objects.last()  # pylint: disable=no-member
+        second_to_last_monthly_balance = MonthlyBalance.objects.get(  # pylint: disable=no-member
             month=past_date.month
         )
         self.assertEqual(now().date().year, last_monthly_balance.year)
@@ -228,7 +225,7 @@ class DateBalanceLogicTests(APITestCase):
         self.assertEqual(past_date.year, second_to_last_monthly_balance.year)
         self.assertEqual(past_date.month, second_to_last_monthly_balance.month)
         self.assertEqual(0, second_to_last_monthly_balance.gross_quantity)
-        last_annual_balance = AnnualBalance.objects.last()
+        last_annual_balance = AnnualBalance.objects.last()  # pylint: disable=no-member
         self.assertEqual(now().date().year, last_annual_balance.year)
         self.assertEqual(10.14, last_annual_balance.gross_quantity)
         # Test update diferent quantity
@@ -237,11 +234,11 @@ class DateBalanceLogicTests(APITestCase):
             str(rev.id), {"real_quantity": 20.86}
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        last_monthly_balance = MonthlyBalance.objects.last()
+        last_monthly_balance = MonthlyBalance.objects.last()  # pylint: disable=no-member
         self.assertEqual(now().date().year, last_monthly_balance.year)
         self.assertEqual(now().date().month, last_monthly_balance.month)
         self.assertEqual(20.86, last_monthly_balance.gross_quantity)
-        last_annual_balance = AnnualBalance.objects.last()
+        last_annual_balance = AnnualBalance.objects.last()  # pylint: disable=no-member
         self.assertEqual(now().date().year, last_annual_balance.year)
         self.assertEqual(20.86, last_annual_balance.gross_quantity)
 
@@ -257,7 +254,7 @@ class DateBalanceLogicTests(APITestCase):
         response = test_utils.post(self.client, self.balance_url, data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         # Update expense dfiferent date
-        exp = Balance.objects.get(
+        exp = Balance.objects.get(  # pylint: disable=no-member
             name=data["name"]
         )
         past_date = (now() - timedelta(days=32)).date()
@@ -266,8 +263,8 @@ class DateBalanceLogicTests(APITestCase):
             str(exp.id), {"date": str(past_date)}
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        last_monthly_balance = MonthlyBalance.objects.last()
-        second_to_last_monthly_balance = MonthlyBalance.objects.get(
+        last_monthly_balance = MonthlyBalance.objects.last()  # pylint: disable=no-member
+        second_to_last_monthly_balance = MonthlyBalance.objects.get(  # pylint: disable=no-member
             month=past_date.month
         )
         self.assertEqual(now().date().year, last_monthly_balance.year)
@@ -278,7 +275,8 @@ class DateBalanceLogicTests(APITestCase):
         self.assertEqual(
             -data["real_quantity"], second_to_last_monthly_balance.gross_quantity
         )
-        last_annual_balance = AnnualBalance.objects.get(year=past_date.year)
+        last_annual_balance = AnnualBalance.objects.get(  # pylint: disable=no-member
+            year=past_date.year)
         self.assertEqual(past_date.year, last_annual_balance.year)
         self.assertEqual(-data["real_quantity"],
                          last_annual_balance.gross_quantity)
@@ -289,8 +287,8 @@ class DateBalanceLogicTests(APITestCase):
             {"date": str(now().date()), "real_quantity": 10.14},
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        last_monthly_balance = MonthlyBalance.objects.last()
-        second_to_last_monthly_balance = MonthlyBalance.objects.get(
+        last_monthly_balance = MonthlyBalance.objects.last()  # pylint: disable=no-member
+        second_to_last_monthly_balance = MonthlyBalance.objects.get(  # pylint: disable=no-member
             month=past_date.month
         )
         self.assertEqual(now().date().year, last_monthly_balance.year)
@@ -299,7 +297,7 @@ class DateBalanceLogicTests(APITestCase):
         self.assertEqual(past_date.year, second_to_last_monthly_balance.year)
         self.assertEqual(past_date.month, second_to_last_monthly_balance.month)
         self.assertEqual(0, second_to_last_monthly_balance.gross_quantity)
-        last_annual_balance = AnnualBalance.objects.last()
+        last_annual_balance = AnnualBalance.objects.last()  # pylint: disable=no-member
         self.assertEqual(now().date().year, last_annual_balance.year)
         self.assertEqual(-10.14, last_annual_balance.gross_quantity)
         # Test update diferent quantity
@@ -308,10 +306,10 @@ class DateBalanceLogicTests(APITestCase):
             str(exp.id), {"real_quantity": 20.86}
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        last_monthly_balance = MonthlyBalance.objects.last()
+        last_monthly_balance = MonthlyBalance.objects.last()  # pylint: disable=no-member
         self.assertEqual(now().date().year, last_monthly_balance.year)
         self.assertEqual(now().date().month, last_monthly_balance.month)
         self.assertEqual(-20.86, last_monthly_balance.gross_quantity)
-        last_annual_balance = AnnualBalance.objects.last()
+        last_annual_balance = AnnualBalance.objects.last()  # pylint: disable=no-member
         self.assertEqual(now().date().year, last_annual_balance.year)
         self.assertEqual(-20.86, last_annual_balance.gross_quantity)

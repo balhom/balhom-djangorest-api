@@ -1,11 +1,10 @@
+import logging
 from django.utils.timezone import now
-from rest_framework.test import APITestCase
 from django.urls import reverse
+from rest_framework.test import APITestCase
 from balance.models.annual_balance_model import AnnualBalance
 from balance.models.monthly_balance_model import MonthlyBalance
 from app_auth.models.user_model import User
-from app_auth.models.invitation_code_model import InvitationCode
-import logging
 import core.tests.utils as test_utils
 from keycloak_client.django_client import get_keycloak_client
 
@@ -20,24 +19,18 @@ class BalancePaginationTests(APITestCase):
 
         self.keycloak_client_mock = get_keycloak_client()
 
-        # Create InvitationCodes
-        self.inv_code = InvitationCode.objects.create(  # pylint: disable=no-member
-            usage_left=400
-        )
         # User data
         self.user_data = {
             "keycloak_id": self.keycloak_client_mock.keycloak_id,
             "username": self.keycloak_client_mock.username,
             "email": self.keycloak_client_mock.email,
             "password": self.keycloak_client_mock.password,
-            "inv_code": str(self.inv_code.code),
             "locale": self.keycloak_client_mock.locale,
             "pref_currency_type": "EUR",
         }
         # User creation
         self.user = User.objects.create(
             keycloak_id=self.user_data["keycloak_id"],
-            inv_code=self.inv_code,
         )
         return super().setUp()
 
@@ -66,7 +59,7 @@ class BalancePaginationTests(APITestCase):
 
     def add_annual_balance(self):
         data = self.get_annual_balance_data()
-        AnnualBalance.objects.create(
+        AnnualBalance.objects.create(  # pylint: disable=no-member
             gross_quantity=data["gross_quantity"],
             expected_quantity=data["expected_quantity"],
             currency_type=data["currency_type"],
@@ -80,7 +73,7 @@ class BalancePaginationTests(APITestCase):
 
     def add_monthly_balance(self):
         data = self.get_monthly_balance_data()
-        MonthlyBalance.objects.create(
+        MonthlyBalance.objects.create(  # pylint: disable=no-member
             gross_quantity=data["gross_quantity"],
             expected_quantity=data["expected_quantity"],
             currency_type=data["currency_type"],
@@ -125,7 +118,7 @@ class BalancePaginationTests(APITestCase):
         """
         # Add First AnnualBalance
         self.authenticate_add_annual_balance()
-        for i in range(19):
+        for _ in range(19):
             self.add_annual_balance()
         # Get First page AnnualBalance data
         response = test_utils.get(self.client, self.annual_balance_list)
@@ -176,7 +169,7 @@ class BalancePaginationTests(APITestCase):
         """
         # Add First MonthlyBalance
         self.authenticate_add_monthly_balance()
-        for i in range(19):
+        for _ in range(19):
             self.add_monthly_balance()
         # Get First page MonthlyBalance data
         response = test_utils.get(self.client, self.monthly_balance_list)

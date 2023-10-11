@@ -3,7 +3,6 @@ from django.contrib.auth.models import AbstractUser, UserManager
 from django.db import models
 from django.core.validators import MinValueValidator
 from django.utils.translation import gettext_lazy as _
-from app_auth.models.invitation_code_model import InvitationCode
 
 
 class BalanceUserManager(UserManager):
@@ -23,9 +22,6 @@ class BalanceUserManager(UserManager):
 
         return User.objects.create(
             keycloak_id=keycloak_id,
-            inv_code=InvitationCode.objects.create(  # pylint: disable=no-member
-                usage_left=0, is_active=False
-            ),
             is_staff=False,
             is_superuser=False,
             pref_currency_type=currency_type,
@@ -47,9 +43,6 @@ class BalanceUserManager(UserManager):
 
         return User.objects.create(
             keycloak_id=keycloak_id,
-            inv_code=InvitationCode.objects.create(  # pylint: disable=no-member
-                usage_left=0, is_active=False
-            ),
             is_staff=True,
             is_superuser=True,
             pref_currency_type=currency_type,
@@ -79,13 +72,6 @@ class User(AbstractUser):
         verbose_name=_("profile image"),
         upload_to=_image_user_dir,
         default="users/default_user.jpg",
-    )
-    inv_code = models.ForeignKey(
-        InvitationCode,
-        on_delete=models.DO_NOTHING,
-        verbose_name=_("invitation code"),
-        blank=True,
-        null=True,
     )
     current_balance = models.FloatField(
         verbose_name=_("current balance"),
