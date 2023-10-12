@@ -304,12 +304,12 @@ class OnPremise(Dev):
                 "class": "logging.FileHandler",
                 "filename": LOG_FILE_PATH,
                 "formatter": "verbose",
-            } if LOG_FILE_PATH else {
-                "console": {
-                    "class": "logging.StreamHandler",
-                    "stream": "ext://sys.stdout",
-                    "formatter": "verbose",
-                },
+            }
+        } if LOG_FILE_PATH else {
+            "console": {
+                "class": "logging.StreamHandler",
+                "stream": "ext://sys.stdout",
+                "formatter": "verbose",
             },
         },
         "root": {
