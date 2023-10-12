@@ -12,6 +12,7 @@ class KeycloakClientMock:
         self.access_token = "test.access.token"
         self.refresh_token = "test.refresh.token"
         self.email = "test@mail.com"
+        self.username_for_conflict = "conflict"
         self.email_for_conflict = "conflict@mail.com"
         self.username = "test"
         self.updated_username = "test"
@@ -74,6 +75,37 @@ class KeycloakClientMock:
             "id": self.keycloak_id,
             "createdTimestamp": 1688991767048,
             "username": self.email,
+            "enabled": self.user_enabled,
+            "totp": False,
+            "emailVerified": self.email_verified,
+            "firstName": self.username,
+            "lastName": "",
+            "email": self.email,
+            "attributes": {
+                "locale": [
+                    self.locale
+                ]
+            },
+            "disableableCredentialTypes": [],
+            "requiredActions": [],
+            "notBefore": 0,
+            "access": {
+                "manageGroupMembership": True,
+                "view": True,
+                "mapRoles": True,
+                "impersonate": False,
+                "manage": True
+            }
+        }
+
+    def get_user_info_by_username(self, username: str) -> dict | None:
+        """Get user info by "test" username."""
+        if username != self.username_for_conflict:
+            return None
+        return {
+            "id": self.keycloak_id,
+            "createdTimestamp": 1688991767048,
+            "username": self.username,
             "enabled": self.user_enabled,
             "totp": False,
             "emailVerified": self.email_verified,

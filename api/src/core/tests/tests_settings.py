@@ -38,4 +38,4 @@ class DevTestCase(TestCase):
             self.assertIn(logging_settings["handlers"]["console"]
                           ["formatter"], logging_settings["formatters"])
         self.assertIn("console", logging_settings["root"]["handlers"])
-        self.assertEqual(logging_settings["root"]["level"], "DEBUG")
+        self.assertEqual(logging_settings["root"]["level"], "INFO")

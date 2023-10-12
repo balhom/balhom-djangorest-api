@@ -16,7 +16,8 @@ from app_auth.exceptions import (
     UserEmailConflictException,
     CannotCreateUserException,
     UnverifiedEmailException,
-    WrongCredentialsException
+    WrongCredentialsException,
+    UserNameConflictException,
 )
 
 
@@ -40,6 +41,12 @@ class UserCreationView(generics.CreateAPIView):
         pref_currency_type = validated_data["pref_currency_type"]
 
         keycloak_client = get_keycloak_client()
+
+        user = keycloak_client.get_user_info_by_username(
+            username=validated_data["username"]
+        )
+        if user:
+            raise UserNameConflictException()
 
         created, res_code, _ = keycloak_client.create_user(
             email=validated_data["email"],

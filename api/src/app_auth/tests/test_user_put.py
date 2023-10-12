@@ -1,7 +1,5 @@
 import logging
-import os
 import tempfile
-import shutil
 from django.conf import settings
 from django.core.cache import cache
 from django.urls import reverse
@@ -57,13 +55,6 @@ class UserPutTests(APITestCase):
             data=data,
         )
 
-    def user_patch_image(self, image):
-        return test_utils.patch_image(
-            self.client,
-            self.user_put_url,
-            data={"image": image}
-        )
-
     def temporary_image(self):
         image = Image.new("RGB", (100, 100))
         tmp_file = tempfile.NamedTemporaryFile(
@@ -99,20 +90,6 @@ class UserPutTests(APITestCase):
         keycloak_id = self.keycloak_client_mock.keycloak_id
         user = User.objects.get(keycloak_id=keycloak_id)
         self.assertEqual(user.expected_monthly_balance, 10)
-
-    def test_change_user_image(self):
-        """
-        Checks that image is uploaded
-        """
-        response = self.user_patch_image(self.temporary_image())
-        self.assertEqual(status.HTTP_200_OK, response.status_code)
-        keycloak_id = self.keycloak_client_mock.keycloak_id
-        user = User.objects.get(keycloak_id=keycloak_id)
-        generated_dir = os.path.join(
-            str(settings.BASE_DIR), "media", "user_"+str(user.id))
-        self.assertTrue(os.path.exists(generated_dir))
-        if os.path.exists(generated_dir):
-            shutil.rmtree(generated_dir)
 
     def test_change_pref_currency_type(self):
         """

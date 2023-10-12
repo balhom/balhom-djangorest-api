@@ -18,8 +18,9 @@ coreapi
 # Jwt Authentication
 python-keycloak
 PyJWT
-# Image library
+# Image libraries
 Pillow
+piexif
 # Celery driver
 celery
 # Celery task result models

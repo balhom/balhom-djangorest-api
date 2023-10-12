@@ -1,6 +1,7 @@
 from django.urls import path
 from app_auth.api.views.reset_password_view import ResetPasswordView
 from app_auth.api.views.user_retrieve_update_destroy_view import UserRetrieveUpdateDestroyView
+from app_auth.api.views.user_image_update_view import UserImageUpdateView
 from app_auth.api.views.user_creation_view import UserCreationView
 from app_auth.api.views.send_verify_email_view import SendVerifyEmailView
 from app_auth.api.views.auth_views import (
@@ -16,6 +17,8 @@ urlpatterns = [
     path("account", UserCreationView.as_view(), name="user-post"),
     path("account/profile", UserRetrieveUpdateDestroyView.as_view(),
          name="user-put-get-del"),
+    path("account/image", UserImageUpdateView.as_view(),
+         name="user-image-put"),
     path("auth/send-verify-email", SendVerifyEmailView.as_view(),
          name="send-verify-email"),
     path("auth/password-reset", ResetPasswordView.as_view(),

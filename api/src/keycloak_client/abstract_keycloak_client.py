@@ -20,6 +20,10 @@ class AbstractKeycloakClient(ABC):
         pass
 
     @abstractmethod
+    def get_user_info_by_username(self, username: str) -> dict | None:
+        pass
+
+    @abstractmethod
     def get_user_sessions(self, keycloak_id: str) -> list | None:
         pass
 

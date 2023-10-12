@@ -3,7 +3,7 @@ Provide view classes.
 """
 from rest_framework import generics
 from rest_framework.response import Response
-from rest_framework.parsers import FormParser, MultiPartParser, JSONParser
+from rest_framework.parsers import JSONParser
 from django.utils.translation import gettext_lazy as _
 from django.db import transaction
 from django.utils.timezone import now
@@ -30,7 +30,7 @@ class UserRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
     queryset = User.objects.all()
     permission_classes = (IsCurrentVerifiedUser,)
     serializer_class = UserRetrieveUpdateDestroySerializer
-    parser_classes = (MultiPartParser, FormParser, JSONParser)
+    parser_classes = (JSONParser,)
 
     def get_object(self, queryset=None):  # pylint: disable=unused-argument
         return self.request.user

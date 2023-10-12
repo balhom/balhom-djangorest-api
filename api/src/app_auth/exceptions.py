@@ -16,6 +16,7 @@ CANNOT_UPDATE_USER_ERROR = 8
 CANNOT_DELETE_USER_ERROR = 9
 CURRENCY_TYPE_CHANGED_ERROR = 10
 WRONG_CREDENTIALS_ERROR = 11
+USER_NAME_CONFLICT_ERROR = 12
 
 
 class UserNotFoundException(AppBadRequestException):
@@ -126,3 +127,13 @@ class WrongCredentialsException(AppBadRequestException):
     def __init__(self):
         detail = _("Wrong credentials")
         super().__init__(detail, WRONG_CREDENTIALS_ERROR)
+
+
+class UserNameConflictException(AppBadRequestException):
+    """
+    Exception used when an username is already used.
+    """
+
+    def __init__(self):
+        detail = _("Username already used")
+        super().__init__(detail, USER_NAME_CONFLICT_ERROR)

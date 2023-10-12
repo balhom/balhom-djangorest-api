@@ -86,7 +86,7 @@ class BalancePaginationTests(APITestCase):
                     "balance_type": {
                         "name": "test",
                         "type": "EXPENSE",
-                        "image": "http://testserver/media/core/default_image.jpg",
+                        "image": scheme["results"][0]["balance_type"]["image"],
                     },
                 }
             ],

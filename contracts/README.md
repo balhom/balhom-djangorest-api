@@ -41,3 +41,4 @@ This directory serves as a reference guide for developers working on the fronten
 | 9    | Cannot delete user                                         | /api/v2/account [DEL]                                        |
 | 10   | Currency type has already been changed in the las 24 hours | /api/v2/account [PUT/PATCH]                                  |
 | 11   | Wrong credentials                                          | /api/v2/auth/access                                          |
+| 12   | Username already used                                      | /api/v2/account [POST]                                       |
