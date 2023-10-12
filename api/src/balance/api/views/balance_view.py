@@ -20,7 +20,22 @@ class BalanceViewSet(ModelViewSet):
         """
         if getattr(self, "swagger_fake_view", False):
             return Balance.objects.none()  # pylint: disable=no-member
-        return Balance.objects.filter(owner=self.request.user)  # pylint: disable=no-member
+        queryset = Balance.objects.filter(  # pylint: disable=no-member
+            owner=self.request.user)
+
+        sorting_param = self.request.query_params.get('sorting')
+        if sorting_param:
+            if sorting_param in [
+                "name",
+                "real_quantity",
+                "-real_quantity", 
+                "converted_quantity",
+                "-converted_quantity",
+                "date",
+                "-date",
+            ]:
+                queryset = queryset.order_by(sorting_param)
+        return queryset
 
     def perform_create(self, serializer):
         currency_conversion_client = get_currency_conversion_client()
