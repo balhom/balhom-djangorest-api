@@ -265,52 +265,34 @@ class OnPremise(Dev):
         SECURE_HSTS_INCLUDE_SUBDOMAINS = True
         SECURE_HSTS_PRELOAD = True
 
-    if os.path.exists("/var/log/api/app.log"):
-        print("* Using file log")
-        LOGGING = {
-            "version": 1,
-            "disable_existing_loggers": False,
-            "formatters": {
-                "verbose": {
-                    "format": "{levelname} {asctime} {module} {process:d} {thread:d} {message}",
-                    "style": "{",
-                },
+    LOG_FILE_PATH = env.str("LOG_FILE_PATH", default=None)
+    LOGGING = {
+        "version": 1,
+        "disable_existing_loggers": False,
+        "formatters": {
+            "verbose": {
+                "format": "{levelname} {asctime} {module} {process:d} {thread:d} {message}",
+                "style": "{",
             },
-            "handlers": {
-                "logfile": {
-                    "class": "logging.FileHandler",
-                    "filename": "/var/log/api/app.log",
-                    "formatter": "verbose",
-                },
-            },
-            "root": {
-                "handlers": ["logfile"],
-                "level": "ERROR",
-            },
-        }
-    else:
-        print("* Using console log")
-        LOGGING = {
-            "version": 1,
-            "disable_existing_loggers": False,
-            "formatters": {
-                "verbose": {
-                    "format": "{levelname} {asctime} {module} {process:d} {thread:d} {message}",
-                    "style": "{",
-                },
-            },
-            "handlers": {
+        },
+        "handlers": {
+            "logfile": {
+                "class": "logging.FileHandler",
+                "filename": LOG_FILE_PATH,
+                "formatter": "verbose",
+            } if LOG_FILE_PATH else {
                 "console": {
                     "class": "logging.StreamHandler",
                     "stream": "ext://sys.stdout",
                     "formatter": "verbose",
                 },
             },
-            "root": {
-                "handlers": ["console"],
-                "level": "ERROR",
-            },
-        }
+        },
+        "root": {
+            "handlers": ["logfile"] if LOG_FILE_PATH else ["console"],
+            "level": "ERROR",
+        },
+    }
 
     EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
     # It is setup for gmail
