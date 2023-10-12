@@ -178,7 +178,7 @@ class Dev(Configuration):
         },
         "root": {
             "handlers": ["console"],
-            "level": "DEBUG",
+            "level": "INFO",
         },
     }
 
@@ -247,6 +247,27 @@ class Dev(Configuration):
 
     DISABLE_ADMIN_PANEL = env.bool("DISABLE_ADMIN_PANEL", default=False)
 
+    S3_URL = env.str("S3_URL", default=None)
+    if S3_URL:
+        STORAGES = {
+            "default": {"BACKEND": "core.storage_backends.S3MediaStorage"},
+            "staticfiles": {"BACKEND": "core.storage_backends.S3StaticStorage"},
+        }
+        AWS_S3_ENDPOINT_URL = S3_URL
+        AWS_ACCESS_KEY_ID = env.str("S3_ACCESS_KEY")
+        AWS_SECRET_ACCESS_KEY = env.str("S3_SECRET_KEY")
+        AWS_S3_OBJECT_PARAMETERS = {
+            "CacheControl": "max-age=86400",
+        }
+        AWS_DEFAULT_ACL = None
+
+        S3_STATIC_BUCKET_NAME = env.str(
+            "S3_STATIC_BUCKET_NAME", default="balhom-static-bucket")
+        S3_MEDIA_BUCKET_NAME = env.str(
+            "S3_MEDIA_BUCKET_NAME", default="balhom-media-bucket")
+        S3_STORAGE_ACCESS_KEY = env.str("S3_ACCESS_KEY")
+        S3_STORAGE_SECRET_KEY = env.str("S3_SECRET_KEY")
+
 
 class OnPremise(Dev):
     """
@@ -301,24 +322,3 @@ class OnPremise(Dev):
     EMAIL_PORT = env.int("EMAIL_PORT", default=587)
     EMAIL_HOST_USER = env.str("EMAIL_HOST_USER", default="example@gmail.com")
     EMAIL_HOST_PASSWORD = env.str("EMAIL_HOST_PASSWORD", default="password")
-
-    S3_URL = env.str("S3_URL", default=None)
-    if S3_URL:
-        STORAGES = {
-            "default": {"BACKEND": "core.storage_backends.S3MediaStorage"},
-            "staticfiles": {"BACKEND": "core.storage_backends.S3StaticStorage"},
-        }
-        AWS_S3_ENDPOINT_URL = S3_URL
-        AWS_ACCESS_KEY_ID = env.str("S3_ACCESS_KEY")
-        AWS_SECRET_ACCESS_KEY = env.str("S3_SECRET_KEY")
-        AWS_S3_OBJECT_PARAMETERS = {
-            "CacheControl": "max-age=86400",
-        }
-        AWS_DEFAULT_ACL = None
-
-        S3_STATIC_BUCKET_NAME = env.str(
-            "S3_STATIC_BUCKET_NAME", default="balhom-static-bucket")
-        S3_MEDIA_BUCKET_NAME = env.str(
-            "S3_MEDIA_BUCKET_NAME", default="balhom-media-bucket")
-        S3_STORAGE_ACCESS_KEY = env.str("S3_ACCESS_KEY")
-        S3_STORAGE_SECRET_KEY = env.str("S3_SECRET_KEY")

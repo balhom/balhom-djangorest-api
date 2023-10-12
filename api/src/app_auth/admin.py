@@ -39,6 +39,7 @@ class UserAdmin(admin.ModelAdmin):
         "current_balance",
     )
     list_display = (
+        "keycloak_id",
         "last_login",
         "is_active",
     )

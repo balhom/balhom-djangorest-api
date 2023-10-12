@@ -149,13 +149,13 @@ python manage.py test
 coverage html
 ~~~
 
-* Create static files (also used to upload static files to minio):
+* Create static files (also used to upload static files to s3 bucket):
 
 ~~~bash
 python manage.py collectstatic
 ~~~
 
-* Upload default media files to minio:
+* Upload default media files to s3 bucket:
 
 ~~~bash
 python manage.py collectmedia

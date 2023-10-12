@@ -31,7 +31,6 @@ psycopg2-binary = "^2.9.7"
 coverage = "^7.2.7"
 beautifulsoup4 = "^4.12.2"
 gunicorn = "^21.2.0"
-minio = "^7.1.15"
 django-storages = "^1.13.2"
 boto3 = "^1.28.22"
 
