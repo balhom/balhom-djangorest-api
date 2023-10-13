@@ -18,6 +18,7 @@ from app_auth.exceptions import (
     CannotUpdateUserException,
     CannotDeleteUserException,
     CurrencyTypeChangedException,
+    UserNameConflictException,
 )
 from currency_conversion_client.django_client import get_currency_conversion_client
 
@@ -138,6 +139,16 @@ class UserRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
         # Keycloak update
         keycloak_client = get_keycloak_client()
         keycloak_id = self.request.user.keycloak_id
+
+        if (
+                "username" in serializer.validated_data
+            and serializer.instance != serializer.validated_data["username"]
+            and keycloak_client.exists_user_by_username(
+                username=serializer.validated_data["username"]
+            )
+        ):
+            raise UserNameConflictException()
+
         if "username" in serializer.validated_data \
                 or "locale" in serializer.validated_data:
             updated, _, _ = keycloak_client.update_user_by_id(

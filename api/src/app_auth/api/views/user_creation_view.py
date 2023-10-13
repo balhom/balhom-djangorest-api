@@ -42,10 +42,9 @@ class UserCreationView(generics.CreateAPIView):
 
         keycloak_client = get_keycloak_client()
 
-        user = keycloak_client.get_user_info_by_username(
+        if keycloak_client.exists_user_by_username(
             username=validated_data["username"]
-        )
-        if user:
+        ):
             raise UserNameConflictException()
 
         created, res_code, _ = keycloak_client.create_user(

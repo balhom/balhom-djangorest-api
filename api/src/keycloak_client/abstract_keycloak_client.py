@@ -20,7 +20,7 @@ class AbstractKeycloakClient(ABC):
         pass
 
     @abstractmethod
-    def get_user_info_by_username(self, username: str) -> dict | None:
+    def exists_user_by_username(self, username: str) -> bool:
         pass
 
     @abstractmethod

@@ -79,10 +79,10 @@ class KeycloakClient:
         users = self.keycloak_admin.get_users({"email": email})
         return None if not users else list(users)[0]
 
-    def get_user_info_by_username(self, username: str) -> dict | None:
-        """Get user info by username."""
+    def exists_user_by_username(self, username: str) -> bool:
+        """Exists user by username."""
         users = self.keycloak_admin.get_users({"username": username})
-        return None if not users else list(users)[0]
+        return len(list(users)) > 0
 
     def get_user_sessions(self, keycloak_id: str) -> list | None:
         """Get user sessions."""
