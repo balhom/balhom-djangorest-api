@@ -2,13 +2,13 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-# 
+#
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-09 17:17+0200\n"
+"POT-Creation-Date: 2023-10-13 18:11+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,18 +18,16 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: app_auth/api/serializers/user_creation_serializer.py:61
-#: app_auth/api/serializers/user_retrieve_update_destroy_serializer.py:54
+#: app_auth/api/serializers/user_creation_serializer.py:53
+#: app_auth/api/serializers/user_retrieve_update_destroy_serializer.py:55
 msgid "Locale not supported"
 msgstr "Locale not supported"
 
-#: app_auth/api/serializers/user_creation_serializer.py:72
-msgid "Invitation code not found"
-msgstr "Invitation code not found"
-
-#: app_auth/api/serializers/user_creation_serializer.py:74
-msgid "Invalid invitation code"
-msgstr "Invalid invitation code"
+#: app_auth/api/serializers/user_creation_serializer.py:62
+#: app_auth/api/serializers/user_retrieve_update_destroy_serializer.py:64
+#: balance/api/serializers/balance_serializer.py:39
+msgid "Currency type not supported"
+msgstr "Currency type not supported"
 
 #: app_auth/api/serializers/utils.py:12
 msgid "Password cannot match other profile data"
@@ -39,123 +37,113 @@ msgstr "Password cannot match other profile data"
 msgid "Refresh token not provided"
 msgstr "Refresh token not provided"
 
-#: app_auth/exceptions.py:27
+#: app_auth/exceptions.py:28
 msgid "User not found"
 msgstr "User not found"
 
-#: app_auth/exceptions.py:37
+#: app_auth/exceptions.py:38
 msgid "Unverified email"
 msgstr "Unverified email"
 
-#: app_auth/exceptions.py:47
+#: app_auth/exceptions.py:48
 msgid "Cannot send verification mail"
 msgstr "Cannot send verification mail"
 
-#: app_auth/exceptions.py:57
+#: app_auth/exceptions.py:58
 msgid "Cannot send reset password mail"
 msgstr "Cannot send reset password mail"
 
-#: app_auth/exceptions.py:67
+#: app_auth/exceptions.py:68
 msgid "Email already used"
 msgstr "Email already used"
 
-#: app_auth/exceptions.py:77
+#: app_auth/exceptions.py:78
 msgid "Cannot create user"
 msgstr "Cannot create user"
 
-#: app_auth/exceptions.py:87
+#: app_auth/exceptions.py:88
 msgid "Cannot update user"
 msgstr "Cannot update user"
 
-#: app_auth/exceptions.py:97
+#: app_auth/exceptions.py:98
 msgid "Cannot delete user"
 msgstr "Cannot delete user"
 
-#: app_auth/exceptions.py:107
+#: app_auth/exceptions.py:108
 msgid "Password can only be reset 3 times a day"
 msgstr "Password can only be reset 3 times a day"
 
-#: app_auth/exceptions.py:117
+#: app_auth/exceptions.py:118
 msgid "Currency type has already been changed in the las 24 hours"
 msgstr "Currency type has already been changed in the las 24 hours"
 
-#: app_auth/exceptions.py:127
+#: app_auth/exceptions.py:128
 msgid "Wrong credentials"
 msgstr "Wrong credentials"
 
-#: app_auth/models/invitation_code_model.py:8
-msgid "uuid code"
-msgstr "uuid code"
+#: app_auth/exceptions.py:138
+msgid "Username already used"
+msgstr "Username already used"
 
-#: app_auth/models/invitation_code_model.py:14
-msgid "usage left"
-msgstr "usage left"
-
-#: app_auth/models/invitation_code_model.py:15
-msgid "is active"
-msgstr "is active"
-
-#: app_auth/models/invitation_code_model.py:20
-msgid "Invitation code"
-msgstr "Invitation code"
-
-#: app_auth/models/invitation_code_model.py:21
-msgid "Invitation codes"
-msgstr "Invitation codes"
-
-#: app_auth/models/user_model.py:16 app_auth/models/user_model.py:40
+#: app_auth/models/user_model.py:15 app_auth/models/user_model.py:36
 msgid "A keycloak id must be provided"
 msgstr "A keycloak id must be provided"
 
-#: app_auth/models/user_model.py:76
+#: app_auth/models/user_model.py:69
 msgid "keycloak id"
 msgstr "keycloak id"
 
-#: app_auth/models/user_model.py:79
+#: app_auth/models/user_model.py:72
 msgid "profile image"
 msgstr "profile image"
 
-#: app_auth/models/user_model.py:86
-msgid "invitation code"
-msgstr "invitation code"
-
-#: app_auth/models/user_model.py:91
+#: app_auth/models/user_model.py:77
 msgid "current balance"
 msgstr "current balance"
 
-#: app_auth/models/user_model.py:95
+#: app_auth/models/user_model.py:81
 msgid "receive email about balance"
 msgstr "receive email about balance"
 
-#: app_auth/models/user_model.py:102
+#: app_auth/models/user_model.py:88
 msgid "expected annual balance"
 msgstr "expected annual balance"
 
-#: app_auth/models/user_model.py:110
+#: app_auth/models/user_model.py:96
 msgid "expected monthly balance"
 msgstr "expected monthly balance"
 
-#: app_auth/models/user_model.py:116
+#: app_auth/models/user_model.py:102
 msgid "date of last password reset code sent"
 msgstr "date of last password reset code sent"
 
-#: app_auth/models/user_model.py:120
+#: app_auth/models/user_model.py:106
 msgid "number of requests for password reset"
 msgstr "number of requests for password reset"
 
-#: app_auth/models/user_model.py:123
+#: app_auth/models/user_model.py:109
 msgid "preferred currency type"
 msgstr "preferred currency type"
 
-#: app_auth/models/user_model.py:129
+#: app_auth/models/user_model.py:115
 msgid "date of last preferred currency type change"
 msgstr "date of last preferred currency type change"
 
-#: balance/api/serializers/balance_serializer.py:39
-msgid "Balance type not provided"
-msgstr "Balance type not provided"
+#: app_statistics/api/views/statistics_month_view.py:15
+#: app_statistics/api/views/statistics_year_view.py:15
+msgid "year not provided"
+msgstr "year not provided"
 
-#: balance/api/serializers/balance_serializer.py:47
+#: app_statistics/api/views/statistics_month_view.py:17
+msgid "month not provided"
+msgstr "month not provided"
+
+#: app_statistics/api/views/statistics_month_view.py:19
+msgid "month not valid"
+msgstr "month not valid"
+
+#: balance/api/serializers/balance_serializer.py:49
+#: balance/api/serializers/balance_serializer.py:61
 msgid "Provided balance type does not exists"
 msgstr "Provided balance type does not exists"
 
@@ -270,17 +258,9 @@ msgstr "Monthly balance"
 msgid "Monthly balances"
 msgstr "Monthly balances"
 
-#: core/settings.py:140
+#: core/settings.py:144
 msgid "English"
 msgstr "English"
-
-#: core/settings.py:141
-msgid "Spanish"
-msgstr "Spanish"
-
-#: core/settings.py:142
-msgid "French"
-msgstr "French"
 
 #: currency_conversion_client/exceptions.py:17
 msgid "Cannot make conversion"
@@ -290,18 +270,14 @@ msgstr "Cannot make conversion"
 msgid "Unprocessable authorization header"
 msgstr "Unprocessable authorization header"
 
-#: keycloak_client/authentication.py:43
-msgid "No invitation code stored"
-msgstr "No invitation code stored"
-
-#: keycloak_client/authentication.py:48
+#: keycloak_client/authentication.py:44
 msgid "User does not exists"
 msgstr "User does not exists"
 
-#: keycloak_client/authentication.py:49
+#: keycloak_client/authentication.py:45
 msgid "Invalid access token"
 msgstr "Invalid access token"
 
-#: keycloak_client/authentication.py:52
+#: keycloak_client/authentication.py:48
 msgid "Bearer <jwt>"
 msgstr "Bearer <jwt>"
