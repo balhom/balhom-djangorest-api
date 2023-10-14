@@ -7,22 +7,22 @@ This directory serves as a reference guide for developers working on the fronten
 
 ### Endpoints
 
-* [Auth Endpoints](./endpoints/auth-endpoints.md)
-* [User Endpoints](./endpoints/user-endpoints.md)
-* [Balance Endpoints](./endpoints/balance-endpoints.md)
 * [Verion Endpoints](./endpoints/version-endpoints.md)
+* [Auth Endpoints](./endpoints/auth-endpoints.md)
+* [Account Endpoints](./endpoints/account-endpoints.md)
+* [Balance Endpoints](./endpoints/balance-endpoints.md)
 * [Statistics Endpoints](./endpoints/statistics-endpoints.md)
 
 ### Requests
 
-* [User Requests](./requests/user-requests.md)
+* [Account Requests](./requests/account-requests.md)
 * [Balance Requests](./requests/balance-requests.md)
 
 ### Responses
 
-* [User Response](./responses/user-response.md)
-* [Balance Response](./responses/balance-responses.md)
 * [Version Response](./responses/version-response.md)
+* [Account Response](./responses/account-response.md)
+* [Balance Response](./responses/balance-responses.md)
 * [Statistics Response](./responses/statistics-responses.md)
 
 
