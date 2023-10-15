@@ -25,7 +25,7 @@ class BalanceType(models.Model):
     class Meta:
         verbose_name = _("Balance type")
         verbose_name_plural = _("Balance types")
-        ordering = ["name"]
+        ordering = ["type", "name"]
 
     def __str__(self) -> str:
         return str(self.name)

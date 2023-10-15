@@ -1,9 +1,5 @@
 # Statistics Responses
 
-| name       | type | comments                                                     |
-| ---------- | ---- | ------------------------------------------------------------ |
-| statistics | List | List of Statistics Day Response or Statistics Month Response |
-
 ## Statistics Day Response
 
 | name    | type   | comments |

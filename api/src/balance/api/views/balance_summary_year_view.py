@@ -1,18 +1,13 @@
-from datetime import date
-from django.db.models.functions import ExtractYear
-from django.utils.decorators import method_decorator
-from django.views.decorators.cache import cache_page
-from django.views.decorators.vary import vary_on_headers
 from django.utils.translation import gettext_lazy as _
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.exceptions import ValidationError
-from balance.models.balance_type_model import BalanceType
 from balance.models.balance_model import Balance
+from balance.models.balance_type_model import BalanceType
 from core.permissions import IsCurrentVerifiedUser
 
 
-class BalanceYearsRetrieveView(APIView):
+class BalanceSummaryYearView(APIView):
     permission_classes = (IsCurrentVerifiedUser,)
 
     def validate(self):
@@ -22,30 +17,33 @@ class BalanceYearsRetrieveView(APIView):
             type=self.kwargs["type"]
         ).exists():
             raise ValidationError({"type": [_("type not valid")]})
+        if "year" not in list(self.kwargs):
+            raise ValidationError({"year": [_("year not provided")]})
 
-    @method_decorator(cache_page(60))
-    @method_decorator(vary_on_headers("Authorization"))
     def get(self, request, **kwargs):
-        """
-        This view will be cached for 1 minute
-        """
         self.validate()
 
-        balance_type = self.kwargs["type"]
+        year = int(self.kwargs["year"])
+        balance_type = str(self.kwargs["type"])
         filtered_balances = Balance.objects.filter(  # pylint: disable=no-member
+            date__year=year,
             balance_type__type=balance_type
         )
 
-        years_dict = filtered_balances.annotate(  # pylint: disable=no-member
-            year=ExtractYear('date')
-        ).values('year').distinct()
+        summary_dict = {}
+        for balance in list(filtered_balances):
+            type_name = balance.balance_type.name
+            if type_name in list(summary_dict):
+                summary_dict[type_name] += balance.converted_quantity
+            else:
+                summary_dict[type_name] = balance.converted_quantity
 
-        years = [year['year'] for year in years_dict]
-
-        if years:
-            return Response(
-                data=years,
-            )
         return Response(
-            data=[date.today().year],
+            data=[
+                {
+                    "type": type_name,
+                    "quantity": summary_dict[type_name]
+                }
+                for type_name in list(summary_dict.keys())
+            ]
         )

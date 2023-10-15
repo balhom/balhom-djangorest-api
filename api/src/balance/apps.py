@@ -1,6 +1,6 @@
-from django.apps import AppConfig
-import logging
 import os
+import logging
+from django.apps import AppConfig
 
 
 logger = logging.getLogger(__name__)

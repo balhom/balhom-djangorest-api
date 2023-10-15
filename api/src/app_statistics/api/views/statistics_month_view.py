@@ -29,7 +29,7 @@ class StatisticsMonthView(APIView):
         )
 
         day_balance_dict = {}
-        for balance in filtered_balances:
+        for balance in list(filtered_balances):
             day = balance.date.day
             if day in list(day_balance_dict):
                 if balance.balance_type.type == BalanceTypeChoices.EXPENSE:
@@ -46,14 +46,12 @@ class StatisticsMonthView(APIView):
                     day_balance_dict[day]["revenue"] = balance.converted_quantity
 
         return Response(
-            data={
-                "statistics": [
-                    {
-                        "day": day,
-                        "expense": day_balance_dict[day]["expense"],
-                        "revenue": day_balance_dict[day]["revenue"]
-                    }
-                    for day in list(day_balance_dict.keys())
-                ]
-            },
+            data=[
+                {
+                    "day": day,
+                    "expense": day_balance_dict[day]["expense"],
+                    "revenue": day_balance_dict[day]["revenue"]
+                }
+                for day in list(day_balance_dict.keys())
+            ]
         )

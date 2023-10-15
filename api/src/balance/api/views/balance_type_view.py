@@ -47,6 +47,12 @@ class BalanceTypeViewSet(ModelViewSet):
     def list(self, request, *args, **kwargs):
         return super().list(request, args, kwargs)
 
+    def paginate_queryset(self, queryset):
+        """
+        Avoid using pagination in view
+        """
+        return None
+
 
 balance_type_list_view = BalanceTypeViewSet.as_view({
     "get": "list",

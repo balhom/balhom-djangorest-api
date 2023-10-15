@@ -23,7 +23,7 @@ class StatisticsYearView(APIView):
         )
 
         month_balance_dict = {}
-        for balance in filtered_balances:
+        for balance in list(filtered_balances):
             month = balance.date.month
             if month in list(month_balance_dict):
                 if balance.balance_type.type == BalanceTypeChoices.EXPENSE:
@@ -40,14 +40,12 @@ class StatisticsYearView(APIView):
                     month_balance_dict[month]["revenue"] = balance.converted_quantity
 
         return Response(
-            data={
-                "statistics": [
-                    {
-                        "month": month,
-                        "expense": month_balance_dict[month]["expense"],
-                        "revenue": month_balance_dict[month]["revenue"]
-                    }
-                    for month in list(month_balance_dict.keys())
-                ]
-            },
+            data=[
+                {
+                    "month": month,
+                    "expense": month_balance_dict[month]["expense"],
+                    "revenue": month_balance_dict[month]["revenue"]
+                }
+                for month in list(month_balance_dict.keys())
+            ]
         )

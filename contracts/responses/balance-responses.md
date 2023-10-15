@@ -38,11 +38,12 @@
 | year              | int    |          |
 | month             | int    |          |
 
-## Balance Years Response
+## Balance Summary Response
 
-| name  | type       | comments |
-| ----- | ---------- | -------- |
-| years | List [int] |          |
+| name     | type   | comments         |
+| -------- | ------ | ---------------- |
+| type     | String | BalanceType name |
+| quantity | double |                  |
 
 ## Enums options:
 

@@ -9,3 +9,7 @@ class BalanceTypeAdmin(admin.ModelAdmin):
         "type",
         "image",
     )
+    list_display = [
+        "type",
+        "name",
+    ]
