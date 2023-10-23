@@ -24,27 +24,28 @@ class UserImageUpdateSerializer(serializers.ModelSerializer):
         """
         Validate image param.
         """
-        pil_image = Image.open(image)
+        if image.content_type == "image/jpeg":
+            pil_image = Image.open(image)
 
-        exif_data = piexif.load(pil_image.info['exif'])
+            exif_data = piexif.load(pil_image.info['exif'])
 
-        # Remove EXIF metadata
-        orientation = exif_data['0th'].get(piexif.ImageIFD.Orientation)
-        exif_data['0th'] = {}
-        if orientation:
-            exif_data['0th'][piexif.ImageIFD.Orientation] = orientation
-        exif_data['Exif'] = {}
-        exif_data['GPS'] = {}
+            # Remove EXIF metadata
+            orientation = exif_data['0th'].get(piexif.ImageIFD.Orientation)
+            exif_data['0th'] = {}
+            if orientation:
+                exif_data['0th'][piexif.ImageIFD.Orientation] = orientation
+            exif_data['Exif'] = {}
+            exif_data['GPS'] = {}
 
-        exif_bytes = piexif.dump(exif_data)
+            exif_bytes = piexif.dump(exif_data)
 
-        new_image = io.BytesIO()
-        pil_image.save(
-            new_image,
-            format=pil_image.format,
-            exif=exif_bytes
-        )
-        new_image.seek(0)
-        image.file = new_image
+            new_image = io.BytesIO()
+            pil_image.save(
+                new_image,
+                format=pil_image.format,
+                exif=exif_bytes
+            )
+            new_image.seek(0)
+            image.file = new_image
 
         return image

@@ -3,7 +3,7 @@ version: '3'
 services:
 
   balhom-minio:
-    image: bitnami/minio:2023.7.7
+    image: bitnami/minio:2023.10.16
     container_name: balhom-minio
     ports:
       - "33090:9000"
