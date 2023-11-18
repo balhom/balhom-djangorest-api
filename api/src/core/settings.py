@@ -15,6 +15,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 env = environ.Env()
 env_file_path = os.path.join(BASE_DIR, 'api.env')
 if os.path.exists(env_file_path):
+    print("Using api.env file")
     environ.Env.read_env(env_file_path)
 USE_HTTPS = env.bool("USE_HTTPS", default=False)
 
@@ -39,6 +40,7 @@ class Dev(Configuration):
         CORS_ALLOWED_ORIGINS = cors_hosts
     else:
         CORS_ALLOW_ALL_ORIGINS = True
+    CORS_ALLOW_CREDENTIALS = True
 
     # Csrf Setup
     csrf_hosts = env.list("CSRF_HOSTS", default=[])
