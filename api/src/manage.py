@@ -46,6 +46,7 @@ def main():
         cov.stop()
         cov.save()
         covered = cov.report()
+        cov.xml_report()
         if covered < 70:
             sys.exit(1)
 
