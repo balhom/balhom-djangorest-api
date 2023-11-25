@@ -1,205 +1,52 @@
-# API Docs
+# API
 
-## Directory tree example
+## Environment Variables
 
-~~~
-djangorest/
-    ├── app_1/
-    │   ├── management/
-    |   |   ├── __init__.py
-    │   │   └── commands/
-    |   |       ├── __init__.py
-    |   |       ├── schedule_setup.py
-    │   │       └── ... (This is optional)
-    │   ├── templates/
-    │   │   └── ... (This is optional)
-    │   ├── migrations/
-    │   │   └── ...
-    |   ├── tests/
-    |   │   ├── __init__.py
-    |   │   ├── tests_1.py
-    |   │   └── ...
-    │   ├── api/
-    |   │   ├── serializers.py  (This is optional)
-    |   │   ├── serializers/
-    │   |   │   ├── model1_serializers.py
-    │   |   │   ├── ... (This is optional)
-    │   |   │   └── model2_serializers.py
-    |   │   ├── views.py  (This is optional)
-    |   │   ├── views/
-    │   |   │   ├── model1_views.py
-    │   |   │   ├── ... (This is optional)
-    │   |   │   └── model2_views.py
-    |   │   └── urls.py
-    │   ├── __init__.py
-    │   ├── tasks.py
-    │   ├── signals.py
-    │   ├── schedule_setup.py
-    │   ├── models.py
-    │   ├── filters.py
-    │   ├── notifications.py
-    │   ├── apps.py
-    │   ├── exceptions.py
-    │   └── admin.py
-    ├── ...
-    ├── app_2/
-    │   ├── ...
-    │   └── external_api_name_integration.py
-    ├── external_api_name/
-    │   ├── __init__.py
-    │   ├── client.py
-    │   └── django_client.py
-    ├── core/
-    |   ├── tests/
-    |   │   ├── __init__.py
-    |   │   ├── tests_settings.py
-    |   │   └── ...
-    |   ├── swagger/
-    |   │   ├── __init__.py
-    |   │   └── urls.py
-    │   ├── __init__.py
-    │   ├── asgi.py
-    │   ├── celery.py
-    │   ├── settings.py
-    │   ├── urls.py
-    │   ├── api_urls.py
-    │   ├── exceptions.py
-    │   └── wsgi.py
-    ├── templates/
-    │   └── ... (This is optional)
-    ├── media/
-    │   └── ... (This is optional)
-    ├── static/
-    │   └── ... (This is optional)
-    ├── manage.py
-    └── db.sqlite3
-~~~
+| NAME                        | DESCRIPTION                                                                 |
+| --------------------------- | --------------------------------------------------------------------------- |
+| ALLOWED_HOSTS               | List of strings representing the allowed host/domain names                  |
+| CORS_HOSTS                  | CORS allowed hosts (url format)                                             |
+| CSRF_HOSTS                  | CSRF allowed hosts (url format)                                             |
+| USE_HTTPS                   | Enable HTTPS (true or false). Default: ***false***                          |
+| LOG_FILE_PATH               | Use a file for logging, like "/var/log/app.log". If not set console is used |
+| EMAIL_HOST                  | Email service host name                                                     |
+| EMAIL_PORT                  | Email service port                                                          |
+| EMAIL_HOST_USER             | Email service authentication user                                           |
+| EMAIL_HOST_PASSWORD         | Email service authentication password                                       |
+| CELERY_BROKER_URL           | Celery url                                                                  |
+| EMAIL_CODE_THRESHOLD        | Time to wait for a new email verification code generation                   |
+| EMAIL_CODE_VALID            | Email verification code validity duration                                   |
+| UNVERIFIED_USER_DAYS        | Days for a periodic deletion of unverified users. Default: 2                |
+| DATABASE_URL                | Databse endpoint                                                            |
+| APP_VERSION                 | Minimum supported app version. Optional                                     |
+| WEB_VERSION                 | Minimum supported web version. Optional                                     |
+| DISABLE_ADMIN_PANEL         | Disable admin panel url `/general/admin`. Default: ***false***              |
+| S3_URL                      | S3 api url                                                                  |
+| S3_ACCESS_KEY               | S3 access key                                                               |
+| S3_SECRET_KEY               | S3 secret key                                                               |
+| S3_STATIC_BUCKET_NAME       | S3 static bucket name. Default: ***balhom-static-bucket***                  |
+| S3_MEDIA_BUCKET_NAME        | S3 media bucket name. Default: ***balhom-media-bucket***                    |
+| KEYCLOAK_URL                | Keycloak url                                                                |
+| KEYCLOAK_CLIENT_ID          | Keycloak client id. Default: ***balhom-api***                               |
+| KEYCLOAK_CLIENT_SECRET      | Keycloak client secret                                                      |
+| KEYCLOAK_REALM              | Keycloak realm. Default: ***balhom-realm***                                 |
+| CURRENCY_CONVERSION_API_URL | Currency conversion api url                                                 |
+| CURRENCY_CONVERSION_API_KEY | Currency conversion api key                                                 |
 
-## Useful commands
+## Keylcoak Setup steps
 
-* Install project requirements:
+1. Go to admin console and login.
 
-~~~bash
-pip install -r requirements.txt
-~~~
+2. Create a Realm named `balhom-realm`.
 
-* For the project creation it was used:
+3. Create a Client with `OpenID Connect` type and `balhom-api` id. Then in `Capability config`, `Client authentication` must be enabled and in `Authentication flow` section `Standard flow`, `Direct access grants` and `Service accounts roles` must be enabled.
 
-~~~bash
-django-admin startproject core
-~~~
+4. Assign `manage-users` role (realm-management) in `Service accounts roles` tab to `balhom-api` client inside `Clients` section. 
 
-* Create migrations:
+5. In `Login` tab inside `Realm settings` section enable `Email as username`, `Login with email` and `Verify email`.
 
-~~~bash
-python manage.py makemigrations
-~~~
+6. Enable `Internatiolization` in `Localization` tab inside `Realm settings` section, and add "français" and "español" as `Supported locales`.
 
-* Migrate changes (create tables in the specified database):
+7. In `Email` tab inside `Realm settings` section setup email settings.
 
-~~~bash
-python manage.py migrate
-~~~
-
-* Create an app:
-
-~~~bash
-python manage.py startapp app_1
-~~~
-
-* Create superuser:
-
-~~~bash
-python manage.py createsuperuser
-~~~
-
-* Change password:
-
-~~~bash
-python manage.py changepassword <username>
-~~~
-
-* Run server in debug mode:
-
-~~~bash
-python manage.py runserver 
-~~~
-
-* Export db data to a json file:
-
-~~~bash
-python manage.py dumpdata > db.json
-~~~
-
-* Import db data from a json file:
-
-~~~bash
-python manage.py loaddata db.json
-~~~
-
-* Launch testing: (coverage included)
-
-~~~bash
-python manage.py test
-~~~
-
-* Generate html with coverage report:
-
-~~~bash
-coverage html
-~~~
-
-* Create static files (also used to upload static files to s3 bucket):
-
-~~~bash
-python manage.py collectstatic
-~~~
-
-* Upload default media files to s3 bucket:
-
-~~~bash
-python manage.py collectmedia
-~~~
-
-* Create static and media buckets:
-
-~~~bash
-python manage.py createbuckets
-~~~
-
-* Schedule users deletion task:
-
-~~~bash
-python manage.py schedule_users_delete
-~~~
-
-* Launch celery for development:
-
-~~~bash
-celery -A core worker -l INFO -P eventlet --scheduler django_celery_beat.schedulers:DatabaseScheduler
-~~~
-
-> ***redis*** must be launched too
-
-* Generate locale messages files
-
-~~~bash
-django-admin makemessages --all --ignore=en
-~~~
-
-> Before executing it, a locale folder with all languages folders inside must be created
-
-* Generate compiled messages
-
-~~~bash
-django-admin compilemessages --ignore=env
-~~~
-
-* Useful commands with docker compose
-~~~bash
-docker-compose run --entrypoint "sh" balhom-api-djangorest -c "python manage.py migrate"
-docker-compose run --entrypoint "sh" balhom-api-djangorest -c "python manage.py createbuckets"
-docker-compose run --entrypoint "sh" balhom-api-djangorest -c "python manage.py collectstatic --no-input"
-docker-compose run --entrypoint "sh" balhom-api-djangorest -c "python manage.py collectmedia"
-docker-compose run --entrypoint "sh" balhom-api-djangorest -c "python manage.py createsuperuser"
-~~~
+8.  In `Sessions` tab inside `Realm settings` section change `SSO Session Idle` and `SSO Session Max` values to 5 Days.
