@@ -142,12 +142,16 @@ class UserRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
 
         if (
                 "username" in serializer.validated_data
-            and serializer.instance != serializer.validated_data["username"]
-            and keycloak_client.exists_user_by_username(
-                username=serializer.validated_data["username"]
-            )
         ):
-            raise UserNameConflictException()
+            user_data = keycloak_client.get_user_info_by_id(
+                keycloak_id=serializer.instance.keycloak_id
+            )
+            if (user_data["firstName"] != serializer.validated_data["username"]
+                and keycloak_client.exists_user_by_username(
+                    username=serializer.validated_data["username"]
+            )
+            ):
+                raise UserNameConflictException()
 
         if "username" in serializer.validated_data \
                 or "locale" in serializer.validated_data:
@@ -174,7 +178,7 @@ class UserRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
         locale = "en" if not user_data["attributes"]["locale"] \
             else user_data["attributes"]["locale"][0]
 
-        res["username"] = user_data["username"]
+        res["username"] = user_data["firstName"]
         res["email"] = user_data["email"]
         res["last_login"] = last_login
         res["locale"] = locale

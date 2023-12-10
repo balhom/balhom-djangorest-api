@@ -14,6 +14,7 @@ def app_exception_handler(exc: Exception, context):
     """
     App exception handler.
     """
+    logger.info(exc)
     response = exception_handler(exc, context)
     if isinstance(exc, AppBadRequestException):
         response.data["error_code"] = exc.error_code
