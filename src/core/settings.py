@@ -300,7 +300,7 @@ class Prod(Dev):
             },
         },
         "root": {
-            "handlers": ["logfile"] if LOG_FILE_PATH else ["console"],
+            "handlers": ["console"],
             "level": "ERROR",
         },
     }
