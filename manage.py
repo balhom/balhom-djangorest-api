@@ -10,7 +10,7 @@ def main():
     # Check On Premise configuration
     if "check" in sys.argv and "--deploy" in sys.argv:
         os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'src.core.settings')
-        os.environ.setdefault("DJANGO_CONFIGURATION", "OnPremise")
+        os.environ.setdefault("DJANGO_CONFIGURATION", "Prod")
         os.environ.setdefault("USE_HTTPS", "True")
         from configurations.management import execute_from_command_line
         execute_from_command_line(['manage.py', 'check', '--deploy'])

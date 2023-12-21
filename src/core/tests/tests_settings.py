@@ -14,12 +14,12 @@ class DevTestCase(TestCase):
 
     def test_debug_settings(self):
         """
-        Testing DEBUG const is setup correctly in Dev and OnPremise
+        Testing DEBUG const is setup correctly in Dev and Prod
         """
         from src.core.settings import Dev
         self.assertTrue(Dev.DEBUG)
-        from src.core.settings import OnPremise
-        self.assertFalse(OnPremise.DEBUG)
+        from src.core.settings import Prod
+        self.assertFalse(Prod.DEBUG)
 
     def test_logging_settings(self):
         """

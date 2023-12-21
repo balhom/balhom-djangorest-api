@@ -38,7 +38,7 @@ services:
     env_file:
       - ./api.env
     volumes:
-      - balhom-celery-beat-logs/celery_beat:/var/log/api
+      - balhom-celery-beat-logs:/var/log/api
     restart: unless-stopped
     entrypoint: /app/celery_beat_entrypoint.sh
     networks:

@@ -265,7 +265,7 @@ class Dev(Configuration):
         S3_STORAGE_SECRET_KEY = env.str("S3_SECRET_KEY")
 
 
-class OnPremise(Dev):
+class Prod(Dev):
     """
     On-premise configuration.
     """
@@ -293,12 +293,6 @@ class OnPremise(Dev):
             },
         },
         "handlers": {
-            "logfile": {
-                "class": "logging.FileHandler",
-                "filename": LOG_FILE_PATH,
-                "formatter": "verbose",
-            }
-        } if LOG_FILE_PATH else {
             "console": {
                 "class": "logging.StreamHandler",
                 "stream": "ext://sys.stdout",
