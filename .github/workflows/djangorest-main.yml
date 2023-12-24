@@ -45,7 +45,7 @@ jobs:
 
       - name: Build and Push Docker image
         run: |
-          export APP_VERSION=$(grep -m 1 version src/pyproject.toml | tr -d '=' | cut -d' ' -f3 | tr -d '"' | tr -d '\n' | tr -d '\r')
+          export APP_VERSION=$(grep -m 1 version pyproject.toml | tr -d '=' | cut -d' ' -f3 | tr -d '"' | tr -d '\n' | tr -d '\r')
           export MAJOR_VERSION=$(echo "${APP_VERSION}" | cut -d. -f1,2)
           echo "Using version ${APP_VERSION}"
           # Tag variables
