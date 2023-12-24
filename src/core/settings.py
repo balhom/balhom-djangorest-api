@@ -140,7 +140,7 @@ class Dev(Configuration):
 
     LANGUAGE_CODE = "en"
     LOCALE_PATHS = [
-        BASE_DIR / "locale/",
+        BASE_DIR / "src/locale/",
     ]
     LANGUAGES = (
         ("en", _("English")),
