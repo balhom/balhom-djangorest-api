@@ -35,8 +35,6 @@ services:
     container_name: balhom-api-djangorest
     env_file:
       - ./api.env
-    volumes:
-      - balhom-api-djangorest-logs:/var/log/api
     ports:
       - "8000:80"
     depends_on:
@@ -51,8 +49,6 @@ services:
     container_name: balhom-celery-worker
     env_file:
       - ./api.env
-    volumes:
-      - balhom-celery-worker-logs:/var/log/api
     restart: unless-stopped
     entrypoint: /app/celery_worker_entrypoint.sh
     networks:
@@ -63,8 +59,6 @@ services:
     container_name: balhom-celery-beat
     env_file:
       - ./api.env
-    volumes:
-      - balhom-celery-beat-logs:/var/log/api
     restart: unless-stopped
     entrypoint: /app/celery_beat_entrypoint.sh
     networks:
