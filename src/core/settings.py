@@ -13,7 +13,7 @@ from django.core.management.utils import get_random_secret_key
 # Build paths inside the project like this: BASE_DIR / "subdir".
 BASE_DIR = Path(__file__).resolve().parent.parent
 env = environ.Env()
-env_file_path = os.path.join(BASE_DIR, 'api.env')
+env_file_path = os.path.join(BASE_DIR.parent, 'api.env')
 if os.path.exists(env_file_path):
     print("Using api.env file")
     environ.Env.read_env(env_file_path)
