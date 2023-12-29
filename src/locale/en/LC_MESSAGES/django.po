@@ -1,0 +1,283 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-10-13 18:11+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: app_auth/api/serializers/user_creation_serializer.py:53
+#: app_auth/api/serializers/user_retrieve_update_destroy_serializer.py:55
+msgid "Locale not supported"
+msgstr "Locale not supported"
+
+#: app_auth/api/serializers/user_creation_serializer.py:62
+#: app_auth/api/serializers/user_retrieve_update_destroy_serializer.py:64
+#: balance/api/serializers/balance_serializer.py:39
+msgid "Currency type not supported"
+msgstr "Currency type not supported"
+
+#: app_auth/api/serializers/utils.py:12
+msgid "Password cannot match other profile data"
+msgstr "Password cannot match other profile data"
+
+#: app_auth/api/views/auth_views.py:87 app_auth/api/views/auth_views.py:116
+msgid "Refresh token not provided"
+msgstr "Refresh token not provided"
+
+#: app_auth/exceptions.py:28
+msgid "User not found"
+msgstr "User not found"
+
+#: app_auth/exceptions.py:38
+msgid "Unverified email"
+msgstr "Unverified email"
+
+#: app_auth/exceptions.py:48
+msgid "Cannot send verification mail"
+msgstr "Cannot send verification mail"
+
+#: app_auth/exceptions.py:58
+msgid "Cannot send reset password mail"
+msgstr "Cannot send reset password mail"
+
+#: app_auth/exceptions.py:68
+msgid "Email already used"
+msgstr "Email already used"
+
+#: app_auth/exceptions.py:78
+msgid "Cannot create user"
+msgstr "Cannot create user"
+
+#: app_auth/exceptions.py:88
+msgid "Cannot update user"
+msgstr "Cannot update user"
+
+#: app_auth/exceptions.py:98
+msgid "Cannot delete user"
+msgstr "Cannot delete user"
+
+#: app_auth/exceptions.py:108
+msgid "Password can only be reset 3 times a day"
+msgstr "Password can only be reset 3 times a day"
+
+#: app_auth/exceptions.py:118
+msgid "Currency type has already been changed in the las 24 hours"
+msgstr "Currency type has already been changed in the las 24 hours"
+
+#: app_auth/exceptions.py:128
+msgid "Wrong credentials"
+msgstr "Wrong credentials"
+
+#: app_auth/exceptions.py:138
+msgid "Username already used"
+msgstr "Username already used"
+
+#: app_auth/models/user_model.py:15 app_auth/models/user_model.py:36
+msgid "A keycloak id must be provided"
+msgstr "A keycloak id must be provided"
+
+#: app_auth/models/user_model.py:69
+msgid "keycloak id"
+msgstr "keycloak id"
+
+#: app_auth/models/user_model.py:72
+msgid "profile image"
+msgstr "profile image"
+
+#: app_auth/models/user_model.py:77
+msgid "current balance"
+msgstr "current balance"
+
+#: app_auth/models/user_model.py:81
+msgid "receive email about balance"
+msgstr "receive email about balance"
+
+#: app_auth/models/user_model.py:88
+msgid "expected annual balance"
+msgstr "expected annual balance"
+
+#: app_auth/models/user_model.py:96
+msgid "expected monthly balance"
+msgstr "expected monthly balance"
+
+#: app_auth/models/user_model.py:102
+msgid "date of last password reset code sent"
+msgstr "date of last password reset code sent"
+
+#: app_auth/models/user_model.py:106
+msgid "number of requests for password reset"
+msgstr "number of requests for password reset"
+
+#: app_auth/models/user_model.py:109
+msgid "preferred currency type"
+msgstr "preferred currency type"
+
+#: app_auth/models/user_model.py:115
+msgid "date of last preferred currency type change"
+msgstr "date of last preferred currency type change"
+
+#: app_statistics/api/views/statistics_month_view.py:15
+#: app_statistics/api/views/statistics_year_view.py:15
+msgid "year not provided"
+msgstr "year not provided"
+
+#: app_statistics/api/views/statistics_month_view.py:17
+msgid "month not provided"
+msgstr "month not provided"
+
+#: app_statistics/api/views/statistics_month_view.py:19
+msgid "month not valid"
+msgstr "month not valid"
+
+#: balance/api/serializers/balance_serializer.py:49
+#: balance/api/serializers/balance_serializer.py:61
+msgid "Provided balance type does not exists"
+msgstr "Provided balance type does not exists"
+
+#: balance/api/views/balance_type_view.py:19
+#: balance/api/views/balance_years_view.py:20
+msgid "type not provided"
+msgstr "type not provided"
+
+#: balance/api/views/balance_type_view.py:23
+#: balance/api/views/balance_years_view.py:24
+msgid "type not valid"
+msgstr "type not valid"
+
+#: balance/models/annual_balance_model.py:9
+#: balance/models/monthly_balance_model.py:9
+msgid "year"
+msgstr "year"
+
+#: balance/models/annual_balance_model.py:17
+msgid "Annual balance"
+msgstr "Annual balance"
+
+#: balance/models/annual_balance_model.py:18
+msgid "Annual balances"
+msgstr "Annual balances"
+
+#: balance/models/balance_model.py:14 balance/models/balance_type_model.py:12
+msgid "name"
+msgstr "name"
+
+#: balance/models/balance_model.py:18
+msgid "description"
+msgstr "description"
+
+#: balance/models/balance_model.py:24
+msgid "real quantity"
+msgstr "real quantity"
+
+#: balance/models/balance_model.py:28
+msgid "converted quantity"
+msgstr "converted quantity"
+
+#: balance/models/balance_model.py:32
+msgid "date"
+msgstr "date"
+
+#: balance/models/balance_model.py:35 balance/models/date_balance_model.py:24
+msgid "currency type"
+msgstr "currency type"
+
+#: balance/models/balance_model.py:40
+msgid "balance type"
+msgstr "balance type"
+
+#: balance/models/balance_model.py:45 balance/models/date_balance_model.py:29
+msgid "owner"
+msgstr "owner"
+
+#: balance/models/balance_model.py:52
+msgid "Balance"
+msgstr "Balance"
+
+#: balance/models/balance_model.py:53
+msgid "Balances"
+msgstr "Balances"
+
+#: balance/models/balance_type_model.py:6
+msgid "revenue"
+msgstr "revenue"
+
+#: balance/models/balance_type_model.py:7
+msgid "expense"
+msgstr "expense"
+
+#: balance/models/balance_type_model.py:20
+msgid "image"
+msgstr "image"
+
+#: balance/models/balance_type_model.py:26
+msgid "Balance type"
+msgstr "Balance type"
+
+#: balance/models/balance_type_model.py:27
+msgid "Balance types"
+msgstr "Balance types"
+
+#: balance/models/date_balance_model.py:15
+msgid "gross quantity"
+msgstr "gross quantity"
+
+#: balance/models/date_balance_model.py:20
+msgid "expected quantity"
+msgstr "expected quantity"
+
+#: balance/models/date_balance_model.py:36
+msgid "Date balance"
+msgstr "Date balance"
+
+#: balance/models/date_balance_model.py:37
+msgid "Date balances"
+msgstr "Date balance"
+
+#: balance/models/monthly_balance_model.py:16
+msgid "month"
+msgstr "month"
+
+#: balance/models/monthly_balance_model.py:24
+msgid "Monthly balance"
+msgstr "Monthly balance"
+
+#: balance/models/monthly_balance_model.py:25
+msgid "Monthly balances"
+msgstr "Monthly balances"
+
+#: core/settings.py:144
+msgid "English"
+msgstr "English"
+
+#: currency_conversion_client/exceptions.py:17
+msgid "Cannot make conversion"
+msgstr "Cannot make conversion"
+
+#: keycloak_client/authentication.py:27
+msgid "Unprocessable authorization header"
+msgstr "Unprocessable authorization header"
+
+#: keycloak_client/authentication.py:44
+msgid "User does not exists"
+msgstr "User does not exists"
+
+#: keycloak_client/authentication.py:45
+msgid "Invalid access token"
+msgstr "Invalid access token"
+
+#: keycloak_client/authentication.py:48
+msgid "Bearer <jwt>"
+msgstr "Bearer <jwt>"

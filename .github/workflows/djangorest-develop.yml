@@ -24,22 +24,18 @@ jobs:
           pip install --upgrade pip
           pip install poetry
           poetry install
-        working-directory: ./api/src
 
       - name: Run tests
         run: |
           poetry run python manage.py test
-        working-directory: ./api/src
       
       - name: Check deploy
         run: |
           poetry run python manage.py check --deploy
-        working-directory: ./api/src
       
       - name: Check migrations
         run: |
           poetry run python manage.py makemigrations
-        working-directory: ./api/src
         
       - name: Check build Docker Image
         run: |
@@ -47,4 +43,3 @@ jobs:
           docker build . -t ${IMAGE_TAG}
         env:
           DOCKER_REPO_NAME: ${{ secrets.DOCKER_REPO_NAME }}
-        working-directory: ./api
