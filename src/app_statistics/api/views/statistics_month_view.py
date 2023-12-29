@@ -49,8 +49,8 @@ class StatisticsMonthView(APIView):
             data=[
                 {
                     "day": day,
-                    "expense": day_balance_dict[day]["expense"],
-                    "revenue": day_balance_dict[day]["revenue"]
+                    "expense": round(day_balance_dict[day]["expense"], 2),
+                    "revenue": round(day_balance_dict[day]["revenue"], 2)
                 }
                 for day in list(day_balance_dict.keys())
             ]
