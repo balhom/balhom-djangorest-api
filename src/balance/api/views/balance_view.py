@@ -1,4 +1,5 @@
 from django.db import transaction
+from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 from src.core.permissions import IsCurrentVerifiedUser
 from src.balance.models.balance_model import Balance
@@ -8,7 +9,6 @@ from src.currency_conversion_client.django_client import get_currency_conversion
 
 
 class BalanceViewSet(ModelViewSet):
-    queryset = Balance.objects.all()  # pylint: disable=no-member
     permission_classes = (IsCurrentVerifiedUser,)
     filterset_class = BalanceFilterSet
     serializer_class = BalanceSerializer
@@ -21,20 +21,31 @@ class BalanceViewSet(ModelViewSet):
             return Balance.objects.none()  # pylint: disable=no-member
         queryset = Balance.objects.filter(  # pylint: disable=no-member
             owner=self.request.user)
+        return queryset
+
+    def list(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
 
         sorting_param = self.request.query_params.get('sorting')
         if sorting_param:
             if sorting_param in [
                 "name",
                 "real_quantity",
-                "-real_quantity", 
+                "-real_quantity",
                 "converted_quantity",
                 "-converted_quantity",
                 "date",
                 "-date",
             ]:
                 queryset = queryset.order_by(sorting_param)
-        return queryset
+
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
 
     def perform_create(self, serializer):
         currency_conversion_client = get_currency_conversion_client()

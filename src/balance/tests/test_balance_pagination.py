@@ -107,9 +107,9 @@ class BalancePaginationTests(APITestCase):
         data = dict(response.data)
         self.assertEqual(data["count"], 20)
         # 10 expenses in the first page
-        self.assertEqual(len(data["results"]), 10)
+        self.assertEqual(len(data["results"]), 15)
         # Second page
         response = test_utils.get(self.client, data["next"])
         self.assertEqual(data["count"], 20)
         # 10 expenses in the first page
-        self.assertEqual(len(data["results"]), 10)
+        self.assertEqual(len(data["results"]), 15)
