@@ -17,10 +17,6 @@ The Balhom API is designed to handle data storage, retrieval, and processing, se
 - **Redis**: The multitasker—acting as a message broker and cache for optimized performance.
 - **Celery**: Elevate your app's responsiveness with Celery for asynchronous task execution.
 
-## 📚 Documentation
-
-Dig into the nitty-gritty details of setting up the API, configuring environment variables, and more in our [API Documentation](./api/README.md). It's your go-to resource for mastering the Balhom API.
-
 ## 🐳 Example Docker Compose
 
 Simplify deployment and ensure consistency across environments with our sample Docker Compose configuration.
@@ -78,7 +74,7 @@ networks:
 ## Environment Variables
 
 | NAME                        | DESCRIPTION                                                                 |
-|-----------------------------|-----------------------------------------------------------------------------|
+| --------------------------- | --------------------------------------------------------------------------- |
 | ALLOWED_HOSTS               | List of strings representing the allowed host/domain names                  |
 | CORS_HOSTS                  | CORS allowed hosts (url format)                                             |
 | CSRF_HOSTS                  | CSRF allowed hosts (url format)                                             |
@@ -107,6 +103,24 @@ networks:
 | KEYCLOAK_REALM              | Keycloak realm. Default: ***balhom-realm***                                 |
 | CURRENCY_CONVERSION_API_URL | Currency conversion api url                                                 |
 | CURRENCY_CONVERSION_API_KEY | Currency conversion api key                                                 |
+
+## API Error Codes
+
+| CODE | DEFINITION                                                 | ENDPOINT                                                                   |
+| ---- | ---------------------------------------------------------- | -------------------------------------------------------------------------- |
+| 1    | User not found                                             | /api/v2/auth/send-verify-email , /api/v2/auth/password-reset               |
+| 2    | Unverified email                                           | /api/v2/auth/password-reset , /api/v2/account [POST] , /api/v2/auth/access |
+| 3    | Cannot send verification mail                              | /api/v2/auth/send-verify-email                                             |
+| 4    | Cannot send reset password mail                            | /api/v2/auth/password-reset                                                |
+| 5    | Password can only be reset 3 times a day                   | /api/v2/auth/password-reset                                                |
+| 6    | Email already used                                         | /api/v2/account [POST]                                                     |
+| 7    | Cannot create user                                         | /api/v2/account [POST]                                                     |
+| 8    | Cannot update user                                         | /api/v2/account [PUT]                                                      |
+| 9    | Cannot delete user                                         | /api/v2/account [DEL]                                                      |
+| 10   | Currency type has already been changed in the las 24 hours | /api/v2/account [PUT]                                                      |
+| 11   | Wrong credentials                                          | /api/v2/auth/access                                                        |
+| 12   | Username already used                                      | /api/v2/account [POST]                                                     |
+| 20   | Cannot make conversion                                     | /api/v2/account [PUT] , /api/v2/balance [POST] , /api/v2/balance [PUT]     |
 
 ## Keylcoak Setup steps
 
