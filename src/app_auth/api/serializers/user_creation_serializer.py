@@ -35,11 +35,14 @@ class UserCreationSerializer(serializers.ModelSerializer):
         fields = [
             "username",
             "email",
+            "current_balance",
+            "receive_email_balance",
             "expected_annual_balance",  # not required
             "expected_monthly_balance",  # not required
             "locale",
             "pref_currency_type",
             "password",
+            "image",
         ]
         extra_kwargs = {
             "pref_currency_type": {"required": True}

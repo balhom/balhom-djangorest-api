@@ -88,3 +88,9 @@ class UserCreationView(generics.CreateAPIView):
         )
         user.set_password(validated_data["password"])
         user.save()
+
+        serializer.validated_data["receive_email_balance"] = user.receive_email_balance
+        serializer.validated_data["current_balance"] = user.current_balance
+        serializer.validated_data["expected_annual_balance"] = user.expected_annual_balance
+        serializer.validated_data["expected_monthly_balance"] = user.expected_monthly_balance
+        serializer.validated_data["image"] = user.image
