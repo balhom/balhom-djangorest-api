@@ -2,11 +2,13 @@
 
 Welcome to the Balhom DRF API repository! 🚀
 
-This repository is the beating heart of the Balhom application, providing a powerful backend built with Django and Django Rest Framework. Our API seamlessly connects the frontend with a range of services.
+This repository is the beating heart of the Balhom application, providing a powerful backend built with Django and
+Django Rest Framework. Our API seamlessly connects the frontend with a range of services.
 
 ## 🎯 Purpose
 
-The Balhom API is designed to handle data storage, retrieval, and processing, serving as the backbone for our application. It's the engine that powers Balhom's functionality and brings its features to life.
+The Balhom API is designed to handle data storage, retrieval, and processing, serving as the backbone for our
+application. It's the engine that powers Balhom's functionality and brings its features to life.
 
 ## 🛠 Technologies Used
 
@@ -74,7 +76,7 @@ networks:
 ## Environment Variables
 
 | NAME                        | DESCRIPTION                                                                 |
-| --------------------------- | --------------------------------------------------------------------------- |
+|-----------------------------|-----------------------------------------------------------------------------|
 | ALLOWED_HOSTS               | List of strings representing the allowed host/domain names                  |
 | CORS_HOSTS                  | CORS allowed hosts (url format)                                             |
 | CSRF_HOSTS                  | CSRF allowed hosts (url format)                                             |
@@ -107,7 +109,7 @@ networks:
 ## API Error Codes
 
 | CODE | DEFINITION                                                 | ENDPOINT                                                                   |
-| ---- | ---------------------------------------------------------- | -------------------------------------------------------------------------- |
+|------|------------------------------------------------------------|----------------------------------------------------------------------------|
 | 1    | User not found                                             | /api/v2/auth/send-verify-email , /api/v2/auth/password-reset               |
 | 2    | Unverified email                                           | /api/v2/auth/password-reset , /api/v2/account [POST] , /api/v2/auth/access |
 | 3    | Cannot send verification mail                              | /api/v2/auth/send-verify-email                                             |
@@ -128,22 +130,27 @@ networks:
 
 2. Create a Realm named `balhom-realm`.
 
-3. Create a Client with `OpenID Connect` type and `balhom-api` id. Then in `Capability config`, `Client authentication` must be enabled and in `Authentication flow` section `Standard flow`, `Direct access grants` and `Service accounts roles` must be enabled.
+3. Create a Client with `OpenID Connect` type and `balhom-api` id. Then in `Capability config`, `Client authentication`
+   must be enabled and in `Authentication flow` section `Standard flow`, `Direct access grants`
+   and `Service accounts roles` must be enabled.
 
-4. Assign `manage-users` role (realm-management) in `Service accounts roles` tab to `balhom-api` client inside `Clients` section. 
+4. Assign `manage-users` role (realm-management) in `Service accounts roles` tab to `balhom-api` client inside `Clients`
+   section.
 
 5. In `Login` tab inside `Realm settings` section enable `Email as username`, `Login with email` and `Verify email`.
 
-6. Enable `Internatiolization` in `Localization` tab inside `Realm settings` section, and add "français" and "español" as `Supported locales`.
+6. Enable `Internatiolization` in `Localization` tab inside `Realm settings` section, and add "français" and "español"
+   as `Supported locales`.
 
 7. In `Email` tab inside `Realm settings` section setup email settings.
 
-8.  In `Sessions` tab inside `Realm settings` section change `SSO Session Idle` and `SSO Session Max` values to 5 Days.
+8. In `Sessions` tab inside `Realm settings` section change `SSO Session Idle` and `SSO Session Max` values to 5 Days.
 
 ## Support
 
 [!["Buy Me A Coffee"](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://www.buymeacoffee.com/FabboMaster)
 
-If you have any questions, concerns, or need assistance, please don't hesitate to reach out. We are here to help you make the most of our Currency Conversion API.
+If you have any questions, concerns, or need assistance, please don't hesitate to reach out. We are here to help you
+make the most of our Currency Conversion API.
 
 Happy coding!
