@@ -42,6 +42,9 @@ class KeycloakAuthentication(authentication.BaseAuthentication):
                 except OperationalError as exc:
                     raise exceptions.AuthenticationFailed(
                         _("User does not exists")) from exc
+                except User.DoesNotExist as exc:
+                    raise exceptions.AuthenticationFailed(
+                        _("User does not exists")) from exc
         raise exceptions.AuthenticationFailed(_("Invalid access token"))
 
     def authenticate_header(self, request):
