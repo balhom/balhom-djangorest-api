@@ -230,9 +230,12 @@ class Dev(Configuration):
 
     EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
-    CELERY_RESULT_BACKEND = "django-db"
-    CELERY_BROKER_URL = env.str(
-        "CELERY_BROKER_URL", default="redis://localhost:6379/0")
+    REDIS_URL = env.str(
+        "REDIS_URL", default="redis://localhost:6379/0")
+
+    # Celery setup
+    CELERY_RESULT_BACKEND = REDIS_URL
+    CELERY_BROKER_URL = REDIS_URL
 
     # Days for a periodic deletion of unverified users
     UNVERIFIED_USER_DAYS = env.int("UNVERIFIED_USER_DAYS", default=2)
@@ -312,3 +315,18 @@ class Prod(Dev):
     EMAIL_PORT = env.int("EMAIL_PORT", default=587)
     EMAIL_HOST_USER = env.str("EMAIL_HOST_USER", default="example@gmail.com")
     EMAIL_HOST_PASSWORD = env.str("EMAIL_HOST_PASSWORD", default="password")
+
+    REDIS_URL = env.str(
+        "REDIS_URL", default="redis://localhost:6379/0")
+
+    # Cache setup
+    CACHES = {
+        "default": {
+            "BACKEND": "django_redis.cache.RedisCache",
+            "LOCATION": REDIS_URL,
+            "OPTIONS": {
+                "CLIENT_CLASS": "django_redis.client.DefaultClient"
+            },
+            "KEY_PREFIX": "drf-api"
+        }
+    }

@@ -86,7 +86,7 @@ networks:
 | EMAIL_PORT                  | Email service port                                                          |
 | EMAIL_HOST_USER             | Email service authentication user                                           |
 | EMAIL_HOST_PASSWORD         | Email service authentication password                                       |
-| CELERY_BROKER_URL           | Celery url                                                                  |
+| REDIS_URL                   | Redis url                                                                   |
 | EMAIL_CODE_THRESHOLD        | Time to wait for a new email verification code generation                   |
 | EMAIL_CODE_VALID            | Email verification code validity duration                                   |
 | UNVERIFIED_USER_DAYS        | Days for a periodic deletion of unverified users. Default: 2                |

@@ -29,6 +29,7 @@ django-celery-results
 django-celery-beat
 # Redis driver
 redis
+django-redis
 # Concurrent networking library for Celery
 eventlet
 # Library to deal with URI
