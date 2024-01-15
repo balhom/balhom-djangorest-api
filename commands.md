@@ -120,9 +120,9 @@ django-admin compilemessages --ignore=env
 
 * Useful commands with docker compose
 ~~~bash
-docker-compose run --entrypoint "sh" balhom-api-djangorest -c "python manage.py migrate"
-docker-compose run --entrypoint "sh" balhom-api-djangorest -c "python manage.py createbuckets"
-docker-compose run --entrypoint "sh" balhom-api-djangorest -c "python manage.py collectstatic --no-input"
-docker-compose run --entrypoint "sh" balhom-api-djangorest -c "python manage.py collectmedia"
-docker-compose run --entrypoint "sh" balhom-api-djangorest -c "python manage.py createsuperuser"
+docker-compose run --entrypoint "sh" balhom-api -c "python manage.py migrate"
+docker-compose run --entrypoint "sh" balhom-api -c "python manage.py createbuckets"
+docker-compose run --entrypoint "sh" balhom-api -c "python manage.py collectstatic --no-input"
+docker-compose run --entrypoint "sh" balhom-api -c "python manage.py collectmedia"
+docker-compose run --entrypoint "sh" balhom-api -c "python manage.py createsuperuser"
 ~~~

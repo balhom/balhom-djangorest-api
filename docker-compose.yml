@@ -2,13 +2,13 @@ version: '3'
 
 services:
 
-  balhom-api-djangorest:
-    image: fabbo/balhom-api-djangorest:latest
-    container_name: balhom-api-djangorest
+  balhom-api:
+    image: fabbo/balhom-api:drf
+    container_name: balhom-api
     env_file:
       - ./api.env
     #volumes:
-      #- balhom-api-djangorest-certs:/certs:ro  # Uncomment for HTTPS
+      #- balhom-api-certs:/certs:ro  # Uncomment for HTTPS
     ports:
       - "8000:80"
       #- "443:443"  # Uncomment for HTTPS
@@ -20,7 +20,7 @@ services:
       - balhom-api-net
 
   balhom-celery-worker:
-    image: fabbo/balhom-api-djangorest:latest
+    image: fabbo/balhom-api:drf
     container_name: balhom-celery-worker
     env_file:
       - ./api.env
@@ -30,7 +30,7 @@ services:
       - balhom-api-net
 
   balhom-celery-beat:
-    image: fabbo/balhom-api-djangorest:latest
+    image: fabbo/balhom-api:drf
     container_name: balhom-celery-beat
     env_file:
       - ./api.env
@@ -38,11 +38,6 @@ services:
     entrypoint: /app/celery_beat_entrypoint.sh
     networks:
       - balhom-api-net
-
-volumes:
-  balhom-api-djangorest-logs:
-  balhom-celery-beat-logs:
-  balhom-celery-worker-logs:
 
 networks:
   balhom-api-net:

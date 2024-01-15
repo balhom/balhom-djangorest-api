@@ -4,4 +4,4 @@
 # with a non-zero status
 set -e
 
-exec celery -A core worker -l ERROR "$@"
+exec celery -A core flower -l ERROR "$@"

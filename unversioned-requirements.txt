@@ -27,6 +27,8 @@ celery
 django-celery-results
 # Celery periodic task models
 django-celery-beat
+# Celery monitoring
+flower
 # Redis driver
 redis
 django-redis

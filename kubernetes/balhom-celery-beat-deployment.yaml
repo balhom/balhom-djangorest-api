@@ -1,0 +1,111 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: balhom-celery-beat-deployment
+  namespace: default
+spec:
+  selector:
+    matchLabels:
+      app: balhom-celery-beat
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: balhom-celery-beat
+    spec:
+      containers:
+        - name: balhom-celery-beat
+          image: fabbo/balhom-api:drf-2.0.0
+          command: [ '/app/celery_beat_entrypoint.sh' ]
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: ALLOWED_HOSTS
+              valueFrom:
+                configMapKeyRef:
+                  name: balhom-api-configmap
+                  key: allowed-hosts
+            - name: CORS_HOSTS
+              valueFrom:
+                configMapKeyRef:
+                  name: balhom-api-configmap
+                  key: cors-hosts
+            - name: CSRF_HOSTS
+              valueFrom:
+                configMapKeyRef:
+                  name: balhom-api-configmap
+                  key: csrf-hosts
+            - name: EMAIL_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: balhom-api-configmap
+                  key: email-host
+            - name: EMAIL_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: balhom-api-configmap
+                  key: email-port
+            - name: EMAIL_HOST_USER
+              valueFrom:
+                secretKeyRef:
+                  name: balhom-api-secret
+                  key: email-host-user
+            - name: EMAIL_HOST_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: balhom-api-secret
+                  key: email-host-password
+            - name: REDIS_URL
+              valueFrom:
+                secretKeyRef:
+                  name: balhom-api-secret
+                  key: redis-url
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: balhom-api-secret
+                  key: database-url
+            - name: S3_URL
+              valueFrom:
+                secretKeyRef:
+                  name: balhom-api-secret
+                  key: s3-url
+            - name: S3_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: balhom-api-secret
+                  key: s3-access-key
+            - name: S3_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: balhom-api-secret
+                  key: s3-secret-key
+            - name: KEYCLOAK_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: balhom-api-configmap
+                  key: keycloak-url
+            - name: KEYCLOAK_CLIENT_ID
+              valueFrom:
+                secretKeyRef:
+                  name: balhom-api-secret
+                  key: keycloak-client-id
+            - name: KEYCLOAK_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: balhom-api-secret
+                  key: keycloak-client-secret
+            - name: KEYCLOAK_REALM
+              valueFrom:
+                secretKeyRef:
+                  name: balhom-api-secret
+                  key: keycloak-realm
+            - name: CURRENCY_CONVERSION_API_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: balhom-api-configmap
+                  key: currency-conversion-api-url
+            - name: CURRENCY_CONVERSION_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: balhom-api-secret
+                  key: currency-conversion-api-key

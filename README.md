@@ -28,9 +28,9 @@ version: '3'
 
 services:
 
-  balhom-api-djangorest:
-    image: fabbo/balhom-api-djangorest:latest
-    container_name: balhom-api-djangorest
+  balhom-api:
+    image: fabbo/balhom-api:drf
+    container_name: balhom-api
     env_file:
       - ./api.env
     ports:
@@ -43,7 +43,7 @@ services:
       - balhom-api-net
 
   balhom-celery-worker:
-    image: fabbo/balhom-api-djangorest:latest
+    image: fabbo/balhom-api:drf
     container_name: balhom-celery-worker
     env_file:
       - ./api.env
@@ -53,7 +53,7 @@ services:
       - balhom-api-net
 
   balhom-celery-beat:
-    image: fabbo/balhom-api-djangorest:latest
+    image: fabbo/balhom-api:drf
     container_name: balhom-celery-beat
     env_file:
       - ./api.env
@@ -61,11 +61,6 @@ services:
     entrypoint: /app/celery_beat_entrypoint.sh
     networks:
       - balhom-api-net
-
-volumes:
-  balhom-api-djangorest-logs:
-  balhom-celery-beat-logs:
-  balhom-celery-worker-logs:
 
 networks:
   balhom-api-net:
@@ -81,7 +76,6 @@ networks:
 | CORS_HOSTS                  | CORS allowed hosts (url format)                                             |
 | CSRF_HOSTS                  | CSRF allowed hosts (url format)                                             |
 | USE_HTTPS                   | Enable HTTPS (true or false). Default: ***false***                          |
-| LOG_FILE_PATH               | Use a file for logging, like "/var/log/app.log". If not set console is used |
 | EMAIL_HOST                  | Email service host name                                                     |
 | EMAIL_PORT                  | Email service port                                                          |
 | EMAIL_HOST_USER             | Email service authentication user                                           |

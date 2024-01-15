@@ -285,7 +285,6 @@ class Prod(Dev):
         SECURE_HSTS_INCLUDE_SUBDOMAINS = True
         SECURE_HSTS_PRELOAD = True
 
-    LOG_FILE_PATH = env.str("LOG_FILE_PATH", default=None)
     LOGGING = {
         "version": 1,
         "disable_existing_loggers": False,
