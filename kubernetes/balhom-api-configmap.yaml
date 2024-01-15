@@ -6,10 +6,10 @@ metadata:
   labels:
     app: balhom-api
 data:
-  allowed-hosts: *
-  cors-hosts: *
-  csrf-hosts: *
+  allowed-hosts: '*'
+  cors-hosts: '*'
+  csrf-hosts: '*'
   email-host: test
-  email-port: 443
-  keycloak-url: http://test
-  currency-conversion-api-url: http://test
+  email-port: '443'
+  keycloak-url: 'http://test'
+  currency-conversion-api-url: 'http://test'
