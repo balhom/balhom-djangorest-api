@@ -8,8 +8,9 @@ metadata:
 spec:
   selector:
     app: balhom-api
-  type: ClusterIP
+  type: NodePort
   ports:
     - protocol: TCP
       port: 80
       targetPort: 80
+      nodePort: 32080
