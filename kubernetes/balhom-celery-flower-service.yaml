@@ -2,7 +2,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: balhom-celery-flower-service
-  namespace: default
+  namespace: balhom
   labels:
     app: balhom-celery-flower
 spec:

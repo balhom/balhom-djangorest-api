@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: balhom-api-deployment
-  namespace: default
+  namespace: balhom
 spec:
   selector:
     matchLabels:

@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: balhom-celery-beat-deployment
-  namespace: default
+  namespace: balhom
 spec:
   selector:
     matchLabels:

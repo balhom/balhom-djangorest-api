@@ -2,7 +2,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: balhom-api-configmap
-  namespace: default
+  namespace: balhom
   labels:
     app: balhom-api
 data:
