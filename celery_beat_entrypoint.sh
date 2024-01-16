@@ -4,5 +4,5 @@
 # with a non-zero status
 set -e
 
-exec celery -A core beat -l ERROR \
+exec celery -A src.core beat -l ERROR \
     --scheduler django_celery_beat.schedulers:DatabaseScheduler "$@"
