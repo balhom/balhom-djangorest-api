@@ -118,6 +118,8 @@ networks:
 | 12   | Username already used                                      | /api/v2/account [POST]                                                     |
 | 20   | Cannot make conversion                                     | /api/v2/account [PUT] , /api/v2/balance [POST] , /api/v2/balance [PUT]     |
 
+## [Useful Commands](./commands.md)
+
 ## Keylcoak Setup steps
 
 1. Go to admin console and login.
