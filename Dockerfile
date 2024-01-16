@@ -35,6 +35,7 @@ COPY manage.py /app/
 COPY api_entrypoint.sh /app/
 COPY celery_beat_entrypoint.sh /app/
 COPY celery_worker_entrypoint.sh /app/
+COPY celery_flower_entrypoint.sh /app/
 ADD src /app/src/
 
 # gunicorn will listen on this ports
